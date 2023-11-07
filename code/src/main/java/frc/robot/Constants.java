@@ -6,7 +6,7 @@ public final class Constants {
 
 
     public static final class Mod0{
-        public static final int driveMotor = 1;
+        public static final int driveMotor = 2;
         public static final int turnMotor = 1;
         public static final int canCoder = 1;
     }
