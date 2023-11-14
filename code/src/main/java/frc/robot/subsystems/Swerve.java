@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.PigeonIMU;
+
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -14,21 +17,25 @@ import frc.robot.Constants;
 
 public class Swerve extends SubsystemBase {
   /** Creates a new Swerve. */
-  SwerveDriveKinematics kinematics = new SwerveDriveKinematics();
+  Translation2d m0 = new Translation2d(Constants.trackWidth/2, Constants.wheelBase/2);
+  Translation2d m1 = new Translation2d(Constants.trackWidth/2, -Constants.wheelBase/2);
+  Translation2d m2 = new Translation2d(-Constants.trackWidth/2, Constants.wheelBase/2);
+  Translation2d m3 = new Translation2d(-Constants.trackWidth/2, -Constants.wheelBase/2);
+
+  SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
   SwerveModule Mod_0 = new SwerveModule(Constants.Mod0.driveMotor, Constants.Mod0.turnMotor, Constants.Mod0.canCoder);
   SwerveModule Mod_1 = new SwerveModule(Constants.Mod1.driveMotor, Constants.Mod1.turnMotor, Constants.Mod1.canCoder);
   SwerveModule Mod_2 = new SwerveModule(Constants.Mod2.driveMotor, Constants.Mod2.turnMotor, Constants.Mod2.canCoder);
   SwerveModule Mod_3 = new SwerveModule(Constants.Mod3.driveMotor, Constants.Mod3.turnMotor, Constants.Mod3.canCoder);
   public Swerve() {
-  
   }
 
-  public void drive(double y, double x, double w, double gyro){ //TODO: switch for gyro
-  Rotation2d gyroAngle = new Rotation2d(gyro);
+  public void drive(double y, double x, double w, PigeonIMU gyro){
+  Rotation2d gyroAngle = new Rotation2d((Math.abs(gyro.getYaw())%360)/57.2958); //gyro abs angle in rads
+  System.out.println(gyroAngle);
   ChassisSpeeds speeds = new ChassisSpeeds(y, x, w);
-  ChassisSpeeds frspeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, gyroAngle);
-  SwerveModuleState[] states = kinematics.toSwerveModuleStates(frspeeds);
-  
+  //ChassisSpeeds frspeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, gyroAngle);
+  SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
   Mod_0.setState(states[0]);
   Mod_1.setState(states[1]);
   Mod_2.setState(states[2]);
