@@ -18,31 +18,30 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix.sensors.CANCoder;
 
 public class SwerveModule extends SubsystemBase{
-  public double P(double val, double sp, double kP){
-    return (sp-val)*kP;
-  }
   private PIDController anglePID = new PIDController(0.005, 0, 0);
   @Log
   private double pidOut;
-  CANSparkMax drive;
-  CANSparkMax rotate;
-  RelativeEncoder encoder;
-  CANCoder canCoder;
+  private CANSparkMax drive;
+  private CANSparkMax rotate;
+  private RelativeEncoder encoder;
+  private CANCoder canCoder;
+  private double angleOffset;
 
-  public SwerveModule(int driveMotorID, int turnMotorID, int canCoderID) {
+  public SwerveModule(int driveMotorID, int turnMotorID, int canCoderID, double angleOffset) {
     drive = new CANSparkMax(driveMotorID, MotorType.kBrushless);
     rotate = new CANSparkMax(turnMotorID, MotorType.kBrushless);
     this.canCoder = new CANCoder(canCoderID);
     encoder = rotate.getEncoder();
     encoder.setPosition(canCoder.getAbsolutePosition());
     anglePID.enableContinuousInput(0, 360);
+    this.angleOffset = angleOffset;
     
   }
   public void setState(SwerveModuleState state){
-      state = SwerveModuleState.optimize(state, new Rotation2d(canCoder.getAbsolutePosition()));
+      state = SwerveModuleState.optimize(state, new Rotation2d(canCoder.getAbsolutePosition())); //try *Math.PI/180 && .fromdegrees
 
         drive.set(state.speedMetersPerSecond/2.5);
-        pidOut = anglePID.calculate(canCoder.getAbsolutePosition(), state.angle.getDegrees());
+        pidOut = anglePID.calculate(canCoder.getAbsolutePosition()+this.angleOffset, state.angle.getDegrees());
         //System.out.println(String.format(canCoder.getAbsolutePosition() + "-" + state.angle.getDegrees() + "-" + pidOut));
         rotate.set(pidOut/8);
   }
