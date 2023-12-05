@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenixpro.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -32,8 +32,8 @@ public class Swerve extends SubsystemBase {
   public Swerve() {
   }
 
-  public void drive(double y, double x, double w, PigeonIMU gyro){
-  Rotation2d gyroAngle = new Rotation2d((Math.abs(gyro.getYaw())%360)/57.2958); //gyro abs angle in rads
+  public void drive(double y, double x, double w, Pigeon2 gyro){
+  Rotation2d gyroAngle = new Rotation2d((Math.abs(gyro.getYaw().getValue())%360)/57.2958); //gyro abs angle in rads
   System.out.println(gyroAngle);
   ChassisSpeeds speeds = new ChassisSpeeds(y, x, w);
   //ChassisSpeeds frspeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, gyroAngle);
