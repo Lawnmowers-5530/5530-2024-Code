@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenixpro.hardware.Pigeon2;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,7 +20,7 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer implements Loggable{
   private final Swerve swerve = new Swerve();
   private final CommandXboxController driverController = new CommandXboxController(0);
-  private final PigeonIMU pigeon = new PigeonIMU(17);
+  private final Pigeon2 pigeon = new Pigeon2(17);
   private final Command swerveCommand = new RunCommand(
     () -> {
       double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.09);
@@ -29,7 +29,6 @@ public class RobotContainer implements Loggable{
       swerve.drive(y, x, w, pigeon);
 }, swerve);
   public RobotContainer() {
-    pigeon.configFactoryDefault();
     Logger.configureLoggingAndConfig(this, false);
     configureBindings();
   }
