@@ -8,7 +8,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 import com.revrobotics.CANSparkMax;
@@ -38,7 +37,7 @@ public class SwerveModule extends SubsystemBase{
     
   }
   public void setState(SwerveModuleState state){
-      state = SwerveModuleState.optimize(state, new Rotation2d(canCoder.getAbsolutePosition())); //try *Math.PI/180 && .fromdegrees
+      state = SwerveModuleState.optimize(state, new Rotation2d(canCoder.getAbsolutePosition()*Math.PI/180)); //try *Math.PI/180
 
         drive.set(state.speedMetersPerSecond/2.5);
         pidOut = anglePID.calculate(canCoder.getAbsolutePosition()+this.angleOffset, state.angle.getDegrees());
