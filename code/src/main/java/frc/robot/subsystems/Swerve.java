@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenixpro.hardware.Pigeon2;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -32,15 +33,15 @@ public class Swerve extends SubsystemBase {
   }
 
   public void drive(double y, double x, double w, Pigeon2 gyro){
-  //Rotation2d gyroAngle = new Rotation2d((Math.abs(gyro.getYaw().getValue())%360)/57.2958); //gyro abs angle in rads
-  //System.out.println(gyroAngle);
+  Rotation2d gyroAngle = new Rotation2d(gyro.getAngle()*Math.PI/180); //gyro angle in rads
+  System.out.println(gyroAngle.getDegrees());
   ChassisSpeeds speeds = new ChassisSpeeds(y, x, w);
-  //ChassisSpeeds frspeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, gyroAngle);
+  ChassisSpeeds frspeeds = ChassisSpeeds.fromFieldRelativeSpeeds(y, x, w, gyroAngle);
   SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
-  Mod_0.setState(states[0]);
-  Mod_1.setState(states[1]);
-  Mod_2.setState(states[2]);
-  Mod_3.setState(states[3]);
+  Mod_0.setState(states[0], gyroAngle);
+  Mod_1.setState(states[1], gyroAngle);
+  Mod_2.setState(states[2], gyroAngle);
+  Mod_3.setState(states[3], gyroAngle);
   
   }
   @Override

@@ -36,21 +36,23 @@ public class SwerveModule extends SubsystemBase{
     this.angleOffset = angleOffset;
     
   }
-  public void setState(SwerveModuleState state){
-      state = SwerveModuleState.optimize(state, new Rotation2d(canCoder.getAbsolutePosition().getValue()*Math.PI/90));
+  public void setState(SwerveModuleState state, Rotation2d gyroAngle){
+        state = SwerveModuleState.optimize(state, new Rotation2d(getTurningPositionDegrees()*Math.PI/180));
 
         drive.set(state.speedMetersPerSecond/2.5);
-        pidOut = anglePID.calculate(canCoder.getAbsolutePosition().getValue()*360+this.angleOffset, state.angle.getDegrees());
+        pidOut = anglePID.calculate(getTurningPositionDegrees(), state.angle.getDegrees());
         rotate.set(pidOut/8);
   }
 
-  public double getTurningPosition() {
-      return encoder.getPosition();
-      //return getAbsoluteEncoderRad();
+  public double getTurningPositionDegrees() {
+    return this.canCoder.getAbsolutePosition().getValue()*360+this.angleOffset;
     }
   public double getTurningVelocity() {
       return encoder.getVelocity();
     }
+  public double getOffset(){
+    return this.angleOffset;
+  }
     
   @Override
   public void periodic() {
