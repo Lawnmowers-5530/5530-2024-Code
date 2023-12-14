@@ -21,10 +21,10 @@ public class Swerve extends SubsystemBase {
   Translation2d m1 = new Translation2d(Constants.trackWidth/2, -Constants.wheelBase/2);
   Translation2d m2 = new Translation2d(-Constants.trackWidth/2, Constants.wheelBase/2);
   Translation2d m3 = new Translation2d(-Constants.trackWidth/2, -Constants.wheelBase/2);
-  //test!
+
 
   SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
-  //im literally making changes right now hello?
+
   SwerveModule Mod_0 = new SwerveModule(Constants.Mod0.driveMotor, Constants.Mod0.turnMotor, Constants.Mod0.canCoder, Constants.Mod0.angleOffset);
   SwerveModule Mod_1 = new SwerveModule(Constants.Mod1.driveMotor, Constants.Mod1.turnMotor, Constants.Mod1.canCoder, Constants.Mod1.angleOffset);
   SwerveModule Mod_2 = new SwerveModule(Constants.Mod2.driveMotor, Constants.Mod2.turnMotor, Constants.Mod2.canCoder, Constants.Mod2.angleOffset);
@@ -33,15 +33,22 @@ public class Swerve extends SubsystemBase {
   }
 
   public void drive(double y, double x, double w, Pigeon2 gyro){
-  Rotation2d gyroAngle = new Rotation2d(gyro.getAngle()*Math.PI/180); //gyro angle in rads
-  System.out.println(gyroAngle.getDegrees());
-  ChassisSpeeds speeds = new ChassisSpeeds(y, x, w);
-  ChassisSpeeds frspeeds = ChassisSpeeds.fromFieldRelativeSpeeds(y, x, w, gyroAngle);
+  Rotation2d gyroAngle = new Rotation2d((Math.abs(gyro.getYaw().getValue())%360)/57.2958); //gyro abs angle in rads
+  //System.out.println(gyroAngle);
+  double theta = Math.atan(x/y);
+  double phi = theta - gyroAngle.getDegrees();
+  double c = Math.sqrt(Math.pow(x, 2)+Math.pow(y, 2));
+
+  double yn = c*Math.cos(phi);
+  double xn = c*Math.sin(phi);
+
+  ChassisSpeeds speeds = new ChassisSpeeds(yn, xn, w);
+  //ChassisSpeeds frspeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, gyroAngle);
   SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
-  Mod_0.setState(states[0], gyroAngle);
-  Mod_1.setState(states[1], gyroAngle);
-  Mod_2.setState(states[2], gyroAngle);
-  Mod_3.setState(states[3], gyroAngle);
+  Mod_0.setState(states[0]);
+  Mod_1.setState(states[1]);
+  Mod_2.setState(states[2]);
+  Mod_3.setState(states[3]);
   
   }
   @Override

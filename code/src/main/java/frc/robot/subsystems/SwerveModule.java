@@ -17,7 +17,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenixpro.hardware.CANcoder;
 
 public class SwerveModule extends SubsystemBase{
-  private PIDController anglePID = new PIDController(0.035, 0.0225, 0);
+  private PIDController anglePID = new PIDController(0.01, 0.005, 0);
   @Log
   private double pidOut;
   private CANSparkMax drive;
@@ -36,12 +36,12 @@ public class SwerveModule extends SubsystemBase{
     this.angleOffset = angleOffset;
     
   }
-  public void setState(SwerveModuleState state, Rotation2d gyroAngle){
+  public void setState(SwerveModuleState state){
         state = SwerveModuleState.optimize(state, new Rotation2d(getTurningPositionDegrees()*Math.PI/180));
 
         drive.set(state.speedMetersPerSecond/2.5);
         pidOut = anglePID.calculate(getTurningPositionDegrees(), state.angle.getDegrees());
-        rotate.set(pidOut/8);
+        rotate.set(pidOut);
   }
 
   public double getTurningPositionDegrees() {
