@@ -35,13 +35,8 @@ public class Swerve extends SubsystemBase {
   public void drive(double y, double x, double w, Pigeon2 gyro){
   Rotation2d gyroAngle = new Rotation2d((Math.abs(gyro.getYaw().getValue())%360)/57.2958); //gyro abs angle in rads
   //System.out.println(gyroAngle);
-  double theta = Math.atan(x/y);
-  double phi = theta - gyroAngle.getDegrees();
-  double c = Math.sqrt(Math.pow(x, 2)+Math.pow(y, 2));
-
-  double yn = c*Math.cos(phi);
-  double xn = c*Math.sin(phi);
-
+  double xn = (x*gyroAngle.getCos())-(y*gyroAngle.getSin());
+  double yn = (x*gyroAngle.getSin())+(y*gyroAngle.getCos());
   ChassisSpeeds speeds = new ChassisSpeeds(yn, xn, w);
   //ChassisSpeeds frspeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, gyroAngle);
   SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
