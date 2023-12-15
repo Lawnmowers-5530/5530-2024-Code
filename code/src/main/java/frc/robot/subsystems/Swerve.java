@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 
 
@@ -32,11 +33,17 @@ public class Swerve extends SubsystemBase {
   public Swerve() {
   }
 
-  public void drive(double y, double x, double w, Pigeon2 gyro){
-  Rotation2d gyroAngle = new Rotation2d((Math.abs(gyro.getYaw().getValue())%360)/57.2958); //gyro abs angle in rads
-  //System.out.println(gyroAngle);
-  double xn = (x*gyroAngle.getCos())-(y*gyroAngle.getSin());
-  double yn = (x*gyroAngle.getSin())+(y*gyroAngle.getCos());
+  public void drive(double y, double x, double w, Pigeon2 gyro, Trigger Y){
+  if(Y.getAsBoolean()){
+    zeroGyro(gyro);
+  }
+  double yaw = gyro.getYaw().getValue();
+  Rotation2d gyroAngle = new Rotation2d(-(Math.abs(yaw)%360)/57.2958); //gyro abs angle in rads
+  double[] rotated = rotateVector(x, y, gyroAngle);
+  
+  double xn = rotated[0];
+  double yn = rotated[1];
+
   ChassisSpeeds speeds = new ChassisSpeeds(yn, xn, w);
   //ChassisSpeeds frspeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, gyroAngle);
   SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
@@ -49,5 +56,13 @@ public class Swerve extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public double[] rotateVector(double x, double y, Rotation2d gyroAngle){
+  return new double[]{(x*gyroAngle.getCos())-(y*gyroAngle.getSin()), (x*gyroAngle.getSin())+(y*gyroAngle.getCos())};
+  }
+
+  public void zeroGyro(Pigeon2 pig){
+    pig.setYaw(0);
   }
 }

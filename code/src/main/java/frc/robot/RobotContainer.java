@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
 
@@ -26,7 +27,8 @@ public class RobotContainer implements Loggable{
       double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.09);
       double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.09);
       double w = MathUtil.applyDeadband(driverController.getRightX(), 0.09);
-      swerve.drive(y, x, w, pigeon);
+      Trigger Y = driverController.y();
+      swerve.drive(y, x, w, pigeon, Y);
 }, swerve);
   public RobotContainer() {
     Logger.configureLoggingAndConfig(this, false);
