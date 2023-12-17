@@ -37,6 +37,7 @@ public class SwerveModule extends SubsystemBase{
     this.angleOffset = angleOffset;
     
   }
+
   public void setState(SwerveModuleState state){
         state = SwerveModuleState.optimize(state, new Rotation2d(getTurningPosition().getDegrees()*Math.PI/180));
 
@@ -48,9 +49,11 @@ public class SwerveModule extends SubsystemBase{
   public Rotation2d getTurningPosition() {
     return new Rotation2d((this.canCoder.getAbsolutePosition().getValue()*360+this.angleOffset)*(Math.PI/180));
     }
+
   public double getVelocity() {
       return encoder.getVelocity();
     }
+    
   public double getOffset(){
     return this.angleOffset;
   }

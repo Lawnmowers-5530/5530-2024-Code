@@ -28,19 +28,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
-
+import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
 
 
 public class RobotContainer implements Loggable{
   private final Swerve swerve = new Swerve();
   private final CommandXboxController driverController = new CommandXboxController(0);
-  private final Pigeon2 pigeon = new Pigeon2(17);
   private Trigger Y;
   private final Runnable odoInit = new Runnable(){
     @Override
     public void run(){
-      swerve.createOdometry();
+      //method call here;
     }
   };
 
@@ -51,7 +50,7 @@ public class RobotContainer implements Loggable{
       double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15);
       double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15);
       Y = driverController.y();
-      swerve.drive(y, x, w, pigeon, Y);
+      swerve.drive(y, x, w, Y);
 }, swerve);
   public RobotContainer() {
     Logger.configureLoggingAndConfig(this, false);
@@ -82,6 +81,6 @@ thetaController.enableContinuousInput(-Math.PI, Math.PI);
       thetaController,
       swerve::setModuleStates,
       swerve);
-    return swerveControllerCommand.andThen(() -> swerve.autonDrive(0, 0, 0, pigeon));
+    return swerveControllerCommand.andThen(() -> swerve.autonDrive(0, 0, 0));
 }
 }
