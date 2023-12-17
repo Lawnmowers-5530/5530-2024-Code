@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.annotations.Log;
@@ -30,24 +31,24 @@ public class SwerveModule extends SubsystemBase{
     drive = new CANSparkMax(driveMotorID, MotorType.kBrushless);
     rotate = new CANSparkMax(turnMotorID, MotorType.kBrushless);
     this.canCoder = new CANcoder(canCoderID);
-    encoder = rotate.getEncoder();
-    encoder.setPosition(canCoder.getAbsolutePosition().getValue());
+    encoder = drive.getEncoder();
+    encoder.setPosition(0);
     anglePID.enableContinuousInput(0, 360);
     this.angleOffset = angleOffset;
     
   }
   public void setState(SwerveModuleState state){
-        state = SwerveModuleState.optimize(state, new Rotation2d(getTurningPositionDegrees()*Math.PI/180));
+        state = SwerveModuleState.optimize(state, new Rotation2d(getTurningPosition().getDegrees()*Math.PI/180));
 
         drive.set(state.speedMetersPerSecond/1.1);
-        pidOut = anglePID.calculate(getTurningPositionDegrees(), state.angle.getDegrees());
+        pidOut = anglePID.calculate(getTurningPosition().getDegrees(), state.angle.getDegrees());
         rotate.set(pidOut);
   }
 
-  public double getTurningPositionDegrees() {
-    return this.canCoder.getAbsolutePosition().getValue()*360+this.angleOffset;
+  public Rotation2d getTurningPosition() {
+    return new Rotation2d((this.canCoder.getAbsolutePosition().getValue()*360+this.angleOffset)*(Math.PI/180));
     }
-  public double getTurningVelocity() {
+  public double getVelocity() {
       return encoder.getVelocity();
     }
   public double getOffset(){
@@ -57,5 +58,12 @@ public class SwerveModule extends SubsystemBase{
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+  public double getDistance(){
+    return encoder.getPosition()*(Math.PI*8);
+  }
+
+  public SwerveModulePosition getPos(){
+    return new SwerveModulePosition(getDistance(), getTurningPosition());
   }
 }
