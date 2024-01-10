@@ -8,13 +8,13 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
+import frc.lib.Vector2D;
 import frc.robot.subsystems.Swerve;
 
 
@@ -30,7 +30,6 @@ public class RobotContainer implements Loggable{
     }
   };
 
-  private final Command odometryInitializer = new InstantCommand(odoInit, swerve);
   private final Command swerveCommand = new RunCommand(
     () -> {
       double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
@@ -45,7 +44,8 @@ private final Command driveToVector = new RunCommand(
     double y=1;
     double x=1;
     double w=1;
-    swerve.drive(y, x, w, false);
+    Vector2D vector = new Vector2D(x, y, false);
+    swerve.vectorDrive(vector, 0);
 }, swerve);
 
   public RobotContainer() {
