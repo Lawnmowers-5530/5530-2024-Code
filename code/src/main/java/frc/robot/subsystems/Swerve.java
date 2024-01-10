@@ -4,18 +4,18 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenixpro.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.lib.Vector2D;
+import frc.lib.Vector3D;
+import frc.lib.VectorOperator;
 import frc.robot.Constants;
 
 
@@ -23,10 +23,10 @@ public class Swerve extends SubsystemBase {
 
   SwerveDriveOdometry odometry;
 
-  SwerveModule Mod_0 = new SwerveModule(Constants.Mod0.driveMotor, Constants.Mod0.turnMotor, Constants.Mod0.canCoder, Constants.Mod0.angleOffset);
-  SwerveModule Mod_1 = new SwerveModule(Constants.Mod1.driveMotor, Constants.Mod1.turnMotor, Constants.Mod1.canCoder, Constants.Mod1.angleOffset);
-  SwerveModule Mod_2 = new SwerveModule(Constants.Mod2.driveMotor, Constants.Mod2.turnMotor, Constants.Mod2.canCoder, Constants.Mod2.angleOffset);
-  SwerveModule Mod_3 = new SwerveModule(Constants.Mod3.driveMotor, Constants.Mod3.turnMotor, Constants.Mod3.canCoder, Constants.Mod3.angleOffset);
+  private static final SwerveModule Mod_0 = Constants.Modules.Mod_0;
+  private static final SwerveModule Mod_1 = Constants.Modules.Mod_1;
+  private static final SwerveModule Mod_2 = Constants.Modules.Mod_2;
+  private static final SwerveModule Mod_3 = Constants.Modules.Mod_3;
 
   SwerveModule[] modules = new SwerveModule[]{Mod_0, Mod_1, Mod_2, Mod_3};
 
@@ -36,9 +36,11 @@ public class Swerve extends SubsystemBase {
   }
 
   public void drive(double y, double x, double w, Trigger Y){
+    if(Y!=null){
     if(Y.getAsBoolean()){
       Pgyro.zeroGyro();
     }
+  }
 
     Rotation2d gyroAngle = Pgyro.getRot();
 
@@ -56,6 +58,7 @@ public class Swerve extends SubsystemBase {
     Mod_3.setState(states[3]);
 
   }
+  
   @Override
   public void periodic() {
     odometry.update(Pgyro.getRot(), getModulePositions());
@@ -69,11 +72,13 @@ public class Swerve extends SubsystemBase {
     return odometry.getPoseMeters();
   }
 
-  public void autonDrive(double xSpeed, double ySpeed, double rot) {
-    SwerveModuleState[] swerveModuleStates =
-        Constants.kinematics.toSwerveModuleStates(
-            new ChassisSpeeds(xSpeed, ySpeed, rot));
-    setModuleStates(swerveModuleStates);
+  public void vectorDrive(Vector2D target, double thetaRadSec){
+    double vx = target.getvX();
+    double vy = target.getvY();
+    
+    this.drive(vy, vx, thetaRadSec, null);
+
+
   }
 
 

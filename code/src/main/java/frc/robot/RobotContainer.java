@@ -4,23 +4,10 @@
 
 package frc.robot;
 
-import java.util.List;
-
-import javax.management.InstanceNotFoundException;
-
-import com.ctre.phoenixpro.hardware.Pigeon2;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -28,12 +15,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
-import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
 
 
 public class RobotContainer implements Loggable{
   private final Swerve swerve = new Swerve();
+
   private final CommandXboxController driverController = new CommandXboxController(0);
   private Trigger Y;
   private final Runnable odoInit = new Runnable(){
@@ -52,6 +39,15 @@ public class RobotContainer implements Loggable{
       Y = driverController.y();
       swerve.drive(y, x, w, Y);
 }, swerve);
+
+private final Command driveToVector = new RunCommand(
+  () -> {
+    double y=1;
+    double x=1;
+    double w=1;
+    swerve.drive(y, x, w, false);
+}, swerve);
+
   public RobotContainer() {
     Logger.configureLoggingAndConfig(this, false);
     configureBindings();
