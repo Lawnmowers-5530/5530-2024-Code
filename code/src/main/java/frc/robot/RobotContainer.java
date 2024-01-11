@@ -23,29 +23,25 @@ public class RobotContainer implements Loggable{
 
   private final CommandXboxController driverController = new CommandXboxController(0);
   private Trigger Y;
-  private final Runnable odoInit = new Runnable(){
-    @Override
-    public void run(){
-      //method call here;
-    }
-  };
+  private Trigger X;
 
   private final Command swerveCommand = new RunCommand(
     () -> {
       double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
       double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15);
       double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15);
+      Vector2D vector = new Vector2D(x, y, false);
       Y = driverController.y();
-      swerve.drive(y, x, w, Y);
+      swerve.drive(vector, w, Y);
 }, swerve);
 
 private final Command driveToVector = new RunCommand(
   () -> {
-    double y=1;
-    double x=1;
-    double w=1;
-    Vector2D vector = new Vector2D(x, y, false);
-    swerve.vectorDrive(vector, 0);
+    double y=0.5;
+    double x=0.5;
+    double w=0;
+    Vector2D vector = new Vector2D(x, -y, false);
+    swerve.vectorDrive(vector, w);
 }, swerve);
 
   public RobotContainer() {
@@ -57,6 +53,7 @@ private final Command driveToVector = new RunCommand(
   }
   private void configureBindings() {
     swerve.setDefaultCommand(swerveCommand);
+    driverController.x().whileTrue(driveToVector);
   }
   
   public Command getAutonomousCommand() {

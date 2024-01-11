@@ -4,6 +4,8 @@
 
 package frc.lib;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+
 /** Add your docs here. */
 public class VectorOperator {
   public static Vector3D add(Vector3D v1, Vector3D v2){
@@ -22,6 +24,13 @@ public class VectorOperator {
       return new Vector3D(vx, vy, vz, false);
 
   }
+  public static Vector3D subtract(Vector3D v1, Vector2D v2){
+    double vx = v1.getvX() - v2.getvX();
+    double vy = v1.getvY() - v2.getvY();
+    double vz = v1.getvZ();
+
+    return new Vector3D(vx, vy, vz, false);
+}
 
   public static double vecLen3D(Vector3D vector){
       double vx = vector.getvX();
@@ -54,7 +63,7 @@ public class VectorOperator {
 
     double r = Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2));
 
-    double theta = Math.atan(vx/vy);
+    double theta = Math.atan(vy/vx);
 
 
     return new double[]{r, theta};
@@ -88,4 +97,8 @@ public class VectorOperator {
 
       return new double[]{r, theta, phi};
   }
+
+  public static Vector2D rotateVector2D(Vector2D vector, Rotation2d angle){
+    return new Vector2D(vector.getvX()*angle.getCos()-(vector.getvY()*angle.getSin()), (vector.getvX()*angle.getSin())+(vector.getvY()*angle.getCos()), false);
+    }
 }

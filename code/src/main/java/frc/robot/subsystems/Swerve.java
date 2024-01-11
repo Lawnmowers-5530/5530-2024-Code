@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Vector2D;
+import frc.lib.VectorOperator;
 import frc.robot.Constants;
 
 
@@ -33,19 +34,18 @@ public class Swerve extends SubsystemBase {
     odometry = new SwerveDriveOdometry(Constants.kinematics, new Rotation2d(Pgyro.getGyro().getYaw().getValue()*(Math.PI/180)), modPos);
   }
 
-  public void drive(double y, double x, double w, Trigger Y){
+  public void drive(Vector2D vector, double omegaRadSec, Trigger Y){
+    if(Y!=null){
     if(Y.getAsBoolean()){
       Pgyro.zeroGyro();
     }
+  }
 
     Rotation2d gyroAngle = Pgyro.getRot();
 
-    double[] rotated = rotateVector(x, y, gyroAngle);
-    
-    double xn = rotated[0];
-    double yn = rotated[1];
+    Vector2D rotated = VectorOperator.rotateVector2D(vector, gyroAngle);
 
-    ChassisSpeeds speeds = new ChassisSpeeds(yn, xn, w);
+    ChassisSpeeds speeds = new ChassisSpeeds(rotated.getvX(), rotated.getvY(), omegaRadSec);
 
     SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(speeds);
     Mod_0.setState(states[0]);
@@ -57,10 +57,6 @@ public class Swerve extends SubsystemBase {
   @Override
   public void periodic() {
     odometry.update(Pgyro.getRot(), getModulePositions());
-  }
-
-  public double[] rotateVector(double x, double y, Rotation2d angle){
-  return new double[]{(x*angle.getCos())-(y*angle.getSin()), (x*angle.getSin())+(y*angle.getCos())};
   }
 
   public Pose2d getPose() {
@@ -75,10 +71,7 @@ public class Swerve extends SubsystemBase {
   }
 
   public void vectorDrive(Vector2D target, double thetaRadSec){
-    double vx = target.getvX();
-    double vy = target.getvY();
-    
-    this.drive(vy, vx, thetaRadSec, null);
+    this.drive(target, thetaRadSec, null);
   }
 
 
