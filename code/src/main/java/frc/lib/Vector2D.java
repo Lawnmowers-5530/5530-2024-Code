@@ -16,7 +16,7 @@ public class Vector2D {
   public Vector2D(double vx, double vy, boolean isPolar){
       if(isPolar){
 
-          double[] vector = VectorOperator.toCartesian3D(new double[]{vx, vy});
+          double[] vector = VectorOperator.toCartesian2D(vx, vy);
 
           this.vector = vector;
           this.vx = vector[0];

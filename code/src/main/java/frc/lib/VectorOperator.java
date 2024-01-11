@@ -87,6 +87,13 @@ public class VectorOperator {
       return new double[]{vx, vy, vz};
   }
 
+  public static double[] toCartesian2D(double r, double theta){
+    double vx = r * Math.cos(theta);
+    double vy = r * Math.sin(theta);
+
+    return new double[]{vx, vy};
+  }
+
   public static double[] convertToConventional3D(double[] vector){
       double r = vector[0];
       double originalTheta = vector[1];
@@ -101,4 +108,5 @@ public class VectorOperator {
   public static Vector2D rotateVector2D(Vector2D vector, Rotation2d angle){
     return new Vector2D(vector.getvX()*angle.getCos()-(vector.getvY()*angle.getSin()), (vector.getvX()*angle.getSin())+(vector.getvY()*angle.getCos()), false);
     }
+
 }
