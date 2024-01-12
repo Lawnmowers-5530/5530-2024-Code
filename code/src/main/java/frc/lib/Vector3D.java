@@ -59,6 +59,6 @@ public class Vector3D {
   }
   public void printVector(){
       System.out.println("["+this.vx+","+this.vy+","+this.vz+"]");
-  }
-  
+  } //prints the vector in the form [vx,vy,vz]
+
 }

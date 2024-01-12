@@ -14,12 +14,16 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
+import io.github.oblarg.oblog.annotations.Log;
 import frc.lib.Vector2D;
 import frc.robot.subsystems.Swerve;
 
 
 public class RobotContainer implements Loggable{
   private final Swerve swerve = new Swerve();
+
+  @Log
+  String x = "a";
 
   private final CommandXboxController driverController = new CommandXboxController(0);
   private Trigger Y;
@@ -45,11 +49,7 @@ private final Command driveToVector = new RunCommand(
 }, swerve);
 
   public RobotContainer() {
-    Logger.configureLoggingAndConfig(this, false);
     configureBindings();
-  }
-  public void updateLogger() {
-    Logger.updateEntries();
   }
   private void configureBindings() {
     swerve.setDefaultCommand(swerveCommand);
@@ -76,4 +76,5 @@ thetaController.enableContinuousInput(-Math.PI, Math.PI);
       swerve);
     return swerveControllerCommand.andThen(() -> swerve.autonDrive(0, 0, 0));
 }
+
 }

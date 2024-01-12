@@ -16,11 +16,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
 import frc.robot.Constants;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
 
-public class Swerve extends SubsystemBase {
+public class Swerve extends SubsystemBase implements Loggable{
 
   SwerveDriveOdometry odometry;
+  
+  @Log
+  String pose = "a";
 
   private static final SwerveModule Mod_0 = Constants.Modules.Mod_0;
   private static final SwerveModule Mod_1 = Constants.Modules.Mod_1;
@@ -31,7 +36,7 @@ public class Swerve extends SubsystemBase {
 
   public Swerve() {
     SwerveModulePosition[] modPos = getModulePositions();
-    odometry = new SwerveDriveOdometry(Constants.kinematics, new Rotation2d(Pgyro.getGyro().getYaw().getValue()*(Math.PI/180)), modPos);
+    odometry = new SwerveDriveOdometry(Constants.kinematics, Pgyro.getRot(), modPos);
   }
 
   public void drive(Vector2D vector, double omegaRadSec, Trigger Y){
@@ -57,6 +62,7 @@ public class Swerve extends SubsystemBase {
   @Override
   public void periodic() {
     odometry.update(Pgyro.getRot(), getModulePositions());
+    pose = odometry.getPoseMeters().toString();
   }
 
   public Pose2d getPose() {

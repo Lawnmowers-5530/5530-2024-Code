@@ -106,7 +106,7 @@ public class VectorOperator {
   }
 
   public static Vector2D rotateVector2D(Vector2D vector, Rotation2d angle){
-    return new Vector2D(vector.getvX()*angle.getCos()-(vector.getvY()*angle.getSin()), (vector.getvX()*angle.getSin())+(vector.getvY()*angle.getCos()), false);
+    return new Vector2D(vector.getvY()*angle.getCos()-(vector.getvX()*angle.getSin()), (vector.getvY()*angle.getSin())+(vector.getvX()*angle.getCos()), false);
     }
 
 }

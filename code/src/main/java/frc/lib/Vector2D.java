@@ -51,4 +51,5 @@ public class Vector2D {
   public void printVector(){
       System.out.println("["+this.vx+","+this.vy+"]");
   }
+
 }

@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import io.github.oblarg.oblog.Logger;
 
 
 public class Robot extends TimedRobot {
@@ -17,11 +18,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+    Logger.configureLoggingAndConfig(m_robotContainer, false);
   }
 
   @Override
   public void robotPeriodic() {
-    m_robotContainer.updateLogger();
+    Logger.updateEntries();
     CommandScheduler.getInstance().run();
   }
 

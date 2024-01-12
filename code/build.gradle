@@ -70,7 +70,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 
 //TODO: change this!
-    implementation "com.github.Oblarg:Oblog:5.0.0"
+    implementation "com.github.Oblarg:Oblog:5.1.0"
 }
 
 test {
