@@ -4,6 +4,8 @@
 
 package frc.lib;
 
+import edu.wpi.first.math.Vector;
+
 /** Add your docs here. */
 public class Vector2D {
   private double[] vector;
@@ -52,4 +54,8 @@ public class Vector2D {
       System.out.println("["+this.vx+","+this.vy+"]");
   }
 
+  public Vector2D getDifference(Vector2D v1, Vector2D v2) {
+        Vector2D V = new Vector2D(v2.getvX() - v1.getvX(), v2.getvY() - v1.getvY(), false);
+        return V;
+  }
 }
