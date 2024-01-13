@@ -4,8 +4,6 @@
 
 package frc.lib;
 
-import edu.wpi.first.math.Vector;
-
 /** Add your docs here. */
 public class Vector2D {
   private double[] vector;

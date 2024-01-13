@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
 import frc.robot.Constants;
+import frc.robot.module.limelight.Limelight;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -90,5 +91,9 @@ public class Swerve extends SubsystemBase implements Loggable{
 
   public SwerveModulePosition[] getModulePositions(){
     return new SwerveModulePosition[]{Mod_0.getPos(), Mod_1.getPos(), Mod_2.getPos(), Mod_3.getPos()};
+  }
+
+  public void updateOdometry(Limelight limelight){
+    odometry.resetPosition(Pgyro.getRot(), getModulePositions(), limelight.getPose2DBlue());
   }
 }

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -13,24 +15,31 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.lib.Vector2D;
+import frc.robot.module.limelight.Limelight;
 import frc.robot.subsystems.Swerve;
 
 
 public class RobotContainer implements Loggable{
   private final Swerve swerve = new Swerve();
+  Limelight limelight = new Limelight();
+  Trigger validTarget;
+  PIDController angleController = new PIDController(0.25, 0, 0);
+
+  @Log
+  String blueLimePose = "a";
 
   @Log
   String x = "a";
 
   private final CommandXboxController driverController = new CommandXboxController(0);
   private Trigger Y;
-  private Trigger X;
 
   private final Command swerveCommand = new RunCommand(
     () -> {
+      blueLimePose = limelight.testBotpose();
+
       double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
       double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15);
       double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15);
@@ -48,12 +57,29 @@ private final Command driveToVector = new RunCommand(
     swerve.vectorDrive(vector, w);
 }, swerve);
 
+private final Command rotateToHdg = new RunCommand(
+  () -> {
+    double w=limelight.getHorizontalOffset();
+    w = angleController.calculate(w);
+
+    swerve.vectorDrive(new Vector2D(0, 0, false), w);
+}, swerve);
+
   public RobotContainer() {
     configureBindings();
   }
+
+
   private void configureBindings() {
     swerve.setDefaultCommand(swerveCommand);
     driverController.x().whileTrue(driveToVector);
+
+    
+    BooleanSupplier isTargetValid = () -> limelight.hasValidTargets();
+    validTarget = new Trigger(isTargetValid);
+
+    driverController.b().and(validTarget).whileTrue(rotateToHdg);
+    
   }
   
   public Command getAutonomousCommand() {
