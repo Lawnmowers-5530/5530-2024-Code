@@ -43,7 +43,7 @@ public class RobotContainer implements Loggable{
       double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
       double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15);
       double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15);
-      Vector2D vector = new Vector2D(x, y, false);
+      Vector2D vector = new Vector2D(y, x, false);
       Y = driverController.y();
       swerve.drive(vector, w, Y);
 }, swerve);
