@@ -4,7 +4,9 @@
 
 package frc.lib;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Constants;
 
 /** Add your docs here. */
 public class VectorOperator {
@@ -108,5 +110,9 @@ public class VectorOperator {
   public static Vector2D rotateVector2D(Vector2D vector, Rotation2d angle){
     return new Vector2D((vector.getvY()*angle.getSin())+(vector.getvX()*angle.getCos()), vector.getvY()*angle.getCos()-(vector.getvX()*angle.getSin()), false);
     }
+
+  public static Vector2D fromPose(Pose2d currentPose, Pose2d targetPose){
+    return new Vector2D((targetPose.getTranslation().getX()-currentPose.getTranslation().getX())*Constants.poseVectorMultiplier, (targetPose.getTranslation().getY()-currentPose.getTranslation().getY())*Constants.poseVectorMultiplier, false);
+  }
 
 }

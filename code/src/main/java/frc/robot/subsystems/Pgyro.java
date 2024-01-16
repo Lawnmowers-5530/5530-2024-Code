@@ -27,7 +27,7 @@ public class Pgyro extends SubsystemBase {
     return getDeg()*Math.PI/180;
   }
   public static void zeroGyro(){
-    pigeon.setYaw((-36000));
+    pigeon.setYaw((0));
   }
   public static double getHdgDeg(){
     double a;
@@ -41,7 +41,7 @@ public class Pgyro extends SubsystemBase {
   }
   public static double getHdgRad(){
     double a;
-    if(getDeg()>0){
+    if(getRad()>0){
     a = Math.abs(getRad()%(Math.PI*2));
     }else{
     a = (Math.PI*2)-Math.abs(getRad()%(Math.PI*2));

@@ -10,6 +10,8 @@ public final class Constants {
     public static final double trackWidth = Units.inchesToMeters(24);
     public static final double wheelBase = Units.inchesToMeters(24);
 
+    public static final double poseVectorMultiplier = 0.25;
+
 
     public static final class Mod0{
         public static final int driveMotor = 5;

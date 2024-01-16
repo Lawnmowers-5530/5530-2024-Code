@@ -96,4 +96,8 @@ public class Swerve extends SubsystemBase implements Loggable{
   public void updateOdometry(Limelight limelight){
     odometry.resetPosition(Pgyro.getRot(), getModulePositions(), limelight.getPose2DBlue());
   }
+
+  public Pose2d getPoseOdometry(){
+    return odometry.getPoseMeters();
+  }
 }
