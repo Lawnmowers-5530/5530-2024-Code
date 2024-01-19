@@ -63,6 +63,7 @@ public class Swerve extends SubsystemBase implements Loggable{
   @Override
   public void periodic() {
     odometry.update(Pgyro.getRot(), getModulePositions());
+    updateOdometry();
     pose = odometry.getPoseMeters().toString();
   }
 
@@ -93,8 +94,10 @@ public class Swerve extends SubsystemBase implements Loggable{
     return new SwerveModulePosition[]{Mod_0.getPos(), Mod_1.getPos(), Mod_2.getPos(), Mod_3.getPos()};
   }
 
-  public void updateOdometry(Limelight limelight){
-    odometry.resetPosition(Pgyro.getRot(), getModulePositions(), limelight.getPose2DBlue());
+  public void updateOdometry(){
+    if(StaticLimeLight.hasValidTargets()){
+    odometry.resetPosition(Pgyro.getRot(), getModulePositions(), StaticLimeLight.getPose2DBlue());
+    }
   }
 
   public Pose2d getPoseOdometry(){

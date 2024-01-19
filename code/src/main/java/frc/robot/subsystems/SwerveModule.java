@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
@@ -31,6 +32,7 @@ public class SwerveModule extends SubsystemBase{
     this.canCoder = new CANcoder(canCoderID);
     encoder = drive.getEncoder();
     encoder.setPosition(0);
+    encoder.setPositionConversionFactor(Units.inchesToMeters(Math.PI*4));
     anglePID.enableContinuousInput(0, 360);
     this.angleOffset = angleOffset;
     
@@ -61,7 +63,7 @@ public class SwerveModule extends SubsystemBase{
     // This method will be called once per scheduler run
   }
   public double getDistance(){
-    return encoder.getPosition()*(Math.PI*4);
+    return encoder.getPosition();
   }
 
   public SwerveModulePosition getPos(){
