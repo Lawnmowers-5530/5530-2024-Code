@@ -23,9 +23,8 @@ import io.github.oblarg.oblog.annotations.Log;
 public class Swerve extends SubsystemBase implements Loggable{
 
   SwerveDriveOdometry odometry;
-  
   @Log
-  String pose = "a";
+  boolean isUpdating;
 
   private static final SwerveModule Mod_0 = Constants.Modules.Mod_0;
   private static final SwerveModule Mod_1 = Constants.Modules.Mod_1;
@@ -61,20 +60,11 @@ public class Swerve extends SubsystemBase implements Loggable{
   }
   @Override
   public void periodic() {
-    odometry.update(Pgyro.getRot(), getModulePositions());
     updateOdometry();
-    pose = odometry.getPoseMeters().toString();
   }
 
   public Pose2d getPose() {
     return odometry.getPoseMeters();
-  }
-
-  public void autonDrive(double xSpeed, double ySpeed, double rot) {
-    SwerveModuleState[] swerveModuleStates =
-        Constants.kinematics.toSwerveModuleStates(
-            new ChassisSpeeds(xSpeed, ySpeed, rot));
-    setModuleStates(swerveModuleStates);
   }
 
   public void vectorDrive(Vector2D target, double thetaRadSec){
@@ -96,6 +86,10 @@ public class Swerve extends SubsystemBase implements Loggable{
   public void updateOdometry(){
     if(StaticLimeLight.hasValidTargets()){
     odometry.resetPosition(Pgyro.getRot(), getModulePositions(), StaticLimeLight.getPose2DBlue());
+    isUpdating = true;
+    }else{
+      odometry.update(Pgyro.getRot(), getModulePositions());
+      isUpdating = false;
     }
   }
 

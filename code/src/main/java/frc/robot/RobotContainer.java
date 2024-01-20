@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -31,7 +29,7 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer implements Loggable{
   private final Swerve swerve = new Swerve();
   Trigger validTarget;
-  PIDController angleController = new PIDController(0.15, 0.05, 0.0);
+  PIDController angleController = new PIDController(0.35, 0.05, 0.0);
   PIDController limelightAngleController = new PIDController(0.025, 0.01, 0.0);
 
   @Log
@@ -50,9 +48,9 @@ public class RobotContainer implements Loggable{
   String goalPoseStr = "a";
 
   @Config
-  double poseX = 14;
+  double poseX = 0;
   @Config
-  double poseY = 3.5;
+  double poseY = 0;
   @Config
   double poseRotGoal = 0;
 
@@ -87,7 +85,7 @@ private final Command driveToPose = new RunCommand(
     goalPoseStr = goalPose.toString();
     Vector2D vector = VectorOperator.fromPose(currentPose, goalPose);
     w = -angleController.calculate(currentPose.getRotation().getRadians(), poseRotGoal);
-    swerve.vectorDrive(vector, w);
+    swerve.vectorDrive(new Vector2D(vector.getvX(), vector.getvY(), false), w);
 }, swerve);
 
 private final Command rotateToHdg = new RunCommand(
@@ -116,24 +114,7 @@ private final Command rotateToHdg = new RunCommand(
   }
   
   public Command getAutonomousCommand() {
-    var thetaController =
-    new ProfiledPIDController(
-        0.1, 0, 0, Constants.kThetaControllerConstraints);
-thetaController.enableContinuousInput(-Math.PI, Math.PI);
-    
-  SwerveControllerCommand swerveControllerCommand =
-  new SwerveControllerCommand(
-      Trajectories.trajectory,
-      swerve::getPose,
-      Constants.kinematics,
-
-      // Position controllers
-      new PIDController(0.1, 0, 0),
-      new PIDController(0.1, 0, 0),
-      thetaController,
-      swerve::setModuleStates,
-      swerve);
-    return swerveControllerCommand.andThen(() -> swerve.autonDrive(0, 0, 0));
+    return null;
 }
 
 }

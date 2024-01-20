@@ -4,12 +4,16 @@
 
 package frc.lib;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 
 /** Add your docs here. */
 public class VectorOperator {
+  public static PIDController poseController = new PIDController(0.1, 0.02, 0.00);
+
+
   public static Vector3D add(Vector3D v1, Vector3D v2){
       double vx = v1.getvX() + v2.getvX();
       double vy = v1.getvY() + v2.getvY();
@@ -112,7 +116,10 @@ public class VectorOperator {
     }
 
   public static Vector2D fromPose(Pose2d currentPose, Pose2d targetPose){
-    return new Vector2D((targetPose.getTranslation().getX()-currentPose.getTranslation().getX())*Constants.poseVectorMultiplier, (targetPose.getTranslation().getY()-currentPose.getTranslation().getY())*Constants.poseVectorMultiplier, false);
+    double x = poseController.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
+    double y = poseController.calculate(currentPose.getTranslation().getY(), targetPose.getTranslation().getY());
+
+    return new Vector2D(x, y, false);
   }
 
 }
