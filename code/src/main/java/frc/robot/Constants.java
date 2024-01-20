@@ -56,7 +56,4 @@ public final class Constants {
   
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
 
-    public static final int motor1id = 0;
-    public static final int motor2id = 1;
-
 }

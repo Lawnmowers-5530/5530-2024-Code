@@ -7,12 +7,9 @@ package frc.robot.subsystems;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.module.limelight.Limelight;
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Log;
-
 public class StaticLimeLight extends SubsystemBase implements Loggable{
   /** Creates a new LimeTest. */
   public StaticLimeLight() {}

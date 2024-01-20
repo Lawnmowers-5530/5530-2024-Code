@@ -26,12 +26,10 @@ import frc.lib.VectorOperator;
 import frc.robot.subsystems.StaticLimeLight;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.shooterTest;
 
 
 public class RobotContainer implements Loggable{
   private final Swerve swerve = new Swerve();
-  private final shooterTest shooter = new shooterTest();
   Trigger validTarget;
   PIDController angleController = new PIDController(0.15, 0.05, 0.0);
   PIDController limelightAngleController = new PIDController(0.025, 0.01, 0.0);
@@ -101,12 +99,6 @@ private final Command rotateToHdg = new RunCommand(
     swerve.vectorDrive(new Vector2D(0, 0, false), limeAngle);
 }, swerve);
 
-private final Command shooterCommand = new RunCommand(
-  () -> {
-    double speed = driverController.getRightY();
-    shooter.runShooter(speed);
-  }, shooter);
-
   public RobotContainer() {
     angleController.enableContinuousInput(0, Math.PI*2);
     configureBindings();
@@ -114,12 +106,11 @@ private final Command shooterCommand = new RunCommand(
 
 
   private void configureBindings() {
-    //swerve.setDefaultCommand(swerveCommand);
-    //validTarget = new Trigger(StaticLimeLight.validTargetSupp());
-    ////limeTest.setDefaultCommand(limeCommand);
-    //driverController.x().whileTrue(driveToPose);
-    //driverController.b().and(validTarget).whileTrue(rotateToHdg);
-    shooter.setDefaultCommand(shooterCommand);
+    swerve.setDefaultCommand(swerveCommand);
+    validTarget = new Trigger(StaticLimeLight.validTargetSupp());
+    //limeTest.setDefaultCommand(limeCommand);
+    driverController.x().whileTrue(driveToPose);
+    driverController.b().and(validTarget).whileTrue(rotateToHdg);
 
     
   }
