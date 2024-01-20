@@ -11,7 +11,7 @@ import frc.robot.Constants;
 
 /** Add your docs here. */
 public class VectorOperator {
-  public static PIDController poseController = new PIDController(0.1, 0.02, 0.00);
+  public static PIDController poseController = new PIDController(0.5, 0.02, 0.00);
 
 
   public static Vector3D add(Vector3D v1, Vector3D v2){
@@ -116,8 +116,8 @@ public class VectorOperator {
     }
 
   public static Vector2D fromPose(Pose2d currentPose, Pose2d targetPose){
-    double x = poseController.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
-    double y = poseController.calculate(currentPose.getTranslation().getY(), targetPose.getTranslation().getY());
+    double x = -poseController.calculate(currentPose.getTranslation().getX(), targetPose.getTranslation().getX());
+    double y = -poseController.calculate(currentPose.getTranslation().getY(), targetPose.getTranslation().getY());
 
     return new Vector2D(x, y, false);
   }

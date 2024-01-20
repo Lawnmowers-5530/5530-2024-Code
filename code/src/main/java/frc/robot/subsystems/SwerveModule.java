@@ -32,7 +32,7 @@ public class SwerveModule extends SubsystemBase{
     this.canCoder = new CANcoder(canCoderID);
     encoder = drive.getEncoder();
     encoder.setPosition(0);
-    encoder.setPositionConversionFactor(Units.inchesToMeters(Math.PI*4));
+    encoder.setPositionConversionFactor(1/6.75);
     anglePID.enableContinuousInput(0, 360);
     this.angleOffset = angleOffset;
     
@@ -63,10 +63,10 @@ public class SwerveModule extends SubsystemBase{
     // This method will be called once per scheduler run
   }
   public double getDistance(){
-    return encoder.getPosition();
+    return encoder.getPosition()*Units.inchesToMeters(Math.PI*4);
   }
 
   public SwerveModulePosition getPos(){
-    return new SwerveModulePosition(getDistance(), getTurningPosition());
+    return new SwerveModulePosition(-getDistance(), getTurningPosition());
   }
 }

@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -29,7 +30,7 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer implements Loggable{
   private final Swerve swerve = new Swerve();
   Trigger validTarget;
-  PIDController angleController = new PIDController(0.35, 0.05, 0.0);
+  PIDController angleController = new PIDController(0.65, 0.05, 0.0);
   PIDController limelightAngleController = new PIDController(0.025, 0.01, 0.0);
 
   @Log
@@ -48,14 +49,13 @@ public class RobotContainer implements Loggable{
   String goalPoseStr = "a";
 
   @Config
-  double poseX = 0;
+  double poseX = 13;
   @Config
-  double poseY = 0;
+  double poseY = 4;
   @Config
   double poseRotGoal = 0;
 
   private final CommandXboxController driverController = new CommandXboxController(0);
-  private Trigger Y;
 
   private final Command swerveCommand = new RunCommand(
     () -> {
@@ -71,8 +71,7 @@ public class RobotContainer implements Loggable{
       rads = Pgyro.getHdgRad();
 
       Vector2D vector = new Vector2D(y, x, false);
-      Y = driverController.y();
-      swerve.drive(vector, w, Y);
+      swerve.drive(vector, w);
       currentPoseStr = swerve.getPoseOdometry().toString();
 
 }, swerve);
@@ -97,6 +96,11 @@ private final Command rotateToHdg = new RunCommand(
     swerve.vectorDrive(new Vector2D(0, 0, false), limeAngle);
 }, swerve);
 
+private final Command resetGyro = new RunCommand(
+  () -> {
+    Pgyro.zeroGyro();
+  }, new Subsystem[]{} );
+
   public RobotContainer() {
     angleController.enableContinuousInput(0, Math.PI*2);
     configureBindings();
@@ -109,6 +113,8 @@ private final Command rotateToHdg = new RunCommand(
     //limeTest.setDefaultCommand(limeCommand);
     driverController.x().whileTrue(driveToPose);
     driverController.b().and(validTarget).whileTrue(rotateToHdg);
+
+    driverController.y().whileTrue(resetGyro);
 
     
   }

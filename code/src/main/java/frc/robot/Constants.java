@@ -53,4 +53,6 @@ public final class Constants {
   
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
 
+    public static final boolean team = false; //red
+
 }

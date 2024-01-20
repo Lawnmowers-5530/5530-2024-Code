@@ -41,6 +41,18 @@ public static BooleanSupplier validTargetSupp(){
   return () -> hasValidTargets();
 }
 
+public static boolean getValidTarget(){
+  if(limeLight.getTargetArea()>=0.7){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+public static double getTargetArea(){
+  return limeLight.getTargetArea();
+}
+
 
 
   @Override

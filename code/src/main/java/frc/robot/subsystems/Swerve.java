@@ -31,6 +31,11 @@ public class Swerve extends SubsystemBase implements Loggable{
   private static final SwerveModule Mod_2 = Constants.Modules.Mod_2;
   private static final SwerveModule Mod_3 = Constants.Modules.Mod_3;
 
+  @Log
+  private static double forwardPos;
+  @Log
+  private static double sidePos;
+
   SwerveModule[] modules = new SwerveModule[]{Mod_0, Mod_1, Mod_2, Mod_3};
 
   public Swerve() {
@@ -38,12 +43,7 @@ public class Swerve extends SubsystemBase implements Loggable{
     odometry = new SwerveDriveOdometry(Constants.kinematics, Pgyro.getRot(), modPos);
   }
 
-  public void drive(Vector2D vector, double omegaRadSec, Trigger Y){
-    if(Y!=null){
-    if(Y.getAsBoolean()){
-      Pgyro.zeroGyro();
-    }
-  }
+  public void drive(Vector2D vector, double omegaRadSec){
 
     Rotation2d gyroAngle = Pgyro.getRot();
 
@@ -68,7 +68,7 @@ public class Swerve extends SubsystemBase implements Loggable{
   }
 
   public void vectorDrive(Vector2D target, double thetaRadSec){
-    this.drive(target, thetaRadSec, null);
+    this.drive(target, thetaRadSec);
   }
 
 
@@ -84,13 +84,15 @@ public class Swerve extends SubsystemBase implements Loggable{
   }
 
   public void updateOdometry(){
-    if(StaticLimeLight.hasValidTargets()){
+    if(StaticLimeLight.getValidTarget()){
     odometry.resetPosition(Pgyro.getRot(), getModulePositions(), StaticLimeLight.getPose2DBlue());
     isUpdating = true;
     }else{
       odometry.update(Pgyro.getRot(), getModulePositions());
       isUpdating = false;
     }
+    forwardPos = odometry.getPoseMeters().getX();
+    sidePos = odometry.getPoseMeters().getY();
   }
 
   public Pose2d getPoseOdometry(){
