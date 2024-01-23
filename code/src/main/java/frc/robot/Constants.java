@@ -2,13 +2,16 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.SwerveModule;
+import com.pathplanner.lib.util.PIDConstants;
 
 public final class Constants {
     public static final double trackWidth = Units.inchesToMeters(24);
     public static final double wheelBase = Units.inchesToMeters(24);
+
+    public static final double driveBaseRadius = Units.inchesToMeters(Math.sqrt(trackWidth*trackWidth + wheelBase*wheelBase));
+
 
     public static final class Mod0{ //FL
         public static final int driveMotor = 5;
@@ -45,14 +48,11 @@ public final class Constants {
         public static final SwerveModule Mod_2 = new SwerveModule(Constants.Mod2.driveMotor, Constants.Mod2.turnMotor, Constants.Mod2.canCoder, Constants.Mod2.angleOffset);
         public static final SwerveModule Mod_3 = new SwerveModule(Constants.Mod3.driveMotor, Constants.Mod3.turnMotor, Constants.Mod3.canCoder, Constants.Mod3.angleOffset);
     }
-
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-        new TrapezoidProfile.Constraints(
-            0.75, 0.5);
   
   
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
 
-    public static final boolean team = false; //red
+    public static final PIDConstants translationConstants = new PIDConstants(0.5, 0.02, 0);
+    public static final PIDConstants rotationConstants = new PIDConstants(0.65, 0.05, 0);
 
 }

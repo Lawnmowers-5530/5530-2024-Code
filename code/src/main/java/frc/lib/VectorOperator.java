@@ -7,7 +7,6 @@ package frc.lib;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.Constants;
 
 /** Add your docs here. */
 public class VectorOperator {

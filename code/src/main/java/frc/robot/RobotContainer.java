@@ -6,14 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import io.github.oblarg.oblog.Loggable;
@@ -26,18 +26,25 @@ import frc.robot.subsystems.StaticLimeLight;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
 
+import java.util.function.BooleanSupplier;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 public class RobotContainer implements Loggable{
+  private SendableChooser<Command> autoChooser;
+
   private final Swerve swerve = new Swerve();
   Trigger validTarget;
   PIDController angleController = new PIDController(0.65, 0.05, 0.0);
   PIDController limelightAngleController = new PIDController(0.025, 0.01, 0.0);
-
   @Log
-  double limeOff;
-  double rads;
-  double w;
-  double limeAngle;
+  double limeOff; //limelight tx (horizontal offset)
+  double rads; //gyro heading rads
+  double w; //angular velocity
+  double limeAngle; //angular velocity in rotateToHdg command
   String x = "a";
 
   Pose2d currentPose;
@@ -49,9 +56,9 @@ public class RobotContainer implements Loggable{
   String goalPoseStr = "a";
 
   @Config
-  double poseX = 13;
+  double poseX = 0;
   @Config
-  double poseY = 4;
+  double poseY = 0;
   @Config
   double poseRotGoal = 0;
 
@@ -71,7 +78,7 @@ public class RobotContainer implements Loggable{
       rads = Pgyro.getHdgRad();
 
       Vector2D vector = new Vector2D(y, x, false);
-      swerve.drive(vector, w);
+      swerve.drive(vector, w, true);
       currentPoseStr = swerve.getPoseOdometry().toString();
 
 }, swerve);
@@ -99,13 +106,17 @@ private final Command rotateToHdg = new RunCommand(
 private final Command resetGyro = new RunCommand(
   () -> {
     Pgyro.zeroGyro();
-  }, new Subsystem[]{} );
+  }, new Subsystem[]{}
+  );
 
   public RobotContainer() {
     angleController.enableContinuousInput(0, Math.PI*2);
     configureBindings();
-  }
 
+    //autoChooser = AutoBuilder.buildAutoChooser();
+  //
+    //SmartDashboard.putData("Auton chooser", autoChooser);
+  }
 
   private void configureBindings() {
     swerve.setDefaultCommand(swerveCommand);
@@ -120,7 +131,7 @@ private final Command resetGyro = new RunCommand(
   }
   
   public Command getAutonomousCommand() {
-    return null;
-}
+    return AutoBuilder.buildAuto("auto1");
+  }
 
 }
