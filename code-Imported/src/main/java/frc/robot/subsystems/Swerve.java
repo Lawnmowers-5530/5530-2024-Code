@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -22,6 +23,8 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class Swerve extends SubsystemBase implements Loggable{
+
+  PIDController rotationPID = new PIDController(Constants.RoatationConstants.kP, Constants.RoatationConstants.kI, Constants.RoatationConstants.kD);
 
   SwerveDriveOdometry odometry;
   @Log
@@ -136,6 +139,11 @@ public class Swerve extends SubsystemBase implements Loggable{
     Vector2D vector = new Vector2D(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, false);
     output = vector.toString();
     this.drive(vector, speeds.omegaRadiansPerSecond, false);
+  }
+
+  public void rotateToAngle(double angle){ //TODO
+    double output = rotationPID.calculate(Pgyro.getRot().getDegrees(), angle);
+    this.drive(new Vector2D(0, 0, false), output, false);
   }
 
 }

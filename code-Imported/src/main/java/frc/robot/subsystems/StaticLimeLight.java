@@ -8,7 +8,6 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.module.limelight.Limelight;
 import io.github.oblarg.oblog.Loggable;
 public class StaticLimeLight extends SubsystemBase implements Loggable{
   /** Creates a new LimeTest. */

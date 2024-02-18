@@ -51,6 +51,11 @@ public final class Constants {
         public static final SwerveModule Mod_3 = new SwerveModule(Constants.Mod3.driveMotor, Constants.Mod3.turnMotor, Constants.Mod3.canCoder, Constants.Mod3.angleOffset);
     }
 
+    public static final class RoatationConstants{
+        public static final double kP = 0.1;
+        public static final double kI = 0.1;
+        public static final double kD = 0.1;
+    }
     
     public static final class LoaderConstants{
         public static final int loaderMotorPort = 1;
@@ -62,10 +67,13 @@ public final class Constants {
     public static final class LauncherConstants{
         public static final int leftMotorPort = 1;
         public static final int rightMotorPort = 2;
+        public static final boolean isReversed = false;
         public static final double kP = 0.1;
         public static final double kI = 0.1;
         public static final double kD = 0.1;
         public static final double kF = 0.1;
+
+        public static final double loaderShotSpeed = 0.2;
     }
 
     public static final class LauncherAngleConstants{

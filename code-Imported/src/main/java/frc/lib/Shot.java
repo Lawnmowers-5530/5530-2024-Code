@@ -1,16 +1,10 @@
 package frc.lib;
 
-import frc.lib.module.launcher2024.subsystems.LauncherV2;
-import frc.lib.module.launcherAngle2024.subsystems.LauncherAngle;
-
 public class Shot {
-    double speedfps;
-    double rpm;
+    private double speedfps;
 
-    double r;
-    double phi;
-    double theta;
-    double thetaDeg;
+    private double phi;
+    private double theta;
 
     public Shot(double vx, double vy){
         this.speedfps = Math.sqrt(vx+vy);
@@ -21,34 +15,22 @@ public class Shot {
         double vz = vec.getvZ();
         this.speedfps = Math.sqrt(Math.pow(vx,2)+Math.pow(vz,2));
         this.theta = Math.atan(vz/vx);
-        this.thetaDeg = Math.toDegrees(this.theta);
         this.phi = Math.atan(vy/vx);
     }
 
     public double getThetaDeg(){
-        return this.thetaDeg;
+        return Math.toDegrees(this.theta);
     }
     public double getSpeed(){
         return this.speedfps;
     }
-    public double getPhiRad(){
-        return this.phi;
-    }
-
-    public void Shoot(LauncherV2 launcher, LauncherAngle launcherAngle){
-        double speed = this.getSpeed();
-        double angle = this.getThetaDeg();
-
-        double leftSpeed = speed;
-        double rightSpeed = speed; //TODO
-
-        launcher.setVelocity(leftSpeed, rightSpeed);
-        launcherAngle.setAngle(angle);
+    public double getPhiDeg(){
+        return Math.toDegrees(this.phi);
     }
 
     @Override
     public String toString(){
         //show speed,theta,and phi
-        return "Speed: " + this.speedfps + " ft/s,\nTheta: " + this.thetaDeg + " degrees,\nPhi: " + this.phi + " radians";
+        return "Speed: " + this.speedfps + " ft/s,\nTheta: " + this.getThetaDeg() + " degrees,\nPhi: " + this.getPhiDeg()+ " degrees";
     }
 }
