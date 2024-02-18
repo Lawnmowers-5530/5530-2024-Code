@@ -50,11 +50,35 @@ public final class Constants {
         public static final SwerveModule Mod_2 = new SwerveModule(Constants.Mod2.driveMotor, Constants.Mod2.turnMotor, Constants.Mod2.canCoder, Constants.Mod2.angleOffset);
         public static final SwerveModule Mod_3 = new SwerveModule(Constants.Mod3.driveMotor, Constants.Mod3.turnMotor, Constants.Mod3.canCoder, Constants.Mod3.angleOffset);
     }
+
+    
+    public static final class LoaderConstants{
+        public static final int loaderMotorPort = 1;
+        public static final boolean isReversed = false;
+        public static final double loaderSpeed = 0.3;
+        public static final double loaderCutoffDistance = 40;
+    }
+
+    public static final class LauncherConstants{
+        public static final int leftMotorPort = 1;
+        public static final int rightMotorPort = 2;
+        public static final double kP = 0.1;
+        public static final double kI = 0.1;
+        public static final double kD = 0.1;
+        public static final double kF = 0.1;
+    }
+
+    public static final class LauncherAngleConstants{
+        public static final int motorPort = 3;
+    }
   
   
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
 
-    public static final PIDConstants translationConstants = new PIDConstants(1, 0, 0);
-    public static final PIDConstants rotationConstants = new PIDConstants(10.0, 0.0, 0);
+    public static final PIDConstants translationConstants = new PIDConstants(0.5, 0, 0.4);
+    public static final PIDConstants rotationConstants = new PIDConstants(0.8, 0.0, 0.3);
+
+    public static final Translation2d targetTranslation = new Translation2d(15, 5);
+
 
 }

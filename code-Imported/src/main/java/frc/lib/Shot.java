@@ -1,5 +1,8 @@
 package frc.lib;
 
+import frc.lib.module.launcher2024.subsystems.LauncherV2;
+import frc.lib.module.launcherAngle2024.subsystems.LauncherAngle;
+
 public class Shot {
     double speedfps;
     double rpm;
@@ -30,5 +33,22 @@ public class Shot {
     }
     public double getPhiRad(){
         return this.phi;
+    }
+
+    public void Shoot(LauncherV2 launcher, LauncherAngle launcherAngle){
+        double speed = this.getSpeed();
+        double angle = this.getThetaDeg();
+
+        double leftSpeed = speed;
+        double rightSpeed = speed; //TODO
+
+        launcher.setVelocity(leftSpeed, rightSpeed);
+        launcherAngle.setAngle(angle);
+    }
+
+    @Override
+    public String toString(){
+        //show speed,theta,and phi
+        return "Speed: " + this.speedfps + " ft/s,\nTheta: " + this.thetaDeg + " degrees,\nPhi: " + this.phi + " radians";
     }
 }

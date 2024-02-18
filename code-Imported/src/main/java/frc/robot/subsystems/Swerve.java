@@ -21,8 +21,6 @@ import frc.robot.Constants;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
-
-
 public class Swerve extends SubsystemBase implements Loggable{
 
   SwerveDriveOdometry odometry;
@@ -95,11 +93,6 @@ public class Swerve extends SubsystemBase implements Loggable{
     return odometry.getPoseMeters();
   }
 
-  public void vectorDrive(Vector2D target, double thetaRadSec){ //depreciated
-    this.drive(target, thetaRadSec, true);
-  }
-
-
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     Mod_0.setState(desiredStates[0]);
     Mod_1.setState(desiredStates[1]);
@@ -113,16 +106,12 @@ public class Swerve extends SubsystemBase implements Loggable{
 
   public void updateOdometry(){
     if(StaticLimeLight.getValidTarget()){
-    odometry.resetPosition(Pgyro.getRot(), getModulePositions(), StaticLimeLight.getPose2DBlue());
+    odometry.resetPosition(Pgyro.getRot(), getModulePositions(), new Pose2d(StaticLimeLight.getPose2DBlue().getTranslation(), Pgyro.getRot()));
     isUpdating = true;
     }else{
       odometry.update(Pgyro.getRot(), getModulePositions());
       isUpdating = false;
     }
-  }
-
-  public Pose2d getPoseOdometry(){
-    return odometry.getPoseMeters();
   }
 
   //chassis speeds consumer

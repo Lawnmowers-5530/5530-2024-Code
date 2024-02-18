@@ -5,116 +5,83 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Config;
-import io.github.oblarg.oblog.annotations.Log;
+import frc.lib.Shot;
+import frc.lib.ShotCalculator;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
-
+import frc.lib.module.distanceSensor2024.subsystems.DistanceSensor;
+import frc.lib.module.launcher2024.structs.LauncherV2CreateInfo;
+import frc.lib.module.launcher2024.subsystems.LauncherV2;
+import frc.lib.module.launcher2024.subsystems.LoaderV2;
+import frc.lib.module.launcherAngle2024.subsystems.LauncherAngle;
 import frc.robot.subsystems.StaticLimeLight;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 public class RobotContainer implements Loggable{
   private final Field2d field;
   private SendableChooser<Command> autoChooser;
+  private Swerve swerve = new Swerve();
+  //private final DistanceSensor distanceSensor;
+  //private final LoaderV2 loader;
+  //private final LauncherAngle launcherAngle;
+//
+  //private final LauncherV2CreateInfo createInfo;
+  //private final LauncherV2 launcher;
 
-  private final Swerve swerve = new Swerve();
-  Trigger validTarget;
-  PIDController angleController = new PIDController(0.65, 0.05, 0.0);
-  PIDController limelightAngleController = new PIDController(0.025, 0.01, 0.0);
-  @Log
-  double limeOff; //limelight tx (horizontal offset)
-  double rads; //gyro heading rads
-  double w; //angular velocity
-  double limeAngle; //angular velocity in rotateToHdg command
-  String x = "a";
+  //private final Trigger validTarget;
+  private DoubleSupplier shotAngleSupplier;
+  private BooleanSupplier slowModeSupplier;
 
-  Pose2d currentPose;
-  Pose2d goalPose;
-
-  @Log
-  String currentPoseStr = "a";
-  @Log
-  String goalPoseStr = "a";
-
-  @Config
-  double poseX = 0;
-  @Config
-  double poseY = 0;
-  @Config
-  double poseRotGoal = 0;
-
-  private final CommandXboxController driverController = new CommandXboxController(0);
-
-  private final Command swerveCommand = new RunCommand(
-    () -> {
-      double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
-      double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15);
-      w = MathUtil.applyDeadband(driverController.getRightX(), 0.15);
-
-      if(driverController.a().getAsBoolean()==true){
-        x/=2;
-        y/=2;
-        w/=2;
-      }
-      rads = Pgyro.getHdgRad();
-
-      Vector2D vector = new Vector2D(y, x, false);
-      swerve.drive(vector, -w, true);
-      currentPoseStr = swerve.getPoseOdometry().toString();
-
-}, swerve);
-
-private final Command driveToPose = new RunCommand(
-  () -> {
-    goalPose = new Pose2d(new Translation2d(poseX, poseY), new Rotation2d(poseRotGoal));
-    currentPose = swerve.getPoseOdometry();
-    currentPoseStr = currentPose.toString();
-    goalPoseStr = goalPose.toString();
-    Vector2D vector = VectorOperator.fromPose(currentPose, goalPose);
-    w = angleController.calculate(currentPose.getRotation().getRadians(), poseRotGoal);
-    swerve.vectorDrive(new Vector2D(vector.getvX(), vector.getvY(), false), w);
-}, swerve);
-
-private final Command vectorDrive = new RunCommand(
-  () -> {
-    swerve.autoDriveRobotRelative(new ChassisSpeeds(0.5, 0, -0.5));
-}, swerve);
-
-private final Command rotateToHdg = new RunCommand(
-  () -> {
-    limeOff=StaticLimeLight.getHorizontalOffset();
-    limeAngle = -limelightAngleController.calculate(limeOff);
-    //limeAngle = limelight.getHorizontalOffset()/10;
-
-    swerve.vectorDrive(new Vector2D(0, 0, false), limeAngle);
-}, swerve);
-
-private final Command resetGyro = new RunCommand(
-  () -> {
-    Pgyro.zeroGyro();
-  }, new Subsystem[]{}
-  );
+  private CommandXboxController driverController;
 
   public RobotContainer() {
-    angleController.enableContinuousInput(0, Math.PI*2);
+    //distanceSensor = new DistanceSensor();
+    //loader = new LoaderV2(Constants.LoaderConstants.loaderMotorPort, Constants.LoaderConstants.isReversed, distanceSensor);
+    //launcherAngle = new LauncherAngle(Constants.LauncherAngleConstants.motorPort);
+    //createInfo = new LauncherV2CreateInfo().withLeftMotorPort(Constants.LauncherConstants.leftMotorPort).withRightMotorPort(Constants.LauncherConstants.rightMotorPort).withkP(Constants.LauncherConstants.kP).withkI(Constants.LauncherConstants.kI).withkD(Constants.LauncherConstants.kD).withkF(Constants.LauncherConstants.kF);
+    //launcher = new LauncherV2(createInfo);
+    //validTarget = new Trigger(StaticLimeLight.validTargetSupp());
+
+    NamedCommands.registerCommand("shoot", shootCommand);
+
+    shotAngleSupplier = new DoubleSupplier() {
+    @Override
+    public double getAsDouble() {
+      return ShotCalculator.angleToTarget(swerve.getPose());
+    }
+  };
+    slowModeSupplier = new BooleanSupplier() {
+    @Override
+    public boolean getAsBoolean() {
+      return driverController.a().getAsBoolean();
+    };
+  };
+
+    driverController = new CommandXboxController(0);
     configureBindings();
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -143,20 +110,85 @@ private final Command resetGyro = new RunCommand(
         });
   }
 
+  private final Command swerveCmd = new RunCommand(
+    () -> {
+      double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
+      double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15);
+      double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15);
+
+      Vector2D vector = new Vector2D(y, x, false);
+      swerve.drive(vector, -w, true);
+
+}, swerve
+);
+
+  private final Command swerveSlowCmd = new RunCommand(
+    () -> {
+      double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15)/2;
+      double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15)/2;
+      double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15)/2;
+
+      Vector2D vector = new Vector2D(y, x, false);
+      swerve.drive(vector, -w, true);
+
+}, swerve
+);
+
+private final Command swerveCommand = new ConditionalCommand(swerveCmd, swerveSlowCmd, driverController.a());
+
+private final Command resetGyro = new RunCommand(
+  () -> {
+    Pgyro.zeroGyro();
+  }, new Subsystem[]{}
+  );
+
+//private final Command loadCommand = new RunCommand(
+//  () -> {
+//    loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed, Constants.LoaderConstants.loaderCutoffDistance);
+//  }, loader
+//  );
+
+private final Command shootCommand = new RunCommand(
+  () -> {
+    Pose2d currentPose = swerve.getPose();
+
+    Vector2D robotRelativeVector = new Vector2D(swerve.getRobotRelativeSpeeds().vxMetersPerSecond, swerve.getRobotRelativeSpeeds().vyMetersPerSecond, false);
+    System.out.println(robotRelativeVector);
+    Vector2D robotVector = VectorOperator.rotateVector2D(robotRelativeVector, Pgyro.getRot());
+    System.out.println(robotVector);
+    double distToTarget = Constants.targetTranslation.getDistance(currentPose.getTranslation());
+    System.out.println(distToTarget);
+    double angleToTarget = shotAngleSupplier.getAsDouble();
+
+    Shot shot = ShotCalculator.vecFinal(robotVector, distToTarget, angleToTarget);
+    System.out.println(shot);
+
+    //temp logging
+    SmartDashboard.putNumber("distToTarget", distToTarget);
+    SmartDashboard.putNumber("angleToTarget", angleToTarget);
+    SmartDashboard.putString("currentPose", currentPose.toString());
+    SmartDashboard.putString("robotVector", robotVector.toString());
+
+    SmartDashboard.putString("shot", shot.toString());
+
+    //shot.Shoot(launcher, launcherAngle);
+  }, new Subsystem[]{}//new Subsystem[]{launcher, launcherAngle}
+  );
+
+    private Command ampScore = AutoBuilder.pathfindToPose(
+      new Pose2d(14.5, 7.5, new Rotation2d(Math.PI/2)),
+      new PathConstraints(4.1, 1, 2, 1)
+    );
+
   private void configureBindings() {
     swerve.setDefaultCommand(swerveCommand);
-    validTarget = new Trigger(StaticLimeLight.validTargetSupp());
-    //limeTest.setDefaultCommand(limeCommand);
-    driverController.x().whileTrue(vectorDrive);
-    driverController.b().and(validTarget).whileTrue(rotateToHdg);
-
+    //driverController.x().whileTrue(loadCommand);
     driverController.y().whileTrue(resetGyro);
-
-    
+    driverController.b().whileTrue(ampScore);
   }
   
   public Command getAutonomousCommand() {
-    return AutoBuilder.buildAuto("updated-auto");
+    return autoChooser.getSelected();
   }
 
 }

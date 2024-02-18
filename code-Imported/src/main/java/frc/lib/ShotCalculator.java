@@ -1,7 +1,12 @@
 package frc.lib;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
+import frc.robot.Constants;
+
 public class ShotCalculator {
     public static Shot vecFinal(Vector2D robotVec, double dist, double angleToTarget){
+        dist = Units.metersToFeet(dist);
         double shooterHeight = 20/12; //height of shooter
         double derivPosSubtracted = 1; //distance behind goal point to consider derivative from
         double maxSpeed = 30; //max speed in fps of shooter
@@ -42,6 +47,10 @@ public class ShotCalculator {
         Shot shot = new Shot(VectorOperator.subtract(goalVector, robotVec));
 
         return shot;
+    }
+
+    public static double angleToTarget(Pose2d currentPose){
+        return Math.atan2((Constants.targetTranslation.getX()-currentPose.getX()),(-Constants.targetTranslation.getY()+currentPose.getY()))-(Math.PI/2);
     }
 }
 
