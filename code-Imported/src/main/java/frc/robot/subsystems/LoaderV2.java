@@ -2,8 +2,8 @@ package frc.robot.subsystems;
 
 public class LoaderV2 extends Loader {
     DistanceSensor distanceSensor;
-    public LoaderV2(int motor, boolean reversed, DistanceSensor distanceSensor) {
-        super(motor, reversed);
+    public LoaderV2(int motorLeft, int motorRight, boolean reversed, DistanceSensor distanceSensor) {
+        super(motorLeft, motorRight, reversed);
         this.distanceSensor = distanceSensor;
     }
 

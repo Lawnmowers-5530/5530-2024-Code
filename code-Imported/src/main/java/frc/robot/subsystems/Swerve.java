@@ -24,7 +24,7 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class Swerve extends SubsystemBase implements Loggable{
 
-  PIDController rotationPID = new PIDController(Constants.RoatationConstants.kP, Constants.RoatationConstants.kI, Constants.RoatationConstants.kD);
+  PIDController rotationPID = new PIDController(Constants.RotationConstants.kP, Constants.RotationConstants.kI, Constants.RotationConstants.kD);
 
   SwerveDriveOdometry odometry;
   @Log

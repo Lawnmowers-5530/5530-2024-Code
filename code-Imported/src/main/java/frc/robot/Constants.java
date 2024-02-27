@@ -27,17 +27,17 @@ public final class Constants {
         public static final int canCoder = 14;
         public static final double angleOffset = 11.5;
     }
-    public static final class Mod2{ //RL
-        public static final int driveMotor = 11;
-        public static final int turnMotor = 12;
-        public static final int canCoder = 16;
-        public static final double angleOffset = 340;
-    }
     public static final class Mod3{ //RR
         public static final int driveMotor = 9;
         public static final int turnMotor = 10;
         public static final int canCoder = 15;
         public static final double angleOffset = 56;
+    }
+    public static final class Mod2{ //RL
+        public static final int driveMotor = 11;
+        public static final int turnMotor = 12;
+        public static final int canCoder = 16;
+        public static final double angleOffset = 340;
     }
     public static Translation2d m0 = new Translation2d(Constants.trackWidth/2, Constants.wheelBase/2);
     public static Translation2d m1 = new Translation2d(Constants.trackWidth/2, -Constants.wheelBase/2);
@@ -51,22 +51,23 @@ public final class Constants {
         public static final SwerveModule Mod_3 = new SwerveModule(Constants.Mod3.driveMotor, Constants.Mod3.turnMotor, Constants.Mod3.canCoder, Constants.Mod3.angleOffset);
     }
 
-    public static final class RoatationConstants{
+    public static final class RotationConstants{
         public static final double kP = 0.1;
         public static final double kI = 0.1;
         public static final double kD = 0.1;
     }
     
     public static final class LoaderConstants{
-        public static final int loaderMotorPort = 1;
+        public static final int leftMotorPort = 20;
+        public static final int rightMotorPort = 21;
         public static final boolean isReversed = false;
         public static final double loaderSpeed = 0.3;
-        public static final double loaderCutoffDistance = 40;
+        public static final double loaderCutoffDistance = 180;
     }
 
     public static final class LauncherConstants{
-        public static final int leftMotorPort = 1;
-        public static final int rightMotorPort = 2;
+        public static final int leftMotorPort = 18;
+        public static final int rightMotorPort = 19;
         public static final boolean isReversed = false;
         public static final double kP = 0.1;
         public static final double kI = 0.1;
@@ -77,7 +78,25 @@ public final class Constants {
     }
 
     public static final class LauncherAngleConstants{
-        public static final int motorPort = 3;
+        public static final int motorPort = 22;
+        public static final boolean isReversed = false;
+
+        public static final double kP = 0.1;
+        public static final double kI = 0.1;
+        public static final double kD = 0.1;
+
+        public static final double conversionFactor = 8192/360;
+    }
+
+    public static final class IntakeConstants{
+        public static final int motorPort = 24;
+        public static final boolean isReversed = false;
+        public static final double intakeSpeed = 0.3;
+    }
+
+    public static final class LauncherIntakeConstants{
+        public static final int theshold = 55;
+        public static final double speed = 0.25;
     }
   
   

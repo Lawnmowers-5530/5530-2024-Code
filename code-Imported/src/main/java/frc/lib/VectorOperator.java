@@ -42,7 +42,7 @@ public class VectorOperator {
 
     double r = Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2));
 
-    double theta = Math.atan(vy/vx);
+    double theta = Math.atan2(vy, vx);
 
 
     return new double[]{r, theta};

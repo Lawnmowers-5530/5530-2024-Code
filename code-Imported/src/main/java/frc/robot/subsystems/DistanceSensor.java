@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
@@ -11,6 +12,7 @@ public class DistanceSensor extends SubsystemBase{
     public DistanceSensor() {
         sensor = new Rev2mDistanceSensor(Port.kOnboard);
         sensor.setDistanceUnits(Rev2mDistanceSensor.Unit.kMillimeters);
+        setEnabled(true);
     }
     
     public double getDistance() { //returns distance in mm
@@ -20,9 +22,15 @@ public class DistanceSensor extends SubsystemBase{
     public void setEnabled(boolean enabled) {
         sensor.setEnabled(enabled);
         sensor.setAutomaticMode(enabled);
+        System.out.println("distance sensor enabled: " + enabled);
     }
 
     public boolean getEnabled() {
         return sensor.isEnabled();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Distance Sensor Value", getDistance());
     }
 }

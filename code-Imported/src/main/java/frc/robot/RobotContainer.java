@@ -22,7 +22,9 @@ import frc.lib.ShotCalculator;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
 import frc.robot.subsystems.StaticLimeLight;
+import frc.robot.commands.LauncherIntake;
 import frc.robot.subsystems.DistanceSensor;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherAngle;
 import frc.robot.subsystems.LauncherV2;
 import frc.robot.subsystems.LoaderV2;
@@ -49,15 +51,17 @@ public class RobotContainer implements Loggable{
 
   private Trigger validTarget;
   private DoubleSupplier shotAngleSupplier;
-  private BooleanSupplier slowModeSupplier;
 
   private CommandXboxController driverController;
 
+  private Intake intake;
+
   public RobotContainer() {
     distanceSensor = new DistanceSensor();
-    loader = new LoaderV2(Constants.LoaderConstants.loaderMotorPort, Constants.LoaderConstants.isReversed, distanceSensor);
-    launcherAngle = new LauncherAngle(Constants.LauncherAngleConstants.motorPort);
+    loader = new LoaderV2(Constants.LoaderConstants.leftMotorPort, Constants.LoaderConstants.rightMotorPort, Constants.LoaderConstants.isReversed, distanceSensor);
+    launcherAngle = new LauncherAngle(Constants.LauncherAngleConstants.motorPort, Constants.LauncherAngleConstants.isReversed, Constants.LauncherAngleConstants.kP, Constants.LauncherAngleConstants.kI, Constants.LauncherAngleConstants.kD, Constants.LauncherAngleConstants.conversionFactor);
     launcher = new LauncherV2();
+    intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
     validTarget = new Trigger(StaticLimeLight.validTargetSupp());
 
     NamedCommands.registerCommand("shoot", shootCommand);
@@ -67,12 +71,6 @@ public class RobotContainer implements Loggable{
     public double getAsDouble() {
       return ShotCalculator.angleToTarget(swerve.getPose());
     }
-  };
-    slowModeSupplier = new BooleanSupplier() {
-    @Override
-    public boolean getAsBoolean() {
-      return driverController.a().getAsBoolean();
-    };
   };
 
     driverController = new CommandXboxController(0);
@@ -147,8 +145,8 @@ public class RobotContainer implements Loggable{
 }, new Subsystem[]{}
 );
 
-//loads rings using distance sensor auto stop
-private final Command loadCommand = new RunCommand(
+  //loads rings using distance sensor auto stop
+  private final Command loadCommand = new RunCommand(
   () -> {
     loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed, Constants.LoaderConstants.loaderCutoffDistance);
 }, loader
@@ -189,17 +187,33 @@ private final Command loadCommand = new RunCommand(
 }, new Subsystem[]{launcher, launcherAngle}
 );
 
-    private Command ampScore = AutoBuilder.pathfindToPose(
-      new Pose2d(14.5, 7.5, new Rotation2d(Math.PI/2)),
-      new PathConstraints(4.1, 1, 2, 1)
+  private Command intakeCommand = new RunCommand(
+    () -> {
+      intake.run(Constants.IntakeConstants.intakeSpeed);
+      loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed, Constants.LoaderConstants.loaderCutoffDistance);
+}, new Subsystem[]{intake, loader}
+);
+  private Command testAngleCommand = new RunCommand(
+    () -> {
+      launcherAngle.setAngle(0.1);
+}, launcherAngle
+);
+
+  private Command ampScore = AutoBuilder.pathfindToPose(
+    new Pose2d(14.5, 7.5, new Rotation2d(Math.PI/2)),
+    new PathConstraints(4.1, 1, 2, 1)
 );
 
   private void configureBindings() {
     swerve.setDefaultCommand(swerveCommand);
-    driverController.x().whileTrue(shootCommand);
+    //driverController.x().whileTrue(shootCommand);
     driverController.y().whileTrue(resetGyro);
-    driverController.b().whileTrue(ampScore);
-    driverController.rightBumper().whileTrue(loadCommand);}
+    driverController.x().whileTrue(testAngleCommand);
+    driverController.b().whileTrue(intakeCommand);
+    driverController.a().onTrue(new LauncherIntake(distanceSensor, loader, launcher, Constants.LauncherIntakeConstants.theshold, Constants.LauncherIntakeConstants.speed));
+ 
+    //driverController.rightBumper().whileTrue(loadCommand);
+  }
   
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
