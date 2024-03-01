@@ -23,10 +23,6 @@ public static Pose2d getPose2DRed() {
     return limeLight.getPose2DRed();
 }
 
-//get limelight tv value (whether or not there is a target)
-public static boolean hasValidTargets() {
-  return limeLight.hasValidTargets();
-}
 //get limelight tx value (horizontal offset from crosshair to target in degrees)
 public static double getHorizontalOffset() {
   return limeLight.getHorizontalOffset();
@@ -37,7 +33,7 @@ public static double getVerticalOffset() {
 }
 
 public static BooleanSupplier validTargetSupp(){
-  return () -> hasValidTargets();
+  return () -> getValidTarget();
 }
 
 public static boolean getValidTarget(){

@@ -28,9 +28,4 @@ public class DistanceSensor extends SubsystemBase{
     public boolean getEnabled() {
         return sensor.isEnabled();
     }
-
-    @Override
-    public void periodic() {
-        SmartDashboard.putNumber("Distance Sensor Value", getDistance());
-    }
 }
