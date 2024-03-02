@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
@@ -31,7 +32,7 @@ public class SwerveModule extends SubsystemBase{
     this.canCoder = new CANcoder(canCoderID);
     encoder = drive.getEncoder();
     encoder.setPosition(0);
-    encoder.setPositionConversionFactor((1/6.75)*Units.inchesToMeters(Math.PI*4));
+    encoder.setPositionConversionFactor((1/42)*Units.inchesToMeters(Math.PI*4));
     anglePID.enableContinuousInput(0, 360);
     this.angleOffset = angleOffset;
     
@@ -40,7 +41,7 @@ public class SwerveModule extends SubsystemBase{
   public void setState(SwerveModuleState state){
         state = SwerveModuleState.optimize(state, getTurningPosition());
 
-        drive.set(state.speedMetersPerSecond/1.1);
+        drive.set(state.speedMetersPerSecond);
         pidOut = anglePID.calculate(getTurningPosition().getDegrees(), state.angle.getDegrees());
         rotate.set(pidOut);
   }
@@ -67,4 +68,5 @@ public class SwerveModule extends SubsystemBase{
   public SwerveModuleState getState(){
     return new SwerveModuleState(getVelocity(), getTurningPosition());
   }
+
 }

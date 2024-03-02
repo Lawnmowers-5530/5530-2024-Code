@@ -27,6 +27,7 @@ import frc.robot.subsystems.DistanceSensor;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherAngle;
 import frc.robot.subsystems.LauncherV2;
+import frc.robot.subsystems.Loader;
 import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
@@ -42,52 +43,48 @@ public class RobotContainer implements Loggable {
   private Field2d field;
   private SendableChooser<Command> autoChooser;
   private Swerve swerve;
-  private DistanceSensor distanceSensor = new DistanceSensor();
-  private LoaderV2 loader = new LoaderV2(Constants.LoaderConstants.leftMotorPort,
-      Constants.LoaderConstants.rightMotorPort, Constants.LoaderConstants.isReversed, distanceSensor);
-  private LauncherAngle launcherAngle = new LauncherAngle(Constants.LauncherAngleConstants.motorPort,
-      Constants.LauncherAngleConstants.isReversed, Constants.LauncherAngleConstants.kP,
-      Constants.LauncherAngleConstants.kI, Constants.LauncherAngleConstants.kD,
-      Constants.LauncherAngleConstants.conversionFactor);
+  private DistanceSensor distanceSensor;
+  private LauncherAngle launcherAngle;
+  private LoaderV2 loader;
+  private LauncherV2 launcher;
 
-  private LauncherV2 launcher = new LauncherV2();
-
-  private Climber climber = new Climber();
+  private Climber climber;
 
   private DoubleSupplier shotAngleSupplier;
 
-  private CommandXboxController driverController = new CommandXboxController(0);
+  private CommandXboxController driverController;
 
-  private CommandXboxController secondaryController = new CommandXboxController(1);
+  private CommandXboxController secondaryController;
 
-  private Intake intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
+  private Intake intake;
 
   public RobotContainer() {
+    driverController = new CommandXboxController(0);
+    secondaryController = new CommandXboxController(1);
+
+    intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
+
+    launcher = new LauncherV2();
+    launcherAngle = new LauncherAngle(Constants.LauncherAngleConstants.motorPort,
+        Constants.LauncherAngleConstants.isReversed, Constants.LauncherAngleConstants.kP,
+        Constants.LauncherAngleConstants.kI, Constants.LauncherAngleConstants.kD,
+        Constants.LauncherAngleConstants.conversionFactor);
+
+    distanceSensor = new DistanceSensor();
+    loader = new LoaderV2(Constants.LoaderConstants.leftMotorPort,
+        Constants.LoaderConstants.rightMotorPort, Constants.LoaderConstants.isReversed, distanceSensor);
+    climber = new Climber();
+
     swerve = new Swerve();
-
-    // NamedCommands.registerCommand("shoot", shootCommand);
-
-    // shotAngleSupplier = new DoubleSupplier() {
-    // @Override
-    // public double getAsDouble() {
-    // return ShotCalculator.angleToTarget(swerve.getPose());
-    // }
-    // };
 
     configureBindings();
 
-    // autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = AutoBuilder.buildAutoChooser();
 
     // SmartDashboard.putData("Auton chooser", autoChooser);
 
-    // field = new Field2d();
-    // SmartDashboard.putData("Field", field);
-
-    // Logging callback for current robot pose
-    // PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-    // Do whatever you want with the pose here
-    // field.setRobotPose(pose);
-    // });
+    field = new Field2d();
+    SmartDashboard.putData("Field", field);
 
     // Logging callback for target robot pose
     PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
@@ -101,51 +98,6 @@ public class RobotContainer implements Loggable {
       field.getObject("path").setPoses(poses);
     });
   }
-
-  // normal speed swerve drive command
-  private final Command swerveCmd = new RunCommand(
-      () -> {
-        double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
-        double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15);
-        double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15);
-
-        Vector2D vector = new Vector2D(y, x, false);
-        // swerve.drive(vector, -w, true);
-
-      }, new Subsystem[] {});// );swerve);
-
-  // slow speed swerve drive command
-  private final Command swerveSlowCmd = new RunCommand(
-      () -> {
-        double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15) / 2;
-        double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15) / 2;
-        double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15) / 2;
-
-        Vector2D vector = new Vector2D(y, x, false);
-        // swerve.drive(vector, -w, true);
-
-      }, new Subsystem[] {});// swerve);
-
-  // swerve drive command that switches between normal and slow command based on
-  // the a button
-  private final Command swerveCommand = new ConditionalCommand(
-      swerveSlowCmd,
-      swerveCmd,
-      driverController.a());
-
-  // reset gyro to 0 when y button is pressed, to be used when gyro drifts or need
-  // different reference for field orientation
-  private final Command resetGyro = new RunCommand(
-      () -> {
-        Pgyro.zeroGyro();
-      }, new Subsystem[] {});
-
-  // loads rings using distance sensor auto stop
-  private final Command loadCommand = new RunCommand(
-      () -> {
-        loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed, Constants.LoaderConstants.loaderCutoffDistance,
-            intake);
-      }, loader);
 
   // private final Command shootCommand = new RunCommand(
   // () -> {
@@ -186,29 +138,56 @@ public class RobotContainer implements Loggable {
   // //SmartDashboard.putString("shot", shot.toString());
   // }, new Subsystem[] { launcher, launcherAngle, swerve });
 
-  private Command intakeCommand = new RunCommand(
-      () -> {
-        loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed, Constants.LoaderConstants.loaderCutoffDistance,
-            intake);
-      }, new Subsystem[] { intake, loader });
-
-  private Command testAngleCommand = new RunCommand(
-      () -> {
-        launcherAngle.setAngle(30);
-      }, launcherAngle);
-
-  private Command climberCommand = new RunCommand(
-      () -> {
-        double output = secondaryController.getLeftY();
-        climber.run(output);
-      }, climber);
-
   // private Command ampScore = AutoBuilder.pathfindToPose(
   // new Pose2d(14.5, 7.5, new Rotation2d(Math.PI / 2)),
   // new PathConstraints(4.1, 1, 2, 1));
 
   private void configureBindings() {
-    // swerve.setDefaultCommand(swerveCommand);
+    Command swerveCmd = new RunCommand(
+        () -> {
+          double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
+          double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15);
+          double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15);
+
+          Vector2D vector = new Vector2D(y, x, false);
+          swerve.drive(vector, -w, true);
+
+        }, swerve);
+
+    // reset gyro to 0 when y button is pressed, to be used when gyro drifts or need
+    // different reference for field orientation
+    final Command resetGyro = new RunCommand(
+        () -> {
+          Pgyro.zeroGyro();
+        }, new Subsystem[] {});
+
+    // loads rings using distance sensor auto stop
+    final Command loadCommand = new RunCommand(
+        () -> {
+          loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed,
+              Constants.LoaderConstants.loaderCutoffDistance,
+              intake);
+        }, loader);
+
+    Command intakeCommand = new RunCommand(
+        () -> {
+          loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed,
+              Constants.LoaderConstants.loaderCutoffDistance,
+              intake);
+        }, new Subsystem[] { intake, loader });
+
+    Command testAngleCommand = new RunCommand(
+        () -> {
+          launcherAngle.setAngle(30);
+        }, launcherAngle);
+
+    Command climberCommand = new RunCommand(
+        () -> {
+          double output = secondaryController.getLeftY();
+          climber.run(output);
+        }, climber);
+
+    swerve.setDefaultCommand(swerveCmd);
     climber.setDefaultCommand(climberCommand);
     // driverController.y().whileTrue(shootCommand);
     driverController.y().whileTrue(resetGyro);
