@@ -32,7 +32,8 @@ public class SwerveModule extends SubsystemBase{
     this.canCoder = new CANcoder(canCoderID);
     encoder = drive.getEncoder();
     encoder.setPosition(0);
-    encoder.setPositionConversionFactor((1/42)*Units.inchesToMeters(Math.PI*4));
+    encoder.setPositionConversionFactor(-1*(1/6.75)*Units.inchesToMeters(Math.PI*4));
+    encoder.setVelocityConversionFactor(-1*(1/6.75)*Units.inchesToMeters(Math.PI*4)/60);
     anglePID.enableContinuousInput(0, 360);
     this.angleOffset = angleOffset;
     

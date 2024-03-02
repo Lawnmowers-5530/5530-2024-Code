@@ -45,11 +45,14 @@ public class Swerve extends SubsystemBase implements Loggable{
   String robotRelativeSpeeds = "";
 
   @Log
-  String frontLeftPosition = "a";
+  String frontLeftState = "a";
   @Log
-  String rearLeftPosition = "a";
+  String rearLeftState = "a";
   @Log
-  String rearRightPosition = "a";
+  String rearRightState = "a";
+  @Log
+  String frontRightState = "a";
+
   @Log
   String frontRightPosition = "a";
 
@@ -102,10 +105,12 @@ public class Swerve extends SubsystemBase implements Loggable{
     poseStr = getPose().toString();
     robotRelativeSpeeds = this.getRobotRelativeSpeeds().toString();
 
-    frontLeftPosition = Mod_0.getState().toString();
-    frontRightPosition = Mod_1.getState().toString();
-    rearLeftPosition = Mod_2.getState().toString();
-    rearLeftPosition = Mod_3.getState().toString();
+    frontLeftState = Mod_0.getState().toString();
+    frontRightState = Mod_1.getState().toString();
+    rearLeftState = Mod_2.getState().toString();
+    rearRightState = Mod_3.getState().toString();
+
+    frontRightPosition = Mod_1.getPos().toString();
   }
 
   public Pose2d getPose() {
