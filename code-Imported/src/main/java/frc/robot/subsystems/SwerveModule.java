@@ -56,11 +56,6 @@ public class SwerveModule extends SubsystemBase{
   public double getOffset(){
     return this.angleOffset;
   }
-    
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
   public double getDistance(){
     return encoder.getPosition();
   }

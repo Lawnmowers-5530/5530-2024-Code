@@ -41,7 +41,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 public class RobotContainer implements Loggable {
   private Field2d field;
   private SendableChooser<Command> autoChooser;
-  //private Swerve swerve = new Swerve();
+  private Swerve swerve;
   private DistanceSensor distanceSensor = new DistanceSensor();
   private LoaderV2 loader = new LoaderV2(Constants.LoaderConstants.leftMotorPort,
       Constants.LoaderConstants.rightMotorPort, Constants.LoaderConstants.isReversed, distanceSensor);
@@ -63,30 +63,31 @@ public class RobotContainer implements Loggable {
   private Intake intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
 
   public RobotContainer() {
+    swerve = new Swerve();
 
-    //NamedCommands.registerCommand("shoot", shootCommand);
+    // NamedCommands.registerCommand("shoot", shootCommand);
 
-    //shotAngleSupplier = new DoubleSupplier() {
-    //  @Override
-    //  public double getAsDouble() {
-    //    return ShotCalculator.angleToTarget(swerve.getPose());
-    //  }
-    //};
+    // shotAngleSupplier = new DoubleSupplier() {
+    // @Override
+    // public double getAsDouble() {
+    // return ShotCalculator.angleToTarget(swerve.getPose());
+    // }
+    // };
 
     configureBindings();
 
-    //autoChooser = AutoBuilder.buildAutoChooser();
+    // autoChooser = AutoBuilder.buildAutoChooser();
 
-    //SmartDashboard.putData("Auton chooser", autoChooser);
+    // SmartDashboard.putData("Auton chooser", autoChooser);
 
-    //field = new Field2d();
-    //SmartDashboard.putData("Field", field);
+    // field = new Field2d();
+    // SmartDashboard.putData("Field", field);
 
     // Logging callback for current robot pose
-    //PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-      // Do whatever you want with the pose here
-      //field.setRobotPose(pose);
-    //});
+    // PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+    // Do whatever you want with the pose here
+    // field.setRobotPose(pose);
+    // });
 
     // Logging callback for target robot pose
     PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
@@ -109,9 +110,9 @@ public class RobotContainer implements Loggable {
         double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15);
 
         Vector2D vector = new Vector2D(y, x, false);
-        //swerve.drive(vector, -w, true);
+        // swerve.drive(vector, -w, true);
 
-      }, new Subsystem[]{});//);swerve);
+      }, new Subsystem[] {});// );swerve);
 
   // slow speed swerve drive command
   private final Command swerveSlowCmd = new RunCommand(
@@ -121,9 +122,9 @@ public class RobotContainer implements Loggable {
         double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15) / 2;
 
         Vector2D vector = new Vector2D(y, x, false);
-        //swerve.drive(vector, -w, true);
+        // swerve.drive(vector, -w, true);
 
-      }, new Subsystem[]{});//swerve);
+      }, new Subsystem[] {});// swerve);
 
   // swerve drive command that switches between normal and slow command based on
   // the a button
@@ -142,47 +143,53 @@ public class RobotContainer implements Loggable {
   // loads rings using distance sensor auto stop
   private final Command loadCommand = new RunCommand(
       () -> {
-        loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed, Constants.LoaderConstants.loaderCutoffDistance, intake);
+        loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed, Constants.LoaderConstants.loaderCutoffDistance,
+            intake);
       }, loader);
 
-  //private final Command shootCommand = new RunCommand(
-      //() -> {
-      //  Pose2d currentPose = swerve.getPose();
-//
-      //  // find field oriented vector of robot
-      //  Vector2D robotRelativeVector = new Vector2D(swerve.getRobotRelativeSpeeds().vxMetersPerSecond,
-      //      swerve.getRobotRelativeSpeeds().vyMetersPerSecond, false);
-      //  Vector2D robotVector = VectorOperator.rotateVector2D(robotRelativeVector, Pgyro.getRot());
-//
-      //  // find distance and angle to target
-      //  double distToTarget = Constants.targetTranslation.getDistance(currentPose.getTranslation());
-      //  double angleToTarget = shotAngleSupplier.getAsDouble();
-//
-      //  // use shooter library to calculate final shot vector
-      //  //Shot shot = ShotCalculator.vecFinal(robotVector, distToTarget, angleToTarget);
-//
-      //  // shoot the calculated shot
-      //  double leftSpeed = 0.4;//shot.getSpeed();
-      //  double rightSpeed = 0.4;//shot.getSpeed(); // TODO
-//
-      //  launcher.setVelocity(leftSpeed, rightSpeed);
-      //  //launcherAngle.setAngle(shot.getThetaDeg());
-//
-      //  loader.run(Constants.LauncherConstants.loaderShotSpeed);
-//
-      //  //swerve.rotateToAngle(Math.toDegrees(shot.getPhiDeg()));
-//
-      //  // temp logging
-      //  SmartDashboard.putNumber("distToTarget", distToTarget);
-      //  SmartDashboard.putNumber("angleToTarget", angleToTarget);
-      //  SmartDashboard.putString("currentPose", currentPose.toString());
-      //  SmartDashboard.putString("robotVector", robotVector.toString());
-      //  //SmartDashboard.putString("shot", shot.toString());
-      //}, new Subsystem[] { launcher, launcherAngle, swerve });
+  // private final Command shootCommand = new RunCommand(
+  // () -> {
+  // Pose2d currentPose = swerve.getPose();
+  //
+  // // find field oriented vector of robot
+  // Vector2D robotRelativeVector = new
+  // Vector2D(swerve.getRobotRelativeSpeeds().vxMetersPerSecond,
+  // swerve.getRobotRelativeSpeeds().vyMetersPerSecond, false);
+  // Vector2D robotVector = VectorOperator.rotateVector2D(robotRelativeVector,
+  // Pgyro.getRot());
+  //
+  // // find distance and angle to target
+  // double distToTarget =
+  // Constants.targetTranslation.getDistance(currentPose.getTranslation());
+  // double angleToTarget = shotAngleSupplier.getAsDouble();
+  //
+  // // use shooter library to calculate final shot vector
+  // //Shot shot = ShotCalculator.vecFinal(robotVector, distToTarget,
+  // angleToTarget);
+  //
+  // // shoot the calculated shot
+  // double leftSpeed = 0.4;//shot.getSpeed();
+  // double rightSpeed = 0.4;//shot.getSpeed(); // TODO
+  //
+  // launcher.setVelocity(leftSpeed, rightSpeed);
+  // //launcherAngle.setAngle(shot.getThetaDeg());
+  //
+  // loader.run(Constants.LauncherConstants.loaderShotSpeed);
+  //
+  // //swerve.rotateToAngle(Math.toDegrees(shot.getPhiDeg()));
+  //
+  // // temp logging
+  // SmartDashboard.putNumber("distToTarget", distToTarget);
+  // SmartDashboard.putNumber("angleToTarget", angleToTarget);
+  // SmartDashboard.putString("currentPose", currentPose.toString());
+  // SmartDashboard.putString("robotVector", robotVector.toString());
+  // //SmartDashboard.putString("shot", shot.toString());
+  // }, new Subsystem[] { launcher, launcherAngle, swerve });
 
   private Command intakeCommand = new RunCommand(
       () -> {
-        loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed, Constants.LoaderConstants.loaderCutoffDistance, intake);
+        loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed, Constants.LoaderConstants.loaderCutoffDistance,
+            intake);
       }, new Subsystem[] { intake, loader });
 
   private Command testAngleCommand = new RunCommand(
@@ -191,40 +198,52 @@ public class RobotContainer implements Loggable {
       }, launcherAngle);
 
   private Command climberCommand = new RunCommand(
-    () -> {
-      double output = secondaryController.getLeftY();
-      climber.run(output);
-    }, climber);
+      () -> {
+        double output = secondaryController.getLeftY();
+        climber.run(output);
+      }, climber);
 
-  //private Command ampScore = AutoBuilder.pathfindToPose(
-  //    new Pose2d(14.5, 7.5, new Rotation2d(Math.PI / 2)),
-  //    new PathConstraints(4.1, 1, 2, 1));
+  // private Command ampScore = AutoBuilder.pathfindToPose(
+  // new Pose2d(14.5, 7.5, new Rotation2d(Math.PI / 2)),
+  // new PathConstraints(4.1, 1, 2, 1));
 
   private void configureBindings() {
-    //swerve.setDefaultCommand(swerveCommand);
+    // swerve.setDefaultCommand(swerveCommand);
     climber.setDefaultCommand(climberCommand);
-    //driverController.y().whileTrue(shootCommand);
+    // driverController.y().whileTrue(shootCommand);
     driverController.y().whileTrue(resetGyro);
     driverController.b().onTrue(new RepeatCommand(intakeCommand));
-    driverController.x().onTrue(new LauncherIntake(distanceSensor, loader, launcher, Constants.LauncherIntakeConstants.theshold, Constants.LauncherIntakeConstants.speed));
+    driverController.x().onTrue(new LauncherIntake(distanceSensor, loader, launcher,
+        Constants.LauncherIntakeConstants.theshold, Constants.LauncherIntakeConstants.speed));
     // driverController.rightBumper().whileTrue(loadCommand);
 
-
-  secondaryController.a().onTrue(new VelocityLauncher(
-    launcher, 
-    () -> {return Constants.LauncherConstants.LAUNCHER_LOW_REVS;}, 
-    () -> {return Constants.LauncherConstants.LAUNCHER_LOW_REVS / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);}
-  ));
-  secondaryController.b().onTrue(new VelocityLauncher(
-    launcher, 
-    () -> {return Constants.LauncherConstants.LAUNCHER_MED_REVS;}, 
-    () -> {return Constants.LauncherConstants.LAUNCHER_MED_REVS / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);}
-  ));
-  secondaryController.y().onTrue(new VelocityLauncher(
-    launcher, 
-    () -> {return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;}, 
-    () -> {return Constants.LauncherConstants.LAUNCHER_HIGH_REVS / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);}
-  ));
+    secondaryController.a().onTrue(new VelocityLauncher(
+        launcher,
+        () -> {
+          return Constants.LauncherConstants.LAUNCHER_LOW_REVS;
+        },
+        () -> {
+          return Constants.LauncherConstants.LAUNCHER_LOW_REVS
+              / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+        }));
+    secondaryController.b().onTrue(new VelocityLauncher(
+        launcher,
+        () -> {
+          return Constants.LauncherConstants.LAUNCHER_MED_REVS;
+        },
+        () -> {
+          return Constants.LauncherConstants.LAUNCHER_MED_REVS
+              / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+        }));
+    secondaryController.y().onTrue(new VelocityLauncher(
+        launcher,
+        () -> {
+          return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;
+        },
+        () -> {
+          return Constants.LauncherConstants.LAUNCHER_HIGH_REVS
+              / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+        }));
   }
 
   public Command getAutonomousCommand() {

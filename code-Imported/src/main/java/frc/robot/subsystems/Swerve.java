@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
@@ -50,8 +51,6 @@ public class Swerve extends SubsystemBase implements Loggable{
   String rearRightPosition = "a";
   @Log
   String frontRightPosition = "a";
-
-  SwerveModule[] modules = new SwerveModule[]{Mod_0, Mod_1, Mod_2, Mod_3};
 
   public Swerve() {
     SwerveModulePosition[] modPos = getModulePositions();
@@ -101,9 +100,9 @@ public class Swerve extends SubsystemBase implements Loggable{
     robotRelativeSpeeds = this.getRobotRelativeSpeeds().toString();
 
     frontLeftPosition = Mod_0.getState().toString();
-    frontRightPosition = Mod_0.getState().toString();
-    rearLeftPosition = Mod_0.getState().toString();
-    rearLeftPosition = Mod_0.getState().toString();
+    frontRightPosition = Mod_1.getState().toString();
+    rearLeftPosition = Mod_2.getState().toString();
+    rearLeftPosition = Mod_3.getState().toString();
   }
 
   public Pose2d getPose() {
