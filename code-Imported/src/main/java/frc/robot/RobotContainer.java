@@ -20,6 +20,8 @@ import io.github.oblarg.oblog.Loggable;
 import frc.lib.ShotCalculator;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
+import frc.robot.commands.LauncherIntake;
+import frc.robot.commands.VelocityLauncher;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
 import frc.robot.subsystems.Intake;
@@ -204,8 +206,25 @@ public class RobotContainer implements Loggable {
     //driverController.y().whileTrue(shootCommand);
     driverController.y().whileTrue(resetGyro);
     driverController.b().onTrue(new RepeatCommand(intakeCommand));
-    //driverController.a().onTrue(new LauncherIntake(distanceSensor, loader, launcher, Constants.LauncherIntakeConstants.theshold, Constants.LauncherIntakeConstants.speed));
+    driverController.x().onTrue(new LauncherIntake(distanceSensor, loader, launcher, Constants.LauncherIntakeConstants.theshold, Constants.LauncherIntakeConstants.speed));
     // driverController.rightBumper().whileTrue(loadCommand);
+
+
+  secondaryController.a().onTrue(new VelocityLauncher(
+    launcher, 
+    () -> {return Constants.LauncherConstants.LAUNCHER_LOW_REVS;}, 
+    () -> {return Constants.LauncherConstants.LAUNCHER_LOW_REVS / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);}
+  ));
+  secondaryController.b().onTrue(new VelocityLauncher(
+    launcher, 
+    () -> {return Constants.LauncherConstants.LAUNCHER_MED_REVS;}, 
+    () -> {return Constants.LauncherConstants.LAUNCHER_MED_REVS / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);}
+  ));
+  secondaryController.y().onTrue(new VelocityLauncher(
+    launcher, 
+    () -> {return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;}, 
+    () -> {return Constants.LauncherConstants.LAUNCHER_HIGH_REVS / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);}
+  ));
   }
 
   public Command getAutonomousCommand() {

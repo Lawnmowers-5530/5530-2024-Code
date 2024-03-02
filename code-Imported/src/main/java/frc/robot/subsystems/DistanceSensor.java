@@ -12,6 +12,7 @@ public class DistanceSensor extends SubsystemBase{
     public DistanceSensor() {
         sensor = new Rev2mDistanceSensor(Port.kOnboard);
         sensor.setDistanceUnits(Rev2mDistanceSensor.Unit.kMillimeters);
+        this.setEnabled(true);
     }
     
     public double getDistance() { //returns distance in mm

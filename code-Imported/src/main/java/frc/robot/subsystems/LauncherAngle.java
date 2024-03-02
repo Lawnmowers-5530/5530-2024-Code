@@ -71,6 +71,6 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
         pidOutput = Double.toString(pidOut);
         feedOutput = Double.toString(feedOut);
 
-        motor.set(feedOut + pidOut);
+        //motor.set(feedOut + pidOut);
     }
 }

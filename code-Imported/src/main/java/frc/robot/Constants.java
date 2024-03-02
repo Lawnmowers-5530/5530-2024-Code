@@ -75,6 +75,12 @@ public final class Constants {
         public static final double kF = 0.1;
 
         public static final double loaderShotSpeed = 0.2;
+
+        public static final double LAUNCHER_LOW_REVS = 1500; // low speed for the launcher
+        public static final double LAUNCHER_MED_REVS = 3000; // medium speed for the launcher
+        public static final double LAUNCHER_HIGH_REVS = 4500; // high speed for the launcher
+
+        public static final double LAUNCHER_SPEED_DIFF_PERCENT = 0.2;
     }
 
     public static final class LauncherAngleConstants{

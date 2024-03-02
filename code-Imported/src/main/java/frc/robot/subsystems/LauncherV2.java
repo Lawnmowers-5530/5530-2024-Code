@@ -55,4 +55,9 @@ public class LauncherV2 extends Launcher {
         leftPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);
         rightPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);
     }
+
+    public void setFF(double ff) {
+        leftPIDController.setFF(ff);
+        rightPIDController.setFF(ff);
+    }
 }
