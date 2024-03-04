@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -81,7 +82,7 @@ public class RobotContainer implements Loggable {
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
-    // SmartDashboard.putData("Auton chooser", autoChooser);
+    SmartDashboard.putData("Auton chooser", autoChooser);
 
     field = new Field2d();
     SmartDashboard.putData("Field", field);
@@ -186,11 +187,22 @@ public class RobotContainer implements Loggable {
           double output = secondaryController.getLeftY();
           climber.run(output);
         }, climber);
+    
+    Command shooterFeed = new RunCommand(
+      () -> {
+        loader.run(0.2);
+      }, loader);
+    
+    Command stopShooterComponents = new RunCommand(
+      () -> {
+        loader.run(0);
+        launcher.setSpeed(0, 0);
+      }, new Subsystem[]{loader, launcher});
 
     swerve.setDefaultCommand(swerveCmd);
     climber.setDefaultCommand(climberCommand);
     // driverController.y().whileTrue(shootCommand);
-    driverController.y().whileTrue(resetGyro);
+    driverController.y().onTrue(resetGyro);
     driverController.b().onTrue(new RepeatCommand(intakeCommand));
     driverController.x().onTrue(new LauncherIntake(distanceSensor, loader, launcher,
         Constants.LauncherIntakeConstants.theshold, Constants.LauncherIntakeConstants.speed));
@@ -223,6 +235,8 @@ public class RobotContainer implements Loggable {
           return Constants.LauncherConstants.LAUNCHER_HIGH_REVS
               / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
         }));
+    secondaryController.leftBumper().onTrue(shooterFeed);
+    secondaryController.rightBumper().onTrue(stopShooterComponents);
   }
 
   public Command getAutonomousCommand() {

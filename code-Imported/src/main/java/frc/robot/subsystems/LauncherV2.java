@@ -33,21 +33,13 @@ public class LauncherV2 extends Launcher {
         rightPIDController.setD(Constants.LauncherConstants.kD);
         rightPIDController.setFF(Constants.LauncherConstants.kF);
     }
-
-    public void setRotations(double left, double right) {
+public void setVelocity(double left, double right) {
         leftPIDController.setReference(left, CANSparkBase.ControlType.kVelocity);
         rightPIDController.setReference(right, CANSparkBase.ControlType.kVelocity);
         SmartDashboard.putNumber("Left Target", left);
         SmartDashboard.putNumber("Right Target", right);
         SmartDashboard.putNumber("left velocity", leftEncoder.getVelocity());
         SmartDashboard.putNumber("right velocity", rightEncoder.getVelocity());
-    }
-
-    public void setVelocity(double left, double right){
-        double leftRotations = left * Constants.noteConversionFactor;
-        double rightRotations = right * Constants.noteConversionFactor;
-
-        setRotations(leftRotations, rightRotations);
     }
     
     @Override
@@ -56,8 +48,10 @@ public class LauncherV2 extends Launcher {
         rightPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);
     }
 
-    public void setFF(double ff) {
-        leftPIDController.setFF(ff);
-        rightPIDController.setFF(ff);
+    public void logEncoder() {
+        SmartDashboard.putNumber("Left Encoder", leftEncoder.getPosition());
+        SmartDashboard.putNumber("Right Encoder", rightEncoder.getPosition());
+        SmartDashboard.putNumber("Left Encoder 2", leftEncoder2.getPosition());
+        SmartDashboard.putNumber("Right Encoder 2", rightEncoder2.getPosition());
     }
 }

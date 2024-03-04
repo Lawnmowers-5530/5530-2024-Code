@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix6.hardware.CANcoder;
 
@@ -29,11 +30,12 @@ public class SwerveModule extends SubsystemBase{
   public SwerveModule(int driveMotorID, int turnMotorID, int canCoderID, double angleOffset) { //initialize module
     drive = new CANSparkMax(driveMotorID, MotorType.kBrushless);
     rotate = new CANSparkMax(turnMotorID, MotorType.kBrushless);
+    drive.setIdleMode(IdleMode.kBrake);
+    rotate.setIdleMode(IdleMode.kBrake);
+
     this.canCoder = new CANcoder(canCoderID);
     encoder = drive.getEncoder();
-    encoder.setPosition(0);
-    encoder.setPositionConversionFactor(-1*(1/6.75)*Units.inchesToMeters(Math.PI*4));
-    encoder.setVelocityConversionFactor(-1*(1/6.75)*Units.inchesToMeters(Math.PI*4)/60);
+    encoder.setPosition(0);;
     anglePID.enableContinuousInput(0, 360);
     this.angleOffset = angleOffset;
     
@@ -52,18 +54,18 @@ public class SwerveModule extends SubsystemBase{
     }
 
   public double getVelocity() {
-      return encoder.getVelocity();
+      return encoder.getVelocity()*(-1*(1/6.75)*Units.inchesToMeters(Math.PI*4))/60;
     }
     
   public double getOffset(){
     return this.angleOffset;
   }
   public double getDistance(){
-    return encoder.getPosition();
+    return encoder.getPosition()*(-1*(1/6.75)*Units.inchesToMeters(Math.PI*4));
   }
 
   public SwerveModulePosition getPos(){
-    return new SwerveModulePosition(-getDistance(), getTurningPosition());
+    return new SwerveModulePosition(getDistance(), getTurningPosition());
   }
 
   public SwerveModuleState getState(){

@@ -11,7 +11,6 @@ public class LoaderV2 extends Loader {
     }
 
     public boolean runUntilBeamBreak(double speed, double cutoffDistance, Intake intake) {
-        System.out.println("running beam break");
             if (distanceSensor.getDistance() < cutoffDistance) {
                 intake.run(0);
                 System.out.println("ended");

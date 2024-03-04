@@ -69,10 +69,10 @@ public final class Constants {
         public static final int leftMotorPort = 18;
         public static final int rightMotorPort = 19;
         public static final boolean isReversed = false;
-        public static final double kP = 0.1;
-        public static final double kI = 0.1;
-        public static final double kD = 0.1;
-        public static final double kF = 0.1;
+        public static final double kP = 0.0004d;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kF = 0.0002d;
 
         public static final double loaderShotSpeed = 0.2;
 
@@ -113,8 +113,8 @@ public final class Constants {
   
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
 
-    public static final PIDConstants translationConstants = new PIDConstants(0.5, 0, 0.4);
-    public static final PIDConstants rotationConstants = new PIDConstants(0.8, 0.0, 0.3);
+    public static final PIDConstants translationConstants = new PIDConstants(4, 0, 0.0);
+    public static final PIDConstants rotationConstants = new PIDConstants(0.75, 0.0, 0.0);
 
     public static final Translation2d targetTranslation = new Translation2d(15, 5);
 

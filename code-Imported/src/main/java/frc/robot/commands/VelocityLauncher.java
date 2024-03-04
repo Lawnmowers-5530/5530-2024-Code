@@ -35,7 +35,7 @@ public class VelocityLauncher extends Command {
 
     @Override
     public void initialize() {
-        launcherSubsystem.setFF( 0.1 * ((leftVelocitySupplier.getAsDouble() + rightVelocitySupplier.getAsDouble()) /2));
+        //launcherSubsystem.setFF( 0.1 * ((leftVelocitySupplier.getAsDouble() + rightVelocitySupplier.getAsDouble()) /2));
         launcherSubsystem.reset();
         
     }
