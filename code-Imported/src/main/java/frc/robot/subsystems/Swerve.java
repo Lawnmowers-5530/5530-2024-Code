@@ -68,7 +68,7 @@ public class Swerve extends SubsystemBase implements Loggable{
     new HolonomicPathFollowerConfig(
       Constants.translationConstants,
       Constants.rotationConstants,
-      0.5, 
+      3.8, 
       Constants.driveBaseRadius,
       new ReplanningConfig()),
       () -> {
@@ -84,10 +84,12 @@ public class Swerve extends SubsystemBase implements Loggable{
   public void drive(Vector2D vector, double omegaRadSec, boolean fieldRelative){
 
     Rotation2d gyroAngle = Pgyro.getRot();
-    if(!fieldRelative){
-      gyroAngle = Rotation2d.fromDegrees(0);
+    Vector2D rotated;
+    if(fieldRelative){
+      rotated = VectorOperator.rotateVector2D(vector, gyroAngle);
+    } else{
+      rotated = vector;
     }
-    Vector2D rotated = VectorOperator.rotateVector2D(vector, gyroAngle);
     ChassisSpeeds speeds = new ChassisSpeeds(rotated.getvX(), rotated.getvY(), -omegaRadSec);
 
     SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(speeds);
@@ -111,6 +113,8 @@ public class Swerve extends SubsystemBase implements Loggable{
     rearRightState = Mod_3.getState().toString();
 
     frontRightPosition = Mod_1.getPos().toString();
+
+    SmartDashboard.putString("robot rel speeds", getRobotRelativeSpeeds().toString());
   }
 
   public Pose2d getPose() {
@@ -157,6 +161,7 @@ public class Swerve extends SubsystemBase implements Loggable{
   }
 
   public void autoDriveRobotRelative(ChassisSpeeds speeds){
+    SmartDashboard.putString("drive goal", speeds.toString());
     Vector2D vector = new Vector2D(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, false);
     output = vector.toString();
     this.drive(vector, speeds.omegaRadiansPerSecond, false);

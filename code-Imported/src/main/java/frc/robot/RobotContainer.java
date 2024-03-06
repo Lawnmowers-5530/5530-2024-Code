@@ -59,24 +59,24 @@ public class RobotContainer implements Loggable {
 
   private Intake intake;
 
+  private Command intakeCommand;
+  private Command swerveCmd;
+  private Command resetGyro;
+  private Command loadCommand;
+  private Command testAngleCommand;
+  private Command climberCommand;
+  private Command shooterFeed;
+  private Command stopShooterComponents;
+
   public RobotContainer() {
     driverController = new CommandXboxController(0);
     secondaryController = new CommandXboxController(1);
 
-    intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
+    createSubsystems();
 
-    launcher = new LauncherV2();
-    launcherAngle = new LauncherAngle(Constants.LauncherAngleConstants.motorPort,
-        Constants.LauncherAngleConstants.isReversed, Constants.LauncherAngleConstants.kP,
-        Constants.LauncherAngleConstants.kI, Constants.LauncherAngleConstants.kD,
-        Constants.LauncherAngleConstants.conversionFactor);
+    createCommands();
 
-    distanceSensor = new DistanceSensor();
-    loader = new LoaderV2(Constants.LoaderConstants.leftMotorPort,
-        Constants.LoaderConstants.rightMotorPort, Constants.LoaderConstants.isReversed, distanceSensor);
-    climber = new Climber();
-
-    swerve = new Swerve();
+    NamedCommands.registerCommand("intake", intakeCommand);
 
     configureBindings();
 
@@ -100,51 +100,15 @@ public class RobotContainer implements Loggable {
     });
   }
 
-  // private final Command shootCommand = new RunCommand(
-  // () -> {
-  // Pose2d currentPose = swerve.getPose();
-  //
-  // // find field oriented vector of robot
-  // Vector2D robotRelativeVector = new
-  // Vector2D(swerve.getRobotRelativeSpeeds().vxMetersPerSecond,
-  // swerve.getRobotRelativeSpeeds().vyMetersPerSecond, false);
-  // Vector2D robotVector = VectorOperator.rotateVector2D(robotRelativeVector,
-  // Pgyro.getRot());
-  //
-  // // find distance and angle to target
-  // double distToTarget =
-  // Constants.targetTranslation.getDistance(currentPose.getTranslation());
-  // double angleToTarget = shotAngleSupplier.getAsDouble();
-  //
-  // // use shooter library to calculate final shot vector
-  // //Shot shot = ShotCalculator.vecFinal(robotVector, distToTarget,
-  // angleToTarget);
-  //
-  // // shoot the calculated shot
-  // double leftSpeed = 0.4;//shot.getSpeed();
-  // double rightSpeed = 0.4;//shot.getSpeed(); // TODO
-  //
-  // launcher.setVelocity(leftSpeed, rightSpeed);
-  // //launcherAngle.setAngle(shot.getThetaDeg());
-  //
-  // loader.run(Constants.LauncherConstants.loaderShotSpeed);
-  //
-  // //swerve.rotateToAngle(Math.toDegrees(shot.getPhiDeg()));
-  //
-  // // temp logging
-  // SmartDashboard.putNumber("distToTarget", distToTarget);
-  // SmartDashboard.putNumber("angleToTarget", angleToTarget);
-  // SmartDashboard.putString("currentPose", currentPose.toString());
-  // SmartDashboard.putString("robotVector", robotVector.toString());
-  // //SmartDashboard.putString("shot", shot.toString());
-  // }, new Subsystem[] { launcher, launcherAngle, swerve });
+  private void createCommands() {
+    intakeCommand = new RunCommand(
+        () -> {
+          loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed,
+              Constants.LoaderConstants.loaderCutoffDistance,
+              intake);
+        }, new Subsystem[] { intake, loader });
 
-  // private Command ampScore = AutoBuilder.pathfindToPose(
-  // new Pose2d(14.5, 7.5, new Rotation2d(Math.PI / 2)),
-  // new PathConstraints(4.1, 1, 2, 1));
-
-  private void configureBindings() {
-    Command swerveCmd = new RunCommand(
+    swerveCmd = new RunCommand(
         () -> {
           double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
           double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15);
@@ -155,49 +119,64 @@ public class RobotContainer implements Loggable {
 
         }, swerve);
 
-    // reset gyro to 0 when y button is pressed, to be used when gyro drifts or need
-    // different reference for field orientation
-    final Command resetGyro = new RunCommand(
+    resetGyro = new RunCommand(
         () -> {
           Pgyro.zeroGyro();
         }, new Subsystem[] {});
 
-    // loads rings using distance sensor auto stop
-    final Command loadCommand = new RunCommand(
+    loadCommand = new RunCommand(
         () -> {
           loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed,
               Constants.LoaderConstants.loaderCutoffDistance,
               intake);
         }, loader);
 
-    Command intakeCommand = new RunCommand(
-        () -> {
-          loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed,
-              Constants.LoaderConstants.loaderCutoffDistance,
-              intake);
-        }, new Subsystem[] { intake, loader });
-
-    Command testAngleCommand = new RunCommand(
+    testAngleCommand = new RunCommand(
         () -> {
           launcherAngle.setAngle(30);
         }, launcherAngle);
 
-    Command climberCommand = new RunCommand(
+    climberCommand = new RunCommand(
         () -> {
           double output = secondaryController.getLeftY();
           climber.run(output);
         }, climber);
-    
-    Command shooterFeed = new RunCommand(
-      () -> {
-        loader.run(0.2);
-      }, loader);
-    
-    Command stopShooterComponents = new RunCommand(
-      () -> {
-        loader.run(0);
-        launcher.setSpeed(0, 0);
-      }, new Subsystem[]{loader, launcher});
+
+    shooterFeed = new RunCommand(
+        () -> {
+          loader.run(0.2);
+        }, loader);
+
+    stopShooterComponents = new RunCommand(
+        () -> {
+          loader.run(0);
+          launcher.setSpeed(0, 0);
+        }, new Subsystem[] { loader, launcher });
+  }
+
+  private void createSubsystems() {
+    intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
+
+    launcher = new LauncherV2();
+    launcherAngle = new LauncherAngle(Constants.LauncherAngleConstants.motorPort,
+        Constants.LauncherAngleConstants.isReversed, Constants.LauncherAngleConstants.kP,
+        Constants.LauncherAngleConstants.kI, Constants.LauncherAngleConstants.kD,
+        Constants.LauncherAngleConstants.conversionFactor);
+
+    distanceSensor = new DistanceSensor();
+    loader = new LoaderV2(Constants.LoaderConstants.leftMotorPort,
+        Constants.LoaderConstants.rightMotorPort, Constants.LoaderConstants.isReversed, distanceSensor);
+    climber = new Climber();
+
+    swerve = new Swerve();
+  }
+
+  private void configureBindings() {
+
+    // reset gyro to 0 when y button is pressed, to be used when gyro drifts or need
+    // different reference for field orientation
+
+    // loads rings using distance sensor auto stop
 
     swerve.setDefaultCommand(swerveCmd);
     climber.setDefaultCommand(climberCommand);

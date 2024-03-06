@@ -114,7 +114,7 @@ public final class Constants {
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
 
     public static final PIDConstants translationConstants = new PIDConstants(4, 0, 0.0);
-    public static final PIDConstants rotationConstants = new PIDConstants(0.75, 0.0, 0.0);
+    public static final PIDConstants rotationConstants = new PIDConstants(1.5, 0.0, 0.0);
 
     public static final Translation2d targetTranslation = new Translation2d(15, 5);
 
