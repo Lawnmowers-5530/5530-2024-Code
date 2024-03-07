@@ -5,23 +5,60 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import io.github.oblarg.oblog.annotations.Log;
 
 public class Climber extends SubsystemBase {
-  private CANSparkMax motor;
-  public Climber() {
-    motor = new CANSparkMax(Constants.ClimberConstants.motorPort, MotorType.kBrushless);
-    motor.setInverted(Constants.ClimberConstants.isReversed);
-  }
+    CANSparkMax motor;
+    RelativeEncoder encoder;
 
-  public void run(double speed){
-    motor.set(speed);
-  }
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    @Log
+    public double target = 0;
+    @Log
+    private double encoderPos = 0;
+
+    public double deadband = 630;
+    public double speed = 0.4;
+    boolean runToPosMode = false;
+
+    public Climber(int motorID, boolean reversed) {
+        motor = new CANSparkMax(motorID, MotorType.kBrushless);
+        encoder = motor.getEncoder();
+        motor.setInverted(reversed);
+        encoder.setPosition(0);
+        encoder.setPositionConversionFactor(42);
+    }
+
+    public void setSpeed(double speed) {
+        motor.set(speed);
+        runToPosMode = false;
+    }
+
+    @Override
+    public void periodic() {
+        encoderPos = encoder.getPosition();
+        if (runToPosMode) {
+            if (Math.abs(encoderPos - target) > deadband) {
+                if (target < encoderPos) {
+                    motor.set(-speed);
+                }
+                if (target > encoderPos) {
+                    motor.set(speed);
+                }
+            } else {
+                motor.set(0);
+            }
+        }
+    }
+
+    public void setTarget(double target) {
+        this.target = target;
+        runToPosMode = true;
+    }
 }
+
+// high: 18465

@@ -147,8 +147,9 @@ public class RobotContainer implements Loggable {
 
     climberCommand = new RunCommand(
         () -> {
-          double output = secondaryController.getLeftY();
-          climber.run(output);
+          double output = secondaryController.getRightY();
+          output = output - secondaryController.getLeftY();
+          climber.setSpeed(output);
         }, climber);
 
     shooterFeed = new RunCommand(
@@ -196,7 +197,9 @@ public class RobotContainer implements Loggable {
     distanceSensor = new DistanceSensor();
     loader = new LoaderV2(Constants.LoaderConstants.leftMotorPort,
         Constants.LoaderConstants.rightMotorPort, Constants.LoaderConstants.isReversed, distanceSensor);
-    climber = new Climber();
+    
+    climber = new Climber(Constants.ClimberConstants.motorPort, Constants.ClimberConstants.isReversed);
+    climber.speed = Constants.ClimberConstants.speed;
 
     swerve = new Swerve();
 

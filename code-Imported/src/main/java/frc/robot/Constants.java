@@ -108,6 +108,7 @@ public final class Constants {
     public static final class ClimberConstants{
         public static final int motorPort = 23;
         public static final boolean isReversed = true;
+        public static final double speed = 0.4;
     }
 
     public static final class DumbLauncherAngleConstants {
