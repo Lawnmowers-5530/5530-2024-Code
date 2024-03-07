@@ -25,6 +25,7 @@ import frc.robot.commands.LauncherIntake;
 import frc.robot.commands.VelocityLauncher;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
+import frc.robot.subsystems.DumbLauncherAngle;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherAngle;
 import frc.robot.subsystems.LauncherV2;
@@ -68,6 +69,14 @@ public class RobotContainer implements Loggable {
   private Command shooterFeed;
   private Command stopShooterComponents;
 
+  // Dumb launcher angle section
+
+  private DumbLauncherAngle dumbLauncherAngle;
+  private Command AngleDownCommand;
+  private Command AngleUpCommand;
+  private Command AngleRelaxCommand;
+
+  // ----------------------------
   public RobotContainer() {
     driverController = new CommandXboxController(0);
     secondaryController = new CommandXboxController(1);
@@ -152,6 +161,27 @@ public class RobotContainer implements Loggable {
           loader.run(0);
           launcher.setSpeed(0, 0);
         }, new Subsystem[] { loader, launcher });
+
+    // Dumb launcher angle section
+    AngleUpCommand = new RunCommand(
+      () -> {
+        dumbLauncherAngle.forceUp();
+      }, dumbLauncherAngle
+    );
+
+    AngleDownCommand = new RunCommand(
+      () -> {
+        dumbLauncherAngle.forceDown();
+      }, dumbLauncherAngle
+    );
+
+    AngleRelaxCommand = new RunCommand(
+      () -> {
+        dumbLauncherAngle.relax();
+      }, dumbLauncherAngle
+    );
+    // ----------------------------
+
   }
 
   private void createSubsystems() {
@@ -169,6 +199,11 @@ public class RobotContainer implements Loggable {
     climber = new Climber();
 
     swerve = new Swerve();
+
+    dumbLauncherAngle = new DumbLauncherAngle(
+      Constants.DumbLauncherAngleConstants.motorPort,
+      Constants.DumbLauncherAngleConstants.power
+    );
   }
 
   private void configureBindings() {
@@ -216,6 +251,12 @@ public class RobotContainer implements Loggable {
         }));
     secondaryController.leftBumper().onTrue(shooterFeed);
     secondaryController.rightBumper().onTrue(stopShooterComponents);
+
+    // Dumb launcher angle section
+    secondaryController.b().whileTrue(AngleDownCommand);
+    secondaryController.x().whileTrue(AngleUpCommand);
+    dumbLauncherAngle.setDefaultCommand(AngleRelaxCommand);
+    // ----------------------------
   }
 
   public Command getAutonomousCommand() {

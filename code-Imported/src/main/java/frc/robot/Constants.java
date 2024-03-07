@@ -109,6 +109,11 @@ public final class Constants {
         public static final int motorPort = 23;
         public static final boolean isReversed = true;
     }
+
+    public static final class DumbLauncherAngleConstants {
+        public static final int motorPort = 22;
+        public static final double power = 0.3;
+    }
   
   
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
