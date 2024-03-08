@@ -27,9 +27,15 @@ import frc.robot.subsystems.DistanceSensor;
 import frc.robot.subsystems.DumbLauncherAngle;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherV2;
+import frc.robot.subsystems.LedController;
+import frc.robot.subsystems.LedController_MultiAccess;
 import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.LedController.fixedPalattePatternType;
+import frc.robot.subsystems.LedController.stripType;
+import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -42,6 +48,7 @@ public class RobotContainer implements Loggable {
   private LauncherV2 launcher;
   private Climber climber;
   private Intake intake;
+  private LedController_MultiAccess leds;
 
   private DashboardIndicators dash;
 
@@ -86,12 +93,13 @@ public class RobotContainer implements Loggable {
   }
 
   private void createSubsystems() {
+    leds = new LedController_MultiAccess(new LedController(0, stripType.Adressable));
     intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
     launcher = new LauncherV2();
     launcherAngle = new DumbLauncherAngle(
         Constants.LauncherAngleConstants.motorPort,
         Constants.LauncherAngleConstants.isReversed);
-    distanceSensor = new DistanceSensor();
+    distanceSensor = new DistanceSensor(leds.getController());
     dash = new DashboardIndicators(distanceSensor);
     loader = new LoaderV2(
         Constants.LoaderConstants.leftMotorPort,
@@ -133,16 +141,6 @@ public class RobotContainer implements Loggable {
         () -> {
           launcherAngle.forceDown();
         }, launcherAngle);
-
-    speakerShot = new VelocityLauncher(
-        launcher,
-        () -> {
-          return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;
-        },
-        () -> {
-          return Constants.LauncherConstants.LAUNCHER_HIGH_REVS
-              / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
-        });
 
     intakeCommand = new RunCommand(
         () -> {
@@ -192,6 +190,16 @@ public class RobotContainer implements Loggable {
     ampShot = new VelocityLauncher(
         launcher,
         () -> {
+          return Constants.LauncherConstants.LAUNCHER_LOW_REVS;
+        },
+        () -> {
+          return Constants.LauncherConstants.LAUNCHER_LOW_REVS
+              / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+        });
+
+    speakerShot = new VelocityLauncher(
+        launcher,
+        () -> {
           return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;
         },
         () -> {
@@ -206,19 +214,38 @@ public class RobotContainer implements Loggable {
     swerve.setDefaultCommand(swerveCmd);
     climber.setDefaultCommand(climberCommandManual);
 
+    driverController.b().onTrue(new RunCommand(
+        () -> {
+          LedControllerProxy ledProxy = leds.getController();
+          ledProxy.setPattern(fixedPalattePatternType.ColorWavesOcean, 1);
+        }, new Subsystem[] {}));
+
     driverController.x().whileTrue(resetGyro); // if not working use repeatcommand
     driverController.y().onTrue(new LauncherIntake(distanceSensor, loader, launcher,
         Constants.LauncherIntakeConstants.theshold, Constants.LauncherIntakeConstants.speed));
+    driverController.y().onTrue(ampAngle);
     driverController.a().onTrue(intakeCommand);
-    driverController.leftTrigger().onTrue(ampAngle);
-    driverController.rightTrigger().onTrue(speakerAngle);
-    driverController.leftBumper().onTrue(ampShot);
+    driverController.a().onTrue(speakerAngle);
+    driverController.leftTrigger().onTrue(speakerAngle);
+    driverController.rightTrigger().onTrue(ampAngle);
+    driverController.leftBumper().onTrue(new VelocityLauncher(
+        launcher,
+        () -> {
+          return Constants.LauncherConstants.LAUNCHER_LOW_REVS;
+        },
+        () -> {
+          return Constants.LauncherConstants.LAUNCHER_LOW_REVS
+              / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+        }));
+    driverController.leftBumper().onTrue(ampAngle);
     driverController.rightBumper().onTrue(speakerShot);
+    driverController.rightBumper().onTrue(speakerAngle);
     driverController.start().onTrue(pathFindCommand);
+    driverController.povDown().onTrue(shooterFeed);
 
-    //secondaryController.a().onTrue(ampShot);
+    // secondaryController.a().onTrue(ampShot);
     secondaryController.y().onTrue(speakerShot);
-    secondaryController.start().onTrue(eject);
+    secondaryController.start().onTrue(shooterFeed);
     secondaryController.rightBumper().onTrue(stopShooterComponents);
     secondaryController.leftBumper().whileTrue(climberUp);
     secondaryController.rightBumper().whileTrue(climberDown);

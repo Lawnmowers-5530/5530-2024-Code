@@ -70,10 +70,10 @@ public final class Constants {
         public static final int leftMotorPort = 18;
         public static final int rightMotorPort = 19;
         public static final boolean isReversed = false;
-        public static final double kP = 0.0004d;
+        public static final double kP = 0.0002d;
         public static final double kI = 0;
         public static final double kD = 0;
-        public static final double kF = 0.0002d;
+        public static final double kF = 0.00026;
 
         public static final double loaderShotSpeed = 0.2;
 
