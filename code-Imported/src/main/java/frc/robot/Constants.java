@@ -111,7 +111,7 @@ public final class Constants {
         public static final boolean isReversed = true;
 
         public static final double speed = 0.5;
-        public static final double maxHeight = 100;
+        public static final double maxHeight = 605;
         public static final double minHeight = 0;
         
     }

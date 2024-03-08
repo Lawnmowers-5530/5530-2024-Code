@@ -55,7 +55,6 @@ public class ShotCalculator {
     }
 
     public static Pose2d getDistPose(Pose2d currentPose){
-        //TODO: calc pose of closest point on dist circle. use angle from speaker to robot to find angle of circle, then use sin and cos to find coordinates
         double theta = Math.atan2((currentPose.getX()-Constants.targetTranslation.getX()),(-currentPose.getY()+Constants.targetTranslation.getY()));
         double x = Constants.targetTranslation.getX() + Constants.shotDistance*Math.cos(theta);
         double y = Constants.targetTranslation.getY() - Constants.shotDistance*Math.sin(theta);

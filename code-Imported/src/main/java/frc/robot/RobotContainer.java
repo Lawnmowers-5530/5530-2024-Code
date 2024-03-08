@@ -5,22 +5,20 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import io.github.oblarg.oblog.Loggable;
 import frc.lib.ShotCalculator;
 import frc.lib.Vector2D;
+import frc.lib.VectorOperator;
 import frc.robot.commands.LauncherIntake;
 import frc.robot.commands.VelocityLauncher;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.DashboardIndicators;
 import frc.robot.subsystems.DistanceSensor;
 import frc.robot.subsystems.DumbLauncherAngle;
 import frc.robot.subsystems.Intake;
@@ -28,9 +26,6 @@ import frc.robot.subsystems.LauncherV2;
 import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
-
-import java.util.function.DoubleSupplier;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -42,8 +37,7 @@ public class RobotContainer implements Loggable {
   private LoaderV2 loader;
   private LauncherV2 launcher;
   private Climber climber;
-
-  private DoubleSupplier shotAngleSupp;
+  private DashboardIndicators dash;
 
   private CommandXboxController driverController;
 
@@ -54,32 +48,19 @@ public class RobotContainer implements Loggable {
   private Command intakeCommand;
   private Command swerveCmd;
   private Command resetGyro;
-  private Command climberCommand;
   private Command shooterFeed;
   private Command stopShooterComponents;
-  private ParallelCommandGroup autonShooterCommand;
-  private SequentialCommandGroup shootCommand;
-  private Command shootAngle;
   private Command speakerShot;
   private Command ampShot;
   private Command eject;
-  private Command climberUpManual;
-  private Command climberDownManual;
+  private Command climberCommandManual;
   private Command climberUp;
   private Command climberDown;
   private Command speakerAngle;
   private Command ampAngle;
-  private Command slowSwerveCmd;
-  private Command swerveCommand;
   private Command pathFindCommand;
 
   public RobotContainer() {
-    shotAngleSupp = () -> {
-      Pose2d pose = swerve.getPose();
-      double angle = ShotCalculator.angleToTarget(pose);
-      return angle;
-    };
-
     driverController = new CommandXboxController(0);
     secondaryController = new CommandXboxController(1);
 
@@ -99,6 +80,7 @@ public class RobotContainer implements Loggable {
   }
 
   private void createSubsystems() {
+    dash = new DashboardIndicators(distanceSensor);
     intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
     launcher = new LauncherV2();
     launcherAngle = new DumbLauncherAngle(
@@ -110,6 +92,7 @@ public class RobotContainer implements Loggable {
         Constants.LoaderConstants.rightMotorPort,
         Constants.LoaderConstants.isReversed, distanceSensor);
     climber = new Climber();
+
     swerve = new Swerve();
 
     // the death zone
@@ -117,16 +100,11 @@ public class RobotContainer implements Loggable {
 
   private void createCommands() {
     pathFindCommand = AutoBuilder.pathfindToPose(
-      ShotCalculator.getDistPose(swerve.getPose()), Constants.PathPlannerConstants.constraints);
+        ShotCalculator.getDistPose(swerve.getPose()), Constants.PathPlannerConstants.constraints);
 
-    climberUpManual = new RunCommand(
+    climberCommandManual = new RunCommand(
         () -> {
-          climber.run(secondaryController.getRightTriggerAxis());
-        }, climber);
-
-    climberDownManual = new RunCommand(
-        () -> {
-          climber.run(secondaryController.getLeftTriggerAxis());
+          climber.run(-secondaryController.getLeftTriggerAxis() + secondaryController.getRightTriggerAxis());
         }, climber);
 
     climberUp = new RunCommand(
@@ -176,8 +154,6 @@ public class RobotContainer implements Loggable {
               intake);
         }, new Subsystem[] { intake, loader });
 
-    swerveCommand = new ConditionalCommand(slowSwerveCmd, swerveCmd, driverController.b());
-
     swerveCmd = new RunCommand(
         () -> {
           double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
@@ -187,15 +163,9 @@ public class RobotContainer implements Loggable {
           Vector2D vector = new Vector2D(y, x, false);
           swerve.drive(vector, -w, true);
 
-        }, swerve);
-    slowSwerveCmd = new RunCommand(
-        () -> {
-          double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
-          double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15);
-          double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15);
-
-          Vector2D vector = new Vector2D(y / 2, x / 2, false);
-          swerve.drive(vector, -w / 2, true);
+          if (driverController.b().getAsBoolean()) {
+            swerve.drive(VectorOperator.scalarMultiply(vector, 0.5), -w / 2, true);
+          }
 
         }, swerve);
 
@@ -203,12 +173,6 @@ public class RobotContainer implements Loggable {
         () -> {
           Pgyro.zeroGyro();
         }, new Subsystem[] {});
-
-    climberCommand = new RunCommand(
-        () -> {
-          double output = secondaryController.getLeftY();
-          climber.run(output);
-        }, climber);
 
     shooterFeed = new RunCommand(
         () -> {
@@ -219,6 +183,7 @@ public class RobotContainer implements Loggable {
         () -> {
           loader.run(0);
           launcher.setSpeed(0, 0);
+          intake.run(0);
         }, new Subsystem[] { loader, launcher });
 
     eject = new RunCommand(
@@ -229,10 +194,12 @@ public class RobotContainer implements Loggable {
   }
 
   private void configureBindings() {
-    swerve.setDefaultCommand(swerveCommand);
-    climber.setDefaultCommand(climberCommand);
+    dash.isLoaded();
 
-    driverController.x().whileTrue(resetGyro); // TODO: if not working use repeat command
+    swerve.setDefaultCommand(swerveCmd);
+    climber.setDefaultCommand(climberCommandManual);
+
+    driverController.x().whileTrue(resetGyro); // if not working use repeatcommand
     driverController.y().onTrue(new LauncherIntake(distanceSensor, loader, launcher,
         Constants.LauncherIntakeConstants.theshold, Constants.LauncherIntakeConstants.speed));
     driverController.a().onTrue(intakeCommand);
@@ -240,7 +207,7 @@ public class RobotContainer implements Loggable {
     driverController.rightTrigger().onTrue(speakerAngle);
     driverController.leftBumper().onTrue(ampShot);
     driverController.rightBumper().onTrue(speakerShot);
-    driverController.start().onTrue(eject); // TODO: temp
+    driverController.start().onTrue(pathFindCommand);
 
     secondaryController.a().onTrue(ampShot);
     secondaryController.y().onTrue(speakerShot);

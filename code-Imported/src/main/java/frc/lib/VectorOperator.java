@@ -69,4 +69,8 @@ public class VectorOperator {
     return new Vector2D(x, y, false);
   }
 
+  public static Vector2D scalarMultiply(Vector2D vector, double multiple){
+    return new Vector2D(vector.getvX()/2, vector.getvY()/2, false);
+  }
+
 }
