@@ -7,7 +7,6 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -40,7 +39,6 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
         upPid = new PIDController(0.009, 0.005, 0.00);
         upPid.setIntegratorRange(-0.2, 0.2);
         upPid.setIZone(15);
-        SmartDashboard.putData("PIDUp", upPid);
 
         encoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         encoder.setPositionConversionFactor(360);
@@ -48,8 +46,6 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
         sP = 30;
 
         feedforward = new ArmFeedforward(0.07, -0.03, 0.035, -0.35); //0.05, -0.0175, 0.03, -0.225
-
-        sP = SmartDashboard.getNumber("setPoint", 30);
     }
     @Config
     public void setAngle(double angle) {
@@ -62,7 +58,6 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
         double pidOut;
         pidOut = upPid.calculate(encoder.getPosition(), sP);
         double feedOut = feedforward.calculate(encoder.getPosition(), MathUtil.applyDeadband(encoder.getVelocity(), 0.005));
-        SmartDashboard.putNumber("encoder velocity", encoder.getVelocity());
 
         //motor.set(MathUtil.clamp(output, -0.25, 0.25));
 

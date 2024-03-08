@@ -8,48 +8,38 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.408505388439349,
-        "y": 7.036539787365289
+        "x": 2.05,
+        "y": 7.0
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.3593381472477235,
-        "y": 7.051199245255634
+        "x": 2.699662542182228,
+        "y": 7.007220871584601
       },
       "prevControl": {
-        "x": 3.1247868210022136,
-        "y": 7.051199245255634
-      },
-      "nextControl": {
-        "x": 5.529136006757769,
-        "y": 7.051199245255634
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.010668021336043,
-        "y": 5.8051453245763645
-      },
-      "prevControl": {
-        "x": 1.8200950687615665,
-        "y": 6.156972313944629
+        "x": 2.599662542182228,
+        "y": 7.007220871584601
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.1,
+      "name": "shoot 1",
+      "waypointRelativePos": 0.05,
       "command": {
         "type": "sequential",
         "data": {
@@ -57,7 +47,24 @@
             {
               "type": "named",
               "data": {
-                "name": "intake"
+                "name": "shoot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "feed 1",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "feed"
               }
             }
           ]
@@ -66,14 +73,14 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.3,
-    "maxAcceleration": 2.0,
-    "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 520.0
+    "maxVelocity": 3.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 270.0,
+    "maxAngularAcceleration": 420.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -1.218875235131366,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,

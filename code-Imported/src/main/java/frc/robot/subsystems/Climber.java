@@ -12,13 +12,30 @@ import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
   private CANSparkMax motor;
+
   public Climber() {
     motor = new CANSparkMax(Constants.ClimberConstants.motorPort, MotorType.kBrushless);
     motor.setInverted(Constants.ClimberConstants.isReversed);
   }
 
-  public void run(double speed){
+  public void run(double speed) {
     motor.set(speed);
+  }
+
+  public void moveDown(){
+    if (motor.getEncoder().getPosition() > Constants.ClimberConstants.maxHeight){
+      motor.set(0);
+    } else {
+      motor.set(-Constants.ClimberConstants.speed);
+    }
+  }
+  
+  public void moveUp(){
+    if (motor.getEncoder().getPosition() < Constants.ClimberConstants.minHeight){
+      motor.set(0);
+    } else {
+      motor.set(Constants.ClimberConstants.speed);
+    }
   }
   @Override
   public void periodic() {

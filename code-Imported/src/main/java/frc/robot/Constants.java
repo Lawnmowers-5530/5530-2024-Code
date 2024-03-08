@@ -76,7 +76,7 @@ public final class Constants {
 
         public static final double loaderShotSpeed = 0.2;
 
-        public static final double LAUNCHER_LOW_REVS = 1500; // low speed for the launcher
+        public static final double LAUNCHER_LOW_REVS = 1000; //1500 // low speed for the launcher
         public static final double LAUNCHER_MED_REVS = 3000; // medium speed for the launcher
         public static final double LAUNCHER_HIGH_REVS = 4500; // high speed for the launcher
 
@@ -108,15 +108,21 @@ public final class Constants {
     public static final class ClimberConstants{
         public static final int motorPort = 23;
         public static final boolean isReversed = true;
+
+        public static final double speed = 0.5;
+        public static final double maxHeight = 100;
+        public static final double minHeight = 0;
+        
     }
   
   
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
 
-    public static final PIDConstants translationConstants = new PIDConstants(4, 0, 0.0);
-    public static final PIDConstants rotationConstants = new PIDConstants(1.5, 0.0, 0.0);
+    public static final PIDConstants translationConstants = new PIDConstants(3, 0, 0.0);
+    public static final PIDConstants rotationConstants = new PIDConstants(1.5, 0.0, 0.1);
 
-    public static final Translation2d targetTranslation = new Translation2d(15, 5);
+    public static final Translation2d targetTranslation = new Translation2d(0, 5);
 
+    public static final double shotDistance = 1;
 
 }
