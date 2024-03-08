@@ -8,8 +8,12 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import io.github.oblarg.oblog.Loggable;
 import frc.lib.ShotCalculator;
@@ -82,13 +86,13 @@ public class RobotContainer implements Loggable {
   }
 
   private void createSubsystems() {
-    dash = new DashboardIndicators(distanceSensor);
     intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
     launcher = new LauncherV2();
     launcherAngle = new DumbLauncherAngle(
         Constants.LauncherAngleConstants.motorPort,
         Constants.LauncherAngleConstants.isReversed);
     distanceSensor = new DistanceSensor();
+    dash = new DashboardIndicators(distanceSensor);
     loader = new LoaderV2(
         Constants.LoaderConstants.leftMotorPort,
         Constants.LoaderConstants.rightMotorPort,
@@ -106,7 +110,8 @@ public class RobotContainer implements Loggable {
 
     climberCommandManual = new RunCommand(
         () -> {
-          climber.run(-secondaryController.getLeftTriggerAxis() + secondaryController.getRightTriggerAxis());
+          climber.runRaw(secondaryController.getLeftTriggerAxis() -
+              secondaryController.getRightTriggerAxis());
         }, climber);
 
     climberUp = new RunCommand(
@@ -128,16 +133,6 @@ public class RobotContainer implements Loggable {
         () -> {
           launcherAngle.forceDown();
         }, launcherAngle);
-
-    ampShot = new VelocityLauncher(
-        launcher,
-        () -> {
-          return Constants.LauncherConstants.LAUNCHER_LOW_REVS;
-        },
-        () -> {
-          return Constants.LauncherConstants.LAUNCHER_LOW_REVS
-              / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
-        });
 
     speakerShot = new VelocityLauncher(
         launcher,
@@ -193,6 +188,16 @@ public class RobotContainer implements Loggable {
           loader.run(-0.3);
           intake.run(-0.3);
         }, new Subsystem[] { loader, intake });
+
+    ampShot = new VelocityLauncher(
+        launcher,
+        () -> {
+          return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;
+        },
+        () -> {
+          return Constants.LauncherConstants.LAUNCHER_HIGH_REVS
+              / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+        });
   }
 
   private void configureBindings() {
@@ -211,10 +216,9 @@ public class RobotContainer implements Loggable {
     driverController.rightBumper().onTrue(speakerShot);
     driverController.start().onTrue(pathFindCommand);
 
-    secondaryController.a().onTrue(ampShot);
+    //secondaryController.a().onTrue(ampShot);
     secondaryController.y().onTrue(speakerShot);
     secondaryController.start().onTrue(eject);
-    secondaryController.leftBumper().onTrue(shooterFeed);
     secondaryController.rightBumper().onTrue(stopShooterComponents);
     secondaryController.leftBumper().whileTrue(climberUp);
     secondaryController.rightBumper().whileTrue(climberDown);

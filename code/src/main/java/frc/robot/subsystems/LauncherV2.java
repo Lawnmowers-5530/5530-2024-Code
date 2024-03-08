@@ -6,9 +6,10 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 
-public class LauncherV2 extends Launcher {
+public class LauncherV2 extends Launcher implements Loggable{
     RelativeEncoder leftEncoder;
     RelativeEncoder rightEncoder;
     RelativeEncoder leftEncoder2;
@@ -61,6 +62,14 @@ public class LauncherV2 extends Launcher {
         SmartDashboard.putNumber("Right Encoder", rightEncoder.getPosition());
         SmartDashboard.putNumber("Left Encoder 2", leftEncoder2.getPosition());
         SmartDashboard.putNumber("Right Encoder 2", rightEncoder2.getPosition());
+    }
+
+    @Override
+    public void periodic(){
+        this.kP = SmartDashboard.getNumber("kP", 0);
+        this.kI = SmartDashboard.getNumber("kI", 0);
+        this.kD = SmartDashboard.getNumber("kD", 0);
+        this.kF = SmartDashboard.getNumber("kF", 0);
     }
 
 

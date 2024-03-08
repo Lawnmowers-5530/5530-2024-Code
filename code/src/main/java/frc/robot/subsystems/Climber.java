@@ -24,9 +24,13 @@ public class Climber extends SubsystemBase {
     encoder.setPosition(0);
   }
 
+  public void runRaw(double speed){
+    motor.set(-speed);
+  }
+
   public void run(double speed) {
     if(encoder.getPosition() < Constants.ClimberConstants.maxHeight && encoder.getPosition() > Constants.ClimberConstants.minHeight){
-      motor.set(speed);
+      motor.set(-speed);
     }else{
       motor.set(0);
     }
@@ -36,7 +40,7 @@ public class Climber extends SubsystemBase {
     if (encoder.getPosition() > Constants.ClimberConstants.maxHeight){
       motor.set(0);
     } else {
-      motor.set(-Constants.ClimberConstants.speed);
+      motor.set(Constants.ClimberConstants.speed);
     }
   }
   
@@ -44,7 +48,7 @@ public class Climber extends SubsystemBase {
     if (encoder.getPosition() < Constants.ClimberConstants.minHeight){
       motor.set(0);
     } else {
-      motor.set(Constants.ClimberConstants.speed);
+      motor.set(-Constants.ClimberConstants.speed);
     }
   }
   @Override
