@@ -1,0 +1,15 @@
+[submodule "code/src/main/java/frc/robot/module/limelight"]
+	path = code/src/main/java/frc/robot/module/limelight
+	url = https://github.com/Lawnmowers-5530/limelight
+[submodule "code-Imported/src/main/java/frc/lib/module/launcher2024"]
+	path = code-Imported/src/main/java/frc/lib/module/launcher2024
+	url = https://github.com/Lawnmowers-5530/launcher2024
+[submodule "code-Imported/src/main/java/frc/lib/module/launcherAngle2024"]
+	path = code-Imported/src/main/java/frc/lib/module/launcherAngle2024
+	url = https://github.com/Lawnmowers-5530/launcherAngle2024
+[submodule "code-Imported/src/main/java/frc/lib/module/distanceSensor2024"]
+	path = code-Imported/src/main/java/frc/lib/module/distanceSensor2024
+	url = https://github.com/Lawnmowers-5530/distanceSensor2024
+[submodule "code-Imported/src/main/java/frc/lib/module/limelight"]
+	path = code-Imported/src/main/java/frc/lib/module/limelight
+	url = https://github.com/Lawnmowers-5530/limelight
