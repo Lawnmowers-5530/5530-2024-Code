@@ -4,10 +4,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.SwerveModule;
+
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PIDConstants;
 
 public final class Constants {
-    public static final double noteConversionFactor = 1; //4400 encoder velocity
 
     public static final double trackWidth = Units.inchesToMeters(24);
     public static final double wheelBase = Units.inchesToMeters(24);
@@ -114,15 +115,22 @@ public final class Constants {
         public static final double minHeight = 0;
         
     }
+
+    public static final class PathPlannerConstants{
+        public static final PIDConstants translationConstants = new PIDConstants(3, 0, 0.0);
+    public static final PIDConstants rotationConstants = new PIDConstants(1.5, 0.0, 0.1);
+
+    public static final PathConstraints constraints = new PathConstraints(
+        3, 2, //linear
+        360, 420 //angular
+    );
+    }
+
+    public static final double shotDistance = 1;
   
   
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
 
-    public static final PIDConstants translationConstants = new PIDConstants(3, 0, 0.0);
-    public static final PIDConstants rotationConstants = new PIDConstants(1.5, 0.0, 0.1);
-
     public static final Translation2d targetTranslation = new Translation2d(0, 5);
-
-    public static final double shotDistance = 1;
 
 }

@@ -67,8 +67,8 @@ public class Swerve extends SubsystemBase implements Loggable{
     this::getRobotRelativeSpeeds, //works
     this::autoDriveRobotRelative, //works
     new HolonomicPathFollowerConfig(
-      Constants.translationConstants,
-      Constants.rotationConstants,
+      Constants.PathPlannerConstants.translationConstants,
+      Constants.PathPlannerConstants.rotationConstants,
       3.8, 
       Constants.driveBaseRadius,
       new ReplanningConfig()),

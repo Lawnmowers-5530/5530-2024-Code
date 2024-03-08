@@ -1,6 +1,7 @@
 package frc.lib;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
@@ -51,6 +52,15 @@ public class ShotCalculator {
 
     public static double angleToTarget(Pose2d currentPose){
         return Math.atan2((Constants.targetTranslation.getX()-currentPose.getX()),(-Constants.targetTranslation.getY()+currentPose.getY()))-(Math.PI/2);
+    }
+
+    public static Pose2d getDistPose(Pose2d currentPose){
+        //TODO: calc pose of closest point on dist circle. use angle from speaker to robot to find angle of circle, then use sin and cos to find coordinates
+        double theta = Math.atan2((currentPose.getX()-Constants.targetTranslation.getX()),(-currentPose.getY()+Constants.targetTranslation.getY()));
+        double x = Constants.targetTranslation.getX() + Constants.shotDistance*Math.cos(theta);
+        double y = Constants.targetTranslation.getY() - Constants.shotDistance*Math.sin(theta);
+
+        return new Pose2d(x, y, Rotation2d.fromDegrees(theta + 180));
     }
 }
 

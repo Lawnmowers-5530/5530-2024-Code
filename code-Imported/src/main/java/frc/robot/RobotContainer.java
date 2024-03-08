@@ -71,6 +71,7 @@ public class RobotContainer implements Loggable {
   private Command ampAngle;
   private Command slowSwerveCmd;
   private Command swerveCommand;
+  private Command pathFindCommand;
 
   public RobotContainer() {
     shotAngleSupp = () -> {
@@ -115,6 +116,9 @@ public class RobotContainer implements Loggable {
   }
 
   private void createCommands() {
+    pathFindCommand = AutoBuilder.pathfindToPose(
+      ShotCalculator.getDistPose(swerve.getPose()), Constants.PathPlannerConstants.constraints);
+
     climberUpManual = new RunCommand(
         () -> {
           climber.run(secondaryController.getRightTriggerAxis());
