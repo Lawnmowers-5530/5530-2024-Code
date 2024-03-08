@@ -37,27 +37,29 @@ public class RobotContainer implements Loggable {
   private LoaderV2 loader;
   private LauncherV2 launcher;
   private Climber climber;
+  private Intake intake;
+
   private DashboardIndicators dash;
 
   private CommandXboxController driverController;
-
   private CommandXboxController secondaryController;
-
-  private Intake intake;
 
   private Command intakeCommand;
   private Command swerveCmd;
   private Command resetGyro;
   private Command shooterFeed;
   private Command stopShooterComponents;
-  private Command speakerShot;
-  private Command ampShot;
   private Command eject;
+
   private Command climberCommandManual;
   private Command climberUp;
   private Command climberDown;
+
   private Command speakerAngle;
   private Command ampAngle;
+  private Command speakerShot;
+  private Command ampShot;
+
   private Command pathFindCommand;
 
   public RobotContainer() {
