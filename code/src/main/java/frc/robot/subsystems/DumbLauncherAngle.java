@@ -4,12 +4,15 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import io.github.oblarg.oblog.annotations.Log;
 
 public class DumbLauncherAngle extends SubsystemBase {
     CANSparkMax motor;
     boolean relaxed = true;
     double power = 0.1;
     RelativeEncoder encoder;
+    @Log
+    double ticks;
 
     public DumbLauncherAngle(int motorPort, boolean isReversed) {
         motor = new CANSparkMax(motorPort, CANSparkMax.MotorType.kBrushless);
@@ -51,5 +54,10 @@ public class DumbLauncherAngle extends SubsystemBase {
     
     public double getEncoderMeasurement() {
         return encoder.getPosition();
+    }
+
+    @Override
+    public void periodic() {
+        ticks = encoder.getPosition();
     }
 }
