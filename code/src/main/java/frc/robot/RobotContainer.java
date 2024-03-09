@@ -226,4 +226,8 @@ public class RobotContainer implements Loggable {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
+
+  public void disabledPeriodic() {
+      swerve.disabledPeriodic();
+  }
 }

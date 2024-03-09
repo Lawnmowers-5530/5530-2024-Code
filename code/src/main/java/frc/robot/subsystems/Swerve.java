@@ -94,10 +94,10 @@ public class Swerve extends SubsystemBase implements Loggable{
     ChassisSpeeds speeds = new ChassisSpeeds(rotated.getvX(), rotated.getvY(), -omegaRadSec);
 
     SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(speeds);
-    Mod_0.setState(states[0]);
-    Mod_1.setState(states[1]);
-    Mod_2.setState(states[2]);
-    Mod_3.setState(states[3]);
+    Mod_0.setIdleMode(states[0]);
+    Mod_1.setIdleMode(states[1]);
+    Mod_2.setIdleMode(states[2]);
+    Mod_3.setIdleMode(states[3]);
 
   }
   @Override
@@ -121,10 +121,10 @@ public class Swerve extends SubsystemBase implements Loggable{
   }
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    Mod_0.setState(desiredStates[0]);
-    Mod_1.setState(desiredStates[1]);
-    Mod_2.setState(desiredStates[2]);
-    Mod_3.setState(desiredStates[3]);
+    Mod_0.setIdleMode(desiredStates[0]);
+    Mod_1.setIdleMode(desiredStates[1]);
+    Mod_2.setIdleMode(desiredStates[2]);
+    Mod_3.setIdleMode(desiredStates[3]);
   }
 
   public SwerveModulePosition[] getModulePositions(){
@@ -144,10 +144,10 @@ public class Swerve extends SubsystemBase implements Loggable{
   //chassis speeds consumer
   public void setChassisSpeeds(ChassisSpeeds speeds){
     SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(speeds);
-    Mod_0.setState(states[0]);
-    Mod_1.setState(states[1]);
-    Mod_2.setState(states[2]);
-    Mod_3.setState(states[3]);
+    Mod_0.setIdleMode(states[0]);
+    Mod_1.setIdleMode(states[1]);
+    Mod_2.setIdleMode(states[2]);
+    Mod_3.setIdleMode(states[3]);
   }
 
   public void resetPose(Pose2d pose){
@@ -171,6 +171,10 @@ public class Swerve extends SubsystemBase implements Loggable{
     this.drive(new Vector2D(0, 0, false), output, false);
 
     return rotationPID.atSetpoint();
+  }
+
+  public void disabledPeriodic() {
+    Mod_0.setState();
   }
 
 }

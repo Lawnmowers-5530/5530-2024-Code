@@ -17,7 +17,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix6.hardware.CANcoder;
 
-public class SwerveModule extends SubsystemBase{
+public class SwerveModule extends SubsystemBase {
   private PIDController anglePID = new PIDController(0.0075, 0.0025, 0);
   private double pidOut;
   private CANSparkMax drive;
@@ -69,6 +69,11 @@ public class SwerveModule extends SubsystemBase{
 
   public SwerveModuleState getState(){
     return new SwerveModuleState(getVelocity(), getTurningPosition());
+  }
+
+  public void setIdleMode(IdleMode idlemode) {
+    drive.setIdleMode(idlemode);
+    rotate.setIdleMode(idlemode);
   }
 
 }
