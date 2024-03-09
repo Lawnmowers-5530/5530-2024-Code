@@ -64,6 +64,7 @@ public final class Constants {
         public static final boolean isReversed = true;
         public static final double loaderSpeed = 0.3;
         public static final double loaderCutoffDistance = 195;
+        public static final int NOTE_LOADED_PRIORITY = 15;
     }
 
     public static final class LauncherConstants{

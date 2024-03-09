@@ -40,8 +40,8 @@ import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
 
-import frc.robot.subsystems.LedController.fixedPalattePatternType;
-import frc.robot.subsystems.LedController.stripType;
+import frc.robot.subsystems.LedController.FixedPallatePatternType;
+import frc.robot.subsystems.LedController.StripType;
 import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -103,7 +103,7 @@ public class RobotContainer implements Loggable {
   }
 
   private void createSubsystems() {
-    leds = new LedController_MultiAccess(new LedController(0, stripType.Adressable));
+    leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable));
     intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
     launcher = new LauncherV2();
     launcherAngle = new DumbLauncherAngle(
@@ -114,7 +114,7 @@ public class RobotContainer implements Loggable {
     loader = new LoaderV2(
         Constants.LoaderConstants.leftMotorPort,
         Constants.LoaderConstants.rightMotorPort,
-        Constants.LoaderConstants.isReversed, distanceSensor);
+        Constants.LoaderConstants.isReversed, distanceSensor, leds.getController());
     climber = new Climber();
 
     swerve = new Swerve();
@@ -184,7 +184,7 @@ public class RobotContainer implements Loggable {
     driverController.b().onTrue(new RunCommand(
         () -> {
           LedControllerProxy ledProxy = leds.getController();
-          ledProxy.setPattern(fixedPalattePatternType.ColorWavesOcean, 1);
+          ledProxy.setPattern(FixedPallatePatternType.ColorWavesOcean, 1);
         }, new Subsystem[] {}));
 
     driverController.x().whileTrue(resetGyro); // if not working use repeatcommand
