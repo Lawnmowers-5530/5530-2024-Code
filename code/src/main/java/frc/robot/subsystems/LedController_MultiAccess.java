@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.LedController.patternType;
+import frc.robot.subsystems.LedController.PatternType;
 
 public class LedController_MultiAccess extends SubsystemBase {
     LedController controller;
@@ -29,7 +29,7 @@ public class LedController_MultiAccess extends SubsystemBase {
          * @param priority The priority of the pattern, higher priority patterns will be displayed instead of lower priority patterns. Does not accept values below 0.
          */
 
-        public void setPattern(patternType patternType, int priority) {
+        public void setPattern(PatternType patternType, int priority) {
             if (priority < 0) {
                 priority = 0;
             }
@@ -44,7 +44,7 @@ public class LedController_MultiAccess extends SubsystemBase {
     // info for a pattern to be set
     public class LedControllerCommand {
         int priority;
-        patternType patternType;
+        PatternType patternType;
     }
     /** updates the controller with the highest priority pattern in the queue */
     public void periodic() {

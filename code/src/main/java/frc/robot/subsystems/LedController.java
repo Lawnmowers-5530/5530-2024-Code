@@ -13,14 +13,14 @@ public class LedController extends SubsystemBase {
     private SimpleWidget widget;
     private GenericEntry entry;
 
-    public interface patternType {
+    public interface PatternType {
         public double getValue();
     }
     public enum stripType {
         Adressable,
         Solid
     }
-    public enum fixedPalattePatternType implements patternType {
+    public enum fixedPalattePatternType implements PatternType {
         Rainbow(-0.99),
         RainbowParty(-0.97),
         RainbowOcean(-0.95),
@@ -79,7 +79,7 @@ public class LedController extends SubsystemBase {
             return value;
         }
     }
-    public enum color1PatternType implements patternType {
+    public enum color1PatternType implements PatternType {
         EndToEndBlendToBlack(-0.03),
         LarsonScanner(-0.01),
         LightChase(0.01),
@@ -100,7 +100,7 @@ public class LedController extends SubsystemBase {
             return value;
         }
     }
-    public enum color2PatternType implements patternType {
+    public enum color2PatternType implements PatternType {
         EndToEndBlendToBlack(0.17),
         LarsonScanner(0.19),
         LightChase(0.21),
@@ -121,7 +121,7 @@ public class LedController extends SubsystemBase {
             return value;
         }
     }
-    public enum color1And2PatternType implements patternType {
+    public enum color1And2PatternType implements PatternType {
         Sparkle1On2(0.37),
         Sparkle2On1(0.39),
         Gradient1And2(0.41),
@@ -142,7 +142,7 @@ public class LedController extends SubsystemBase {
             return value;
         }
     }
-    public enum solidColorType implements patternType {
+    public enum solidColorType implements PatternType {
         HotPink(0.57),
         DarkRed(0.59),
         Red(0.61),
@@ -195,7 +195,7 @@ public class LedController extends SubsystemBase {
             .withProperties(Map.of("colorWhenFalse", "black"));
         this.entry = widget.getEntry();
     }
-    public void setPattern(patternType type) {
+    public void setPattern(PatternType type) {
 
         if (duplicateOnShuffleboard && type instanceof solidColorType) {
 
