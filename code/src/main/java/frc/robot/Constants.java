@@ -93,6 +93,8 @@ public final class Constants {
         public static final double kD = 0.00;
 
         public static final double conversionFactor = 8192/360;
+        public static final double HIGH_ANGLE_MEASUREMENT = -1; // TODO: find out what this is
+        public static final double LOW_ANGLE_MEASUREMENT = -1; // TODO: find out what this is
     }
 
     public static final class IntakeConstants{

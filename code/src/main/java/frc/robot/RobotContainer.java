@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -19,8 +20,17 @@ import io.github.oblarg.oblog.Loggable;
 import frc.lib.ShotCalculator;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
+import frc.robot.commands.ClimberLimited;
+import frc.robot.commands.ClimberManual;
+import frc.robot.commands.IntakeOffFloor;
+import frc.robot.commands.AngleLauncher;
 import frc.robot.commands.LauncherIntake;
+import frc.robot.commands.RunIntake;
+import frc.robot.commands.RunLauncher;
+import frc.robot.commands.RunLoader;
+import frc.robot.commands.StopCommand;
 import frc.robot.commands.VelocityLauncher;
+import frc.robot.commands.AngleLauncher.Angle;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DashboardIndicators;
 import frc.robot.subsystems.DistanceSensor;
@@ -67,10 +77,12 @@ public class RobotContainer implements Loggable {
   private Command climberUp;
   private Command climberDown;
 
-  private Command speakerAngle;
-  private Command ampAngle;
+  private Command highAngle;
+  private Command lowAngle;
   private Command speakerShot;
   private Command ampShot;
+
+  private Command launcherIntakeCommand;
 
   private Command pathFindCommand;
 
@@ -117,38 +129,17 @@ public class RobotContainer implements Loggable {
     pathFindCommand = AutoBuilder.pathfindToPose(
         ShotCalculator.getDistPose(swerve.getPose()), Constants.PathPlannerConstants.constraints);
 
-    climberCommandManual = new RunCommand(
-        () -> {
-          climber.runRaw(secondaryController.getLeftTriggerAxis() -
-              secondaryController.getRightTriggerAxis());
-        }, climber);
+    climberCommandManual = new ClimberManual(climber, () -> {return secondaryController.getRightTriggerAxis();});
 
-    climberUp = new RunCommand(
-        () -> {
-          climber.moveDown();
-        }, climber);
+    climberUp = new ClimberLimited(climber, Constants.ClimberConstants.speed);
 
-    climberDown = new RunCommand(
-        () -> {
-          climber.moveUp();
-        }, climber);
+    climberDown = new ClimberLimited(climber, -Constants.ClimberConstants.speed);
 
-    ampAngle = new RunCommand(
-        () -> {
-          launcherAngle.forceUp();
-        }, launcherAngle);
+    lowAngle = new AngleLauncher(launcherAngle, Angle.UP);
 
-    speakerAngle = new RunCommand(
-        () -> {
-          launcherAngle.forceDown();
-        }, launcherAngle);
+    highAngle = new AngleLauncher(launcherAngle, Angle.DOWN);
 
-    intakeCommand = new RunCommand(
-        () -> {
-          loader.runUntilBeamBreak(Constants.LoaderConstants.loaderSpeed,
-              Constants.LoaderConstants.loaderCutoffDistance,
-              intake);
-        }, new Subsystem[] { intake, loader });
+    intakeCommand = new IntakeOffFloor(intake, loader, 0, 0);
 
     swerveCmd = new RunCommand(
         () -> {
@@ -165,48 +156,27 @@ public class RobotContainer implements Loggable {
 
         }, swerve);
 
-    resetGyro = new RunCommand(
-        () -> {
-          Pgyro.zeroGyro();
-        }, new Subsystem[] {});
+    resetGyro = new InstantCommand(() -> {Pgyro.zeroGyro();});
 
-    shooterFeed = new RunCommand(
-        () -> {
-          loader.run(0.2);
-        }, loader);
+    shooterFeed = new RunLoader(loader, 0.2); //TODO: make this a constant
 
-    stopShooterComponents = new RunCommand(
-        () -> {
-          loader.run(0);
-          launcher.setSpeed(0, 0);
-          intake.run(0);
-        }, new Subsystem[] { loader, launcher });
+    StopCommand<LoaderV2> stopLoader = new StopCommand<>(loader);
+    StopCommand<Intake> stopIntake = new StopCommand<>(intake);
+    StopCommand<LauncherV2> stopLauncher = new StopCommand<>(launcher);
+    stopShooterComponents = new ParallelCommandGroup(new Command[] { stopLoader, stopIntake, stopLauncher });
+    
 
-    eject = new RunCommand(
-        () -> {
-          loader.run(-0.3);
-          intake.run(-0.3);
-        }, new Subsystem[] { loader, intake });
+    RunLoader ejectLoader = new RunLoader(loader, -0.3);
+    RunIntake ejectIntake = new RunIntake(intake, -0.3);
+    eject = new ParallelCommandGroup(new Command[] { ejectLoader, ejectIntake });
 
-    ampShot = new VelocityLauncher(
-        launcher,
-        () -> {
-          return Constants.LauncherConstants.LAUNCHER_LOW_REVS;
-        },
-        () -> {
-          return Constants.LauncherConstants.LAUNCHER_LOW_REVS
-              / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
-        });
+    launcherIntakeCommand = new LauncherIntake(distanceSensor, loader, launcher,
+    Constants.LauncherIntakeConstants.theshold, Constants.LauncherIntakeConstants.speed);
 
-    speakerShot = new VelocityLauncher(
-        launcher,
-        () -> {
-          return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;
-        },
-        () -> {
-          return Constants.LauncherConstants.LAUNCHER_HIGH_REVS
-              / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
-        });
+
+    ampShot = new RunLauncher(launcher, Constants.LauncherConstants.LAUNCHER_LOW_REVS, Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+
+    speakerShot = new RunLauncher(launcher, Constants.LauncherConstants.LAUNCHER_HIGH_REVS, Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
   }
   private void configureBindings() {
     dash.isLoaded();
@@ -221,42 +191,39 @@ public class RobotContainer implements Loggable {
         }, new Subsystem[] {}));
 
     driverController.x().whileTrue(resetGyro); // if not working use repeatcommand
+    
+    SequentialCommandGroup launcherIntakeGroup = new SequentialCommandGroup(new SequentialCommandGroup(new Command[] {highAngle, launcherIntakeCommand}));
+    driverController.y().onTrue(launcherIntakeGroup);
+    
+    
+    SequentialCommandGroup floorIntakeGroup = new SequentialCommandGroup(new SequentialCommandGroup(new Command[] {highAngle, intakeCommand}));
+    driverController.a().onTrue(floorIntakeGroup);
 
-    driverController.y().onTrue(new LauncherIntake(distanceSensor, loader, launcher,
-        Constants.LauncherIntakeConstants.theshold, Constants.LauncherIntakeConstants.speed));
-    driverController.y().onTrue(ampAngle);
+    driverController.leftTrigger().onTrue(highAngle);
+    driverController.rightTrigger().onTrue(lowAngle);
+    
+    SequentialCommandGroup ampShotGroup = new SequentialCommandGroup(new SequentialCommandGroup(new Command[] {lowAngle, ampShot}));
+    driverController.leftBumper().onTrue(ampShotGroup);
 
-    driverController.a().onTrue(intakeCommand);
-    driverController.a().onTrue(speakerAngle);
+    SequentialCommandGroup speakerShotGroup = new SequentialCommandGroup(new SequentialCommandGroup(new Command[] {lowAngle, speakerShot}));
+    driverController.rightBumper().onTrue(speakerShotGroup);
 
-    driverController.leftTrigger().onTrue(speakerAngle);
-    driverController.rightTrigger().onTrue(ampAngle);
-
-    driverController.leftBumper().onTrue(ampShot);
-    driverController.leftBumper().onTrue(ampAngle);
-
-    driverController.rightBumper().onTrue(speakerShot);
-    driverController.rightBumper().onTrue(ampAngle);
-
-    driverController.start().onTrue(pathFindCommand);
+    driverController.start().onTrue(eject);
     driverController.povDown().onTrue(shooterFeed);
 
     // secondaryController.a().onTrue(ampShot);
-    secondaryController.y().onTrue(speakerShot);
-    secondaryController.y().onTrue(ampAngle);
+    secondaryController.y().onTrue(speakerShotGroup);
       
-    secondaryController.b().onTrue(ampAngle);
-    secondaryController.b().onTrue(ampShot);
+    secondaryController.b().onTrue(ampShotGroup);
     secondaryController.start().onTrue(shooterFeed);
     secondaryController.a().onTrue(stopShooterComponents);
     secondaryController.rightBumper().onTrue(stopShooterComponents);
     secondaryController.leftBumper().whileTrue(climberUp);
     secondaryController.rightBumper().whileTrue(climberDown);
-    secondaryController.povDown().onTrue(ampAngle);
-    secondaryController.povUp().onTrue(speakerAngle);
+    secondaryController.povDown().onTrue(lowAngle);
+    secondaryController.povUp().onTrue(highAngle);
     secondaryController.povLeft().onTrue(intakeCommand);
-    secondaryController.povRight().onTrue(new LauncherIntake(distanceSensor, loader, launcher,
-        Constants.LauncherIntakeConstants.theshold, Constants.LauncherIntakeConstants.speed));
+    secondaryController.povRight().onTrue(launcherIntakeGroup);
   }
 
   public Command getAutonomousCommand() {
