@@ -244,7 +244,9 @@ public class RobotContainer implements Loggable {
     // secondaryController.a().onTrue(ampShot);
     secondaryController.y().onTrue(speakerShot);
     secondaryController.y().onTrue(ampAngle);
-
+      
+    secondaryController.b().onTrue(ampAngle);
+    secondaryController.b().onTrue(ampShot);
     secondaryController.start().onTrue(shooterFeed);
     secondaryController.a().onTrue(stopShooterComponents);
     secondaryController.rightBumper().onTrue(stopShooterComponents);

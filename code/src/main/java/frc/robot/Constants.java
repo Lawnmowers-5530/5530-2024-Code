@@ -63,7 +63,7 @@ public final class Constants {
         public static final int rightMotorPort = 21;
         public static final boolean isReversed = true;
         public static final double loaderSpeed = 0.3;
-        public static final double loaderCutoffDistance = 190; //180
+        public static final double loaderCutoffDistance = 195;
     }
 
     public static final class LauncherConstants{
