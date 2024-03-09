@@ -1,9 +1,18 @@
 package frc.robot.subsystems;
 
+import java.util.Map;
+
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LedController extends SubsystemBase {
+    private boolean duplicateOnShuffleboard = false;
+    private SimpleWidget widget;
+    private GenericEntry entry;
+
     public interface patternType {
         public double getValue();
     }
@@ -175,7 +184,78 @@ public class LedController extends SubsystemBase {
         this.ledStripType = type;
         this.ledController = new Spark(portID);
     }
+
+    public LedController(int portID, stripType type, String tabName) {
+        this.portID = portID;
+        this.ledStripType = type;
+        this.ledController = new Spark(portID);
+        this.duplicateOnShuffleboard = true;
+        this.widget = Shuffleboard.getTab("SmartDashboard")
+            .add("Status", false)
+            .withProperties(Map.of("colorWhenFalse", "black"));
+        this.entry = widget.getEntry();
+    }
     public void setPattern(patternType type) {
+
+        if (duplicateOnShuffleboard && type instanceof solidColorType) {
+
+            solidColorType color = (solidColorType) type;
+            widget.withProperties(Map.of("colorWhenTrue", mapToColorName(color)));
+            entry.setBoolean(true);
+
+        }
+
         ledController.set(type.getValue());
+    }
+
+    public String mapToColorName(solidColorType pattern) {
+        switch (pattern) {
+            case HotPink:
+                return "Hot Pink";
+            case DarkRed:
+                return "Dark Red";
+            case Red:
+                return "Red";
+            case RedOrange:
+                return "Red Orange";
+            case Orange:
+                return "Orange";
+            case Gold:
+                return "Gold";
+            case Yellow:
+                return "Yellow";
+            case LawnGreen:
+                return "Lawn Green";
+            case Lime:
+                return "Lime";
+            case DarkGreen:
+                return "Dark Green";
+            case Green:
+                return "Green";
+            case BlueGreen:
+                return "Blue Green";
+            case Aqua:
+                return "Aqua";
+            case SkyBlue:
+                return "Sky Blue";
+            case DarkBlue:
+                return "Dark Blue";
+            case Blue:
+                return "Blue";
+            case BlueViolet:
+                return "Blue Violet";
+            case Violet:
+                return "Violet";
+            case White:
+                return "White";
+            case Gray:
+                return "Gray";
+            case DarkGray:
+                return "Dark Gray";
+            case Black:
+                return "Black";
+            default:
+                return "Black";
+        }
     }
 }
