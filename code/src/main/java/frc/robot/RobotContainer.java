@@ -27,7 +27,7 @@ import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunLauncher;
 import frc.robot.commands.RunLoader;
 import frc.robot.commands.StopCommand;
-import frc.robot.commands.AngleLauncher.Angle;
+import frc.robot.subsystems.DumbLauncherAngle.Angle;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DashboardIndicators;
 import frc.robot.subsystems.DistanceSensor;
@@ -114,7 +114,7 @@ public class RobotContainer implements Loggable {
     loader = new LoaderV2(
         Constants.LoaderConstants.leftMotorPort,
         Constants.LoaderConstants.rightMotorPort,
-        Constants.LoaderConstants.isReversed, distanceSensor, leds.getController());
+        Constants.LoaderConstants.isReversed, distanceSensor);
     climber = new Climber();
 
     swerve = new Swerve();

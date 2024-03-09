@@ -1,17 +1,15 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.LedController.SolidColorType;
-import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
+import frc.robot.data.GlobalState;
 
 public class LoaderV2 extends Loader {
     DistanceSensor distanceSensor;
-    LedControllerProxy leds;
+    GlobalState state;
 
-    public LoaderV2(int motorLeft, int motorRight, boolean reversed, DistanceSensor distanceSensor, LedControllerProxy leds) {
+    public LoaderV2(int motorLeft, int motorRight, boolean reversed, DistanceSensor distanceSensor) {
         super(motorLeft, motorRight, reversed);
         this.distanceSensor = distanceSensor;
-        this.leds = leds;
     }
 
     public boolean runUntilBeamBreak(double speed, double cutoffDistance) {
@@ -27,7 +25,9 @@ public class LoaderV2 extends Loader {
     @Override
     public void periodic() {
         if (distanceSensor.getDistance() < Constants.LoaderConstants.loaderCutoffDistance) {
-            leds.setPattern(SolidColorType.Blue, Constants.LoaderConstants.NOTE_LOADED_PRIORITY);
+            GlobalState.noteLoaded = true;
+        } else {
+            GlobalState.noteLoaded = false;
         }
     }
 }

@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -30,7 +31,7 @@ public class Swerve extends SubsystemBase implements Loggable{
   SwerveDriveOdometry odometry;
   @Log
   boolean isUpdating;
-
+  private boolean isCoasting;
   private static final SwerveModule Mod_0 = Constants.Modules.Mod_0;
   private static final SwerveModule Mod_1 = Constants.Modules.Mod_1;
   private static final SwerveModule Mod_2 = Constants.Modules.Mod_2;
@@ -94,14 +95,21 @@ public class Swerve extends SubsystemBase implements Loggable{
     ChassisSpeeds speeds = new ChassisSpeeds(rotated.getvX(), rotated.getvY(), -omegaRadSec);
 
     SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(speeds);
-    Mod_0.setIdleMode(states[0]);
-    Mod_1.setIdleMode(states[1]);
-    Mod_2.setIdleMode(states[2]);
-    Mod_3.setIdleMode(states[3]);
+    Mod_0.setState(states[0]);
+    Mod_1.setState(states[1]);
+    Mod_2.setState(states[2]);
+    Mod_3.setState(states[3]);
 
   }
   @Override
   public void periodic() {
+    if (isCoasting) {
+      Mod_0.setIdleMode(IdleMode.kBrake);
+      Mod_1.setIdleMode(IdleMode.kBrake);
+      Mod_2.setIdleMode(IdleMode.kBrake);
+      Mod_3.setIdleMode(IdleMode.kBrake);
+      isCoasting = false;
+    }
     updateOdometry();
     poseStr = getPose().toString();
     robotRelativeSpeeds = this.getRobotRelativeSpeeds().toString();
@@ -121,10 +129,10 @@ public class Swerve extends SubsystemBase implements Loggable{
   }
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    Mod_0.setIdleMode(desiredStates[0]);
-    Mod_1.setIdleMode(desiredStates[1]);
-    Mod_2.setIdleMode(desiredStates[2]);
-    Mod_3.setIdleMode(desiredStates[3]);
+    Mod_0.setState(desiredStates[0]);
+    Mod_1.setState(desiredStates[1]);
+    Mod_2.setState(desiredStates[2]);
+    Mod_3.setState(desiredStates[3]);
   }
 
   public SwerveModulePosition[] getModulePositions(){
@@ -144,10 +152,10 @@ public class Swerve extends SubsystemBase implements Loggable{
   //chassis speeds consumer
   public void setChassisSpeeds(ChassisSpeeds speeds){
     SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(speeds);
-    Mod_0.setIdleMode(states[0]);
-    Mod_1.setIdleMode(states[1]);
-    Mod_2.setIdleMode(states[2]);
-    Mod_3.setIdleMode(states[3]);
+    Mod_0.setState(states[0]);
+    Mod_1.setState(states[1]);
+    Mod_2.setState(states[2]);
+    Mod_3.setState(states[3]);
   }
 
   public void resetPose(Pose2d pose){
@@ -174,7 +182,11 @@ public class Swerve extends SubsystemBase implements Loggable{
   }
 
   public void disabledPeriodic() {
-    Mod_0.setState();
+    isCoasting = true;
+    Mod_0.setIdleMode(IdleMode.kCoast);
+    Mod_1.setIdleMode(IdleMode.kCoast);
+    Mod_2.setIdleMode(IdleMode.kCoast);
+    Mod_3.setIdleMode(IdleMode.kCoast);
   }
 
 }
