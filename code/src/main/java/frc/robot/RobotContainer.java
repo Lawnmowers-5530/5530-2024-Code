@@ -32,6 +32,7 @@ import frc.robot.subsystems.LedController_MultiAccess;
 import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
+
 import frc.robot.subsystems.LedController.fixedPalattePatternType;
 import frc.robot.subsystems.LedController.stripType;
 import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
@@ -207,7 +208,6 @@ public class RobotContainer implements Loggable {
               / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
         });
   }
-
   private void configureBindings() {
     dash.isLoaded();
 
@@ -221,31 +221,32 @@ public class RobotContainer implements Loggable {
         }, new Subsystem[] {}));
 
     driverController.x().whileTrue(resetGyro); // if not working use repeatcommand
+
     driverController.y().onTrue(new LauncherIntake(distanceSensor, loader, launcher,
         Constants.LauncherIntakeConstants.theshold, Constants.LauncherIntakeConstants.speed));
     driverController.y().onTrue(ampAngle);
+
     driverController.a().onTrue(intakeCommand);
     driverController.a().onTrue(speakerAngle);
+
     driverController.leftTrigger().onTrue(speakerAngle);
     driverController.rightTrigger().onTrue(ampAngle);
-    driverController.leftBumper().onTrue(new VelocityLauncher(
-        launcher,
-        () -> {
-          return Constants.LauncherConstants.LAUNCHER_LOW_REVS;
-        },
-        () -> {
-          return Constants.LauncherConstants.LAUNCHER_LOW_REVS
-              / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
-        }));
+
+    driverController.leftBumper().onTrue(ampShot);
     driverController.leftBumper().onTrue(ampAngle);
+
     driverController.rightBumper().onTrue(speakerShot);
-    driverController.rightBumper().onTrue(speakerAngle);
+    driverController.rightBumper().onTrue(ampAngle);
+
     driverController.start().onTrue(pathFindCommand);
     driverController.povDown().onTrue(shooterFeed);
 
     // secondaryController.a().onTrue(ampShot);
     secondaryController.y().onTrue(speakerShot);
+    secondaryController.y().onTrue(ampAngle);
+
     secondaryController.start().onTrue(shooterFeed);
+    secondaryController.a().onTrue(stopShooterComponents);
     secondaryController.rightBumper().onTrue(stopShooterComponents);
     secondaryController.leftBumper().whileTrue(climberUp);
     secondaryController.rightBumper().whileTrue(climberDown);
