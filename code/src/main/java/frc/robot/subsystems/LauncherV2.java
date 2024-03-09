@@ -17,11 +17,6 @@ public class LauncherV2 extends Launcher implements Loggable{
     SparkPIDController leftPIDController;
     SparkPIDController rightPIDController;
 
-    double kP = 0;
-    double kI = 0;
-    double kD = 0;
-    double kF = 0;
-
     public LauncherV2() {
         super(Constants.LauncherConstants.leftMotorPort, Constants.LauncherConstants.rightMotorPort,
                 Constants.LauncherConstants.isReversed);
@@ -64,41 +59,34 @@ public class LauncherV2 extends Launcher implements Loggable{
         SmartDashboard.putNumber("Right Encoder 2", rightEncoder2.getPosition());
     }
 
-    @Override
-    public void periodic(){
-        this.kP = SmartDashboard.getNumber("kP", 0);
-        this.kI = SmartDashboard.getNumber("kI", 0);
-        this.kD = SmartDashboard.getNumber("kD", 0);
-        this.kF = SmartDashboard.getNumber("kF", 0);
-    }
 
 
-    //temp testing
-    @Config
-    public void setkP(double kP) {
-        this.kP = kP;
-        leftPIDController.setP(kP);
-        rightPIDController.setP(kP);
-    }
-    
-    @Config
-    public void setkI(double kI) {
-        this.kI = kI;
-        leftPIDController.setI(kI);
-        rightPIDController.setI(kI);
-    }
-
-    @Config
-    public void setkD(double kD) {
-        this.kD = kD;
-        leftPIDController.setD(kD);
-        rightPIDController.setD(kD);
-    }
-
-    @Config
-    public void setkF(double kF) {
-        this.kF = kF;
-        leftPIDController.setFF(kF);
-        rightPIDController.setFF(kF);
-    }
+    ////temp testing
+    //@Config
+    //public void setkP(double kP) {
+    //    this.kP = kP;
+    //    leftPIDController.setP(kP);
+    //    rightPIDController.setP(kP);
+    //}
+    //
+    //@Config
+    //public void setkI(double kI) {
+    //    this.kI = kI;
+    //    leftPIDController.setI(kI);
+    //    rightPIDController.setI(kI);
+    //}
+//
+    //@Config
+    //public void setkD(double kD) {
+    //    this.kD = kD;
+    //    leftPIDController.setD(kD);
+    //    rightPIDController.setD(kD);
+    //}
+//
+    //@Config
+    //public void setkF(double kF) {
+    //    this.kF = kF;
+    //    leftPIDController.setFF(kF);
+    //    rightPIDController.setFF(kF);
+    //}
 }

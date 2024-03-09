@@ -41,7 +41,7 @@ public class LauncherIntake extends Command {
             loaderSubsystem.run(0);
             launcherSubsystem.setSpeed(0, 0);
         } else {
-            loaderSubsystem.run(speed);
+            loaderSubsystem.run(speed-0.075);
             launcherSubsystem.setSpeed(speed, speed);
         }
     }

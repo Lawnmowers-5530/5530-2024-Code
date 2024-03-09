@@ -63,19 +63,19 @@ public final class Constants {
         public static final int rightMotorPort = 21;
         public static final boolean isReversed = true;
         public static final double loaderSpeed = 0.3;
-        public static final double loaderCutoffDistance = 180;
+        public static final double loaderCutoffDistance = 190; //180
     }
 
     public static final class LauncherConstants{
         public static final int leftMotorPort = 18;
         public static final int rightMotorPort = 19;
         public static final boolean isReversed = false;
-        public static final double kP = 0.0004d;
+        public static final double kP = 0.0002d;
         public static final double kI = 0;
         public static final double kD = 0;
-        public static final double kF = 0.0002d;
+        public static final double kF = 0.00026;
 
-        public static final double loaderShotSpeed = 0.2;
+        public static final double loaderShotSpeed = 0.35;
 
         public static final double LAUNCHER_LOW_REVS = 1000; //1500 // low speed for the launcher
         public static final double LAUNCHER_MED_REVS = 3000; // medium speed for the launcher
@@ -110,7 +110,7 @@ public final class Constants {
         public static final int motorPort = 23;
         public static final boolean isReversed = true;
 
-        public static final double speed = 0.5;
+        public static final double speed = 1;
         public static final double maxHeight = 605;
         public static final double minHeight = 0;
         
@@ -118,7 +118,7 @@ public final class Constants {
 
     public static final class PathPlannerConstants{
         public static final PIDConstants translationConstants = new PIDConstants(3, 0, 0.0);
-    public static final PIDConstants rotationConstants = new PIDConstants(1.5, 0.0, 0.1);
+    public static final PIDConstants rotationConstants = new PIDConstants(1.2, 0.0, 0.55);
 
     public static final PathConstraints constraints = new PathConstraints(
         3, 2, //linear
