@@ -35,4 +35,21 @@ public class IntakeOffFloor extends Command {
         intake.run(0);
         loader.run(0);
     }
+
+    public class IntakeOffFloorFactory {
+        Intake intake;
+        LoaderV2 loader;
+        double speed;
+        double cutoff;
+        public IntakeOffFloorFactory(Intake intake, LoaderV2 loader, double speed, double cutoff) {
+            this.intake = intake;
+            this.loader = loader;
+            this.speed = speed;
+            this.cutoff = cutoff;
+        }
+
+        public IntakeOffFloor create() {
+            return new IntakeOffFloor(intake, loader, speed, cutoff);
+        }
+    }
 }

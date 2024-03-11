@@ -27,4 +27,19 @@ public class RunLauncher extends Command {
     public void end(boolean interrupted) {
         launcher.setVelocity(0, 0);
     }
+    
+    public class RunLauncherFactory {
+        LauncherV2 launcher;
+        double speed;
+        double diffPercent;
+        public RunLauncherFactory(LauncherV2 launcher, double speed, double diffPercent) {
+            this.launcher = launcher;
+            this.speed = speed;
+            this.diffPercent = diffPercent;
+        }
+
+        public RunLauncher create() {
+            return new RunLauncher(launcher, speed, diffPercent);
+        }
+    }
 }

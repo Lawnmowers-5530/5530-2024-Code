@@ -53,4 +53,23 @@ public class LauncherIntake extends Command {
         }
         return false;
     }
+
+    public class LauncherIntakeFactory {
+        DistanceSensor distanceSensor;
+        LoaderV2 loaderSubsystem;
+        LauncherV2 launcherSubsystem;
+        int threshold;
+        double speed;
+        public LauncherIntakeFactory(DistanceSensor distanceSensor, LoaderV2 loaderSubsystem, LauncherV2 launcherSubsystem, int threshold, double speed) {
+            this.distanceSensor = distanceSensor;
+            this.loaderSubsystem = loaderSubsystem;
+            this.launcherSubsystem = launcherSubsystem;
+            this.threshold = threshold;
+            this.speed = speed;
+        }
+
+        public LauncherIntake create() {
+            return new LauncherIntake(distanceSensor, loaderSubsystem, launcherSubsystem, threshold, speed);
+        }
+    }
 }

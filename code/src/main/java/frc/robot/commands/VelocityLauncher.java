@@ -43,4 +43,20 @@ public class VelocityLauncher extends Command {
     public boolean isFinished() {
         return false;
     }
+
+    public class VelocityLauncherFactory {
+        LauncherV2 launcherSubsystem;
+        DoubleSupplier leftVelocitySupplier;
+        DoubleSupplier rightVelocitySupplier;
+        public VelocityLauncherFactory(LauncherV2 launcherSubsystem, DoubleSupplier leftVelocitySupplier, DoubleSupplier rightVelocitySupplier) {
+            this.launcherSubsystem = launcherSubsystem;
+            this.leftVelocitySupplier = leftVelocitySupplier;
+            this.rightVelocitySupplier = rightVelocitySupplier;
+        }
+
+        public VelocityLauncher create() {
+            return new VelocityLauncher(launcherSubsystem, leftVelocitySupplier, rightVelocitySupplier);
+        }
+    }
 }
+

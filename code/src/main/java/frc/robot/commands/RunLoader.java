@@ -26,4 +26,17 @@ public class RunLoader extends Command {
     public void end(boolean interrupted) {
         loader.run(0);
     }
+
+    public class RunLoaderFactory {
+        LoaderV2 loader;
+        double speed;
+        public RunLoaderFactory(LoaderV2 loader, double speed) {
+            this.loader = loader;
+            this.speed = speed;
+        }
+
+        public RunLoader create() {
+            return new RunLoader(loader, speed);
+        }
+    }
 }

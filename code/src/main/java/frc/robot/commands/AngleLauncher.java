@@ -29,5 +29,16 @@ public class AngleLauncher extends Command {
         }
     }
 
-        
+    public class AngleLauncherFactory {
+        DumbLauncherAngle launcherAngle;
+        Angle state;
+        public AngleLauncherFactory(DumbLauncherAngle launcherAngle, Angle state) {
+            this.launcherAngle = launcherAngle;
+            this.state = state;
+        }
+
+        public AngleLauncher create() {
+            return new AngleLauncher(launcherAngle, state);
+        }
+    }
 }

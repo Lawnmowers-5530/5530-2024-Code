@@ -27,4 +27,17 @@ public class ClimberManual extends Command {
     public boolean isFinished() {
         return false;
     }
+
+    public class ClimberManualFactory {
+        Climber climber;
+        DoubleSupplier speed;
+        public ClimberManualFactory(Climber climber, DoubleSupplier speed) {
+            this.climber = climber;
+            this.speed = speed;
+        }
+
+        public ClimberManual create() {
+            return new ClimberManual(climber, speed);
+        }
+    }
 }

@@ -27,4 +27,18 @@ public class ClimberLimited extends Command {
     public boolean isFinished() {
         return true;
     }
+
+    public class ClimberLimitedFactory {
+        Climber climber;
+        double speed;
+        public ClimberLimitedFactory(Climber climber, double speed) {
+            this.climber = climber;
+            this.speed = speed;
+        }
+
+        public ClimberLimited create() {
+            return new ClimberLimited(climber, speed);
+        }
+        
+    }
 }
