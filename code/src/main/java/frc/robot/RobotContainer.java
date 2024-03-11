@@ -97,7 +97,7 @@ public class RobotContainer implements Loggable {
   }
 
   private void createSubsystems() {
-    fisheye = new Camera("fisheye", 0, 640, 480, 30);
+    fisheye = new Camera("fisheye", 0, 320, 240, 300);
     leds = new LedController_MultiAccess(new LedController(0, stripType.Adressable));
     intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
     launcher = new LauncherV2();
