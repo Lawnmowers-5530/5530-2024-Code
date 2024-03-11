@@ -20,7 +20,7 @@ public class LedController extends SubsystemBase {
         Adressable,
         Solid
     }
-    public enum FixedPallatePatternType implements PatternType {
+    public enum FixedPalletePatternType implements PatternType {
         Rainbow(-0.99),
         RainbowParty(-0.97),
         RainbowOcean(-0.95),
@@ -72,7 +72,7 @@ public class LedController extends SubsystemBase {
         
         private final double value;
 
-        FixedPallatePatternType(double value) {
+        FixedPalletePatternType(double value) {
             this.value = value;
         }
         public double getValue() {

@@ -4,6 +4,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.SwerveModule;
+import frc.robot.subsystems.LedController.FixedPalletePatternType;
+import frc.robot.subsystems.LedController.PatternType;
+import frc.robot.subsystems.LedController.SolidColorType;
 
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PIDConstants;
@@ -136,4 +139,20 @@ public final class Constants {
 
     public static final Translation2d targetTranslation = new Translation2d(0, 5);
 
+    public static final class LEDConstants {
+        public static final int LED_PORT = 0;
+        public static final class Priorities {
+            public static final int BACKGROUND = 0;
+            public static final int LOW = 50;
+            public static final int MEDIUM = 100;
+            public static final int HIGH = 150;
+            public static final int CRITICAL = 200;
+        }
+        public static final class Patterns {
+            public static final PatternType NOTE_LOADED = SolidColorType.Blue;
+            public static final PatternType NO_NOTE_ARM_READY = SolidColorType.Red;
+            public static final PatternType NOTE_LOADED_IN_ZONE = SolidColorType.Green;
+            public static final PatternType NO_NOTE_ARM_NOT_READY = FixedPalletePatternType.StrobeRed;
+        }
+    }
 }

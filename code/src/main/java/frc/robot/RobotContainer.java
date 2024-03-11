@@ -40,7 +40,7 @@ import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
 
-import frc.robot.subsystems.LedController.FixedPallatePatternType;
+import frc.robot.subsystems.LedController.FixedPalletePatternType;
 import frc.robot.subsystems.LedController.StripType;
 import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
 
@@ -184,25 +184,25 @@ public class RobotContainer implements Loggable {
     driverController.b().onTrue(new RunCommand(
         () -> {
           LedControllerProxy ledProxy = leds.getController();
-          ledProxy.setPattern(FixedPallatePatternType.ColorWavesOcean, 1);
+          ledProxy.setPattern(FixedPalletePatternType.ColorWavesOcean, 1);
         }, new Subsystem[] {}));
 
     driverController.x().whileTrue(resetGyro); // if not working use repeatcommand
     
-    SequentialCommandGroup launcherIntakeGroup = new SequentialCommandGroup(new SequentialCommandGroup(new Command[] {highAngle, launcherIntakeCommand}));
+    SequentialCommandGroup launcherIntakeGroup = new SequentialCommandGroup(new Command[] {highAngle, launcherIntakeCommand});
     driverController.y().onTrue(launcherIntakeGroup);
     
     
-    SequentialCommandGroup floorIntakeGroup = new SequentialCommandGroup(new SequentialCommandGroup(new Command[] {highAngle, intakeCommand}));
+    SequentialCommandGroup floorIntakeGroup = new SequentialCommandGroup(new Command[] {highAngle, intakeCommand});
     driverController.a().onTrue(floorIntakeGroup);
 
     driverController.leftTrigger().onTrue(highAngle);
     driverController.rightTrigger().onTrue(lowAngle);
     
-    SequentialCommandGroup ampShotGroup = new SequentialCommandGroup(new SequentialCommandGroup(new Command[] {lowAngle, ampShot}));
+    SequentialCommandGroup ampShotGroup = new SequentialCommandGroup(new Command[] {lowAngle, ampShot});
     driverController.leftBumper().onTrue(ampShotGroup);
 
-    SequentialCommandGroup speakerShotGroup = new SequentialCommandGroup(new SequentialCommandGroup(new Command[] {lowAngle, speakerShot}));
+    SequentialCommandGroup speakerShotGroup = new SequentialCommandGroup(new Command[] {lowAngle, speakerShot});
     driverController.rightBumper().onTrue(speakerShotGroup);
 
     driverController.start().onTrue(eject);
