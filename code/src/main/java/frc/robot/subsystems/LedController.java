@@ -16,11 +16,11 @@ public class LedController extends SubsystemBase {
     public interface PatternType {
         public double getValue();
     }
-    public enum stripType {
+    public enum StripType {
         Adressable,
         Solid
     }
-    public enum fixedPalattePatternType implements PatternType {
+    public enum FixedPalletePatternType implements PatternType {
         Rainbow(-0.99),
         RainbowParty(-0.97),
         RainbowOcean(-0.95),
@@ -72,14 +72,14 @@ public class LedController extends SubsystemBase {
         
         private final double value;
 
-        fixedPalattePatternType(double value) {
+        FixedPalletePatternType(double value) {
             this.value = value;
         }
         public double getValue() {
             return value;
         }
     }
-    public enum color1PatternType implements PatternType {
+    public enum Color1PatternType implements PatternType {
         EndToEndBlendToBlack(-0.03),
         LarsonScanner(-0.01),
         LightChase(0.01),
@@ -93,14 +93,14 @@ public class LedController extends SubsystemBase {
 
         private final double value;
 
-        color1PatternType(double value) {
+        Color1PatternType(double value) {
             this.value = value;
         }
         public double getValue() {
             return value;
         }
     }
-    public enum color2PatternType implements PatternType {
+    public enum Color2PatternType implements PatternType {
         EndToEndBlendToBlack(0.17),
         LarsonScanner(0.19),
         LightChase(0.21),
@@ -114,14 +114,14 @@ public class LedController extends SubsystemBase {
 
         private final double value;
 
-        color2PatternType(double value) {
+        Color2PatternType(double value) {
             this.value = value;
         }
         public double getValue() {
             return value;
         }
     }
-    public enum color1And2PatternType implements PatternType {
+    public enum Color1And2PatternType implements PatternType {
         Sparkle1On2(0.37),
         Sparkle2On1(0.39),
         Gradient1And2(0.41),
@@ -135,14 +135,14 @@ public class LedController extends SubsystemBase {
 
         private final double value;
 
-        color1And2PatternType(double value) {
+        Color1And2PatternType(double value) {
             this.value = value;
         }
         public double getValue() {
             return value;
         }
     }
-    public enum solidColorType implements PatternType {
+    public enum SolidColorType implements PatternType {
         HotPink(0.57),
         DarkRed(0.59),
         Red(0.61),
@@ -167,7 +167,7 @@ public class LedController extends SubsystemBase {
         Black(0.99);
 
         private final double value;
-        solidColorType(double value) {
+        SolidColorType(double value) {
             this.value = value;
         }
         public double getValue() {
@@ -176,16 +176,16 @@ public class LedController extends SubsystemBase {
     }
     
     int portID;
-    stripType ledStripType;
+    StripType ledStripType;
     Spark ledController;
     
-    public LedController(int portID, stripType type) {
+    public LedController(int portID, StripType type) {
         this.portID = portID;
         this.ledStripType = type;
         this.ledController = new Spark(portID);
     }
 
-    public LedController(int portID, stripType type, String tabName) {
+    public LedController(int portID, StripType type, String tabName) {
         this.portID = portID;
         this.ledStripType = type;
         this.ledController = new Spark(portID);
@@ -197,9 +197,9 @@ public class LedController extends SubsystemBase {
     }
     public void setPattern(PatternType type) {
 
-        if (duplicateOnShuffleboard && type instanceof solidColorType) {
+        if (duplicateOnShuffleboard && type instanceof SolidColorType) {
 
-            solidColorType color = (solidColorType) type;
+            SolidColorType color = (SolidColorType) type;
             widget.withProperties(Map.of("colorWhenTrue", mapToColorName(color)));
             entry.setBoolean(true);
 
@@ -208,7 +208,7 @@ public class LedController extends SubsystemBase {
         ledController.set(type.getValue());
     }
 
-    public String mapToColorName(solidColorType pattern) {
+    public String mapToColorName(SolidColorType pattern) {
         switch (pattern) {
             case HotPink:
                 return "Hot Pink";

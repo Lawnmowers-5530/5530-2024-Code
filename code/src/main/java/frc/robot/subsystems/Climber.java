@@ -51,6 +51,16 @@ public class Climber extends SubsystemBase {
       motor.set(-Constants.ClimberConstants.speed);
     }
   }
+
+  public void runLimited( double speed ) {
+    if (encoder.getPosition() > Constants.ClimberConstants.maxHeight){
+      motor.set(0);
+    } else if (encoder.getPosition() < Constants.ClimberConstants.minHeight){
+      motor.set(0);
+    } else {
+      motor.set(speed);
+    }
+  }
   @Override
   public void periodic() {
     SmartDashboard.putNumber("climber position", encoder.getPosition());

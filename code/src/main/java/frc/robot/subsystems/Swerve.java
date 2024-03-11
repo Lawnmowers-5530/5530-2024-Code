@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -30,7 +31,7 @@ public class Swerve extends SubsystemBase implements Loggable{
   SwerveDriveOdometry odometry;
   @Log
   boolean isUpdating;
-
+  private boolean isCoasting;
   private static final SwerveModule Mod_0 = Constants.Modules.Mod_0;
   private static final SwerveModule Mod_1 = Constants.Modules.Mod_1;
   private static final SwerveModule Mod_2 = Constants.Modules.Mod_2;
@@ -102,6 +103,13 @@ public class Swerve extends SubsystemBase implements Loggable{
   }
   @Override
   public void periodic() {
+    if (isCoasting) {
+      Mod_0.setIdleMode(IdleMode.kBrake);
+      Mod_1.setIdleMode(IdleMode.kBrake);
+      Mod_2.setIdleMode(IdleMode.kBrake);
+      Mod_3.setIdleMode(IdleMode.kBrake);
+      isCoasting = false;
+    }
     updateOdometry();
     poseStr = getPose().toString();
     robotRelativeSpeeds = this.getRobotRelativeSpeeds().toString();
@@ -171,6 +179,14 @@ public class Swerve extends SubsystemBase implements Loggable{
     this.drive(new Vector2D(0, 0, false), output, false);
 
     return rotationPID.atSetpoint();
+  }
+
+  public void disabledPeriodic() {
+    isCoasting = true;
+    Mod_0.setIdleMode(IdleMode.kCoast);
+    Mod_1.setIdleMode(IdleMode.kCoast);
+    Mod_2.setIdleMode(IdleMode.kCoast);
+    Mod_3.setIdleMode(IdleMode.kCoast);
   }
 
 }
