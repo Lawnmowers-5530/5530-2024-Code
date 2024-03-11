@@ -189,20 +189,20 @@ public class RobotContainer implements Loggable {
 
     driverController.x().whileTrue(resetGyro); // if not working use repeatcommand
     
-    SequentialCommandGroup launcherIntakeGroup = new SequentialCommandGroup(new Command[] {highAngle, launcherIntakeCommand});
+    SequentialCommandGroup launcherIntakeGroup = new SequentialCommandGroup(highAngle, launcherIntakeCommand);
     driverController.y().onTrue(launcherIntakeGroup);
     
     
-    SequentialCommandGroup floorIntakeGroup = new SequentialCommandGroup(new Command[] {highAngle, intakeCommand});
+    SequentialCommandGroup floorIntakeGroup = new SequentialCommandGroup(highAngle, intakeCommand);
     driverController.a().onTrue(floorIntakeGroup);
 
     driverController.leftTrigger().onTrue(highAngle);
     driverController.rightTrigger().onTrue(lowAngle);
     
-    SequentialCommandGroup ampShotGroup = new SequentialCommandGroup(new Command[] {lowAngle, ampShot});
+    SequentialCommandGroup ampShotGroup = new SequentialCommandGroup(lowAngle, ampShot);
     driverController.leftBumper().onTrue(ampShotGroup);
 
-    SequentialCommandGroup speakerShotGroup = new SequentialCommandGroup(new Command[] {lowAngle, speakerShot});
+    SequentialCommandGroup speakerShotGroup = new SequentialCommandGroup(lowAngle, speakerShot);
     driverController.rightBumper().onTrue(speakerShotGroup);
 
     driverController.start().onTrue(eject);
