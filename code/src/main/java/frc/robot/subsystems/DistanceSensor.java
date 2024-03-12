@@ -4,6 +4,7 @@ import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.LedController.fixedPalattePatternType;
 import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
 
@@ -32,13 +33,16 @@ public class DistanceSensor extends SubsystemBase {
         return sensor.isEnabled();
     }
 
+    public boolean checkBeamBreak( double cutoffDistance) {
+        if (getDistance() < cutoffDistance) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void periodic(){
-        if(getDistance()<30){
-        proxy.setPattern(fixedPalattePatternType.FireLarge, 0);
-        }else{
-            proxy.setPattern(fixedPalattePatternType.FireMedium, 0);
-        }
 
     }
 }

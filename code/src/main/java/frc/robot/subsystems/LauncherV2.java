@@ -5,11 +5,13 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 
-public class LauncherV2 extends Launcher implements Loggable{
+//TODO: RETUNE THIS
+public class LauncherV2 extends Launcher implements Loggable {
     RelativeEncoder leftEncoder;
     RelativeEncoder rightEncoder;
     RelativeEncoder leftEncoder2;
@@ -47,9 +49,11 @@ public class LauncherV2 extends Launcher implements Loggable{
     }
 
     @Override
-    public void reset() {
-        leftPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);
-        rightPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);
+    public Command reset() {
+        return this.runOnce(() -> {
+            leftPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);
+            rightPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);
+        });
     }
 
     public void logEncoder() {
@@ -59,34 +63,32 @@ public class LauncherV2 extends Launcher implements Loggable{
         SmartDashboard.putNumber("Right Encoder 2", rightEncoder2.getPosition());
     }
 
-
-
-    ////temp testing
-    //@Config
-    //public void setkP(double kP) {
-    //    this.kP = kP;
-    //    leftPIDController.setP(kP);
-    //    rightPIDController.setP(kP);
-    //}
+    //// temp testing
+    // @Config
+    // public void setkP(double kP) {
+    // this.kP = kP;
+    // leftPIDController.setP(kP);
+    // rightPIDController.setP(kP);
+    // }
     //
-    //@Config
-    //public void setkI(double kI) {
-    //    this.kI = kI;
-    //    leftPIDController.setI(kI);
-    //    rightPIDController.setI(kI);
-    //}
-//
-    //@Config
-    //public void setkD(double kD) {
-    //    this.kD = kD;
-    //    leftPIDController.setD(kD);
-    //    rightPIDController.setD(kD);
-    //}
-//
-    //@Config
-    //public void setkF(double kF) {
-    //    this.kF = kF;
-    //    leftPIDController.setFF(kF);
-    //    rightPIDController.setFF(kF);
-    //}
+    // @Config
+    // public void setkI(double kI) {
+    // this.kI = kI;
+    // leftPIDController.setI(kI);
+    // rightPIDController.setI(kI);
+    // }
+    //
+    // @Config
+    // public void setkD(double kD) {
+    // this.kD = kD;
+    // leftPIDController.setD(kD);
+    // rightPIDController.setD(kD);
+    // }
+    //
+    // @Config
+    // public void setkF(double kF) {
+    // this.kF = kF;
+    // leftPIDController.setFF(kF);
+    // rightPIDController.setFF(kF);
+    // }
 }

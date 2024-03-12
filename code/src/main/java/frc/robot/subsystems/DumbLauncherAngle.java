@@ -4,6 +4,9 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+
+
+@Deprecated
 public class DumbLauncherAngle extends SubsystemBase {
     CANSparkMax motor;
     boolean relaxed = true;
