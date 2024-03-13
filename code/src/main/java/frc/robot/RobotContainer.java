@@ -23,6 +23,10 @@ import frc.robot.commands.ClimberManual;
 import frc.robot.commands.IntakeOffFloor;
 import frc.robot.commands.AngleLauncher;
 import frc.robot.commands.LauncherIntake;
+import frc.robot.commands.RunIntake;
+import frc.robot.commands.RunLauncher;
+import frc.robot.commands.RunLoader;
+import frc.robot.commands.StopCommand;
 import frc.robot.commands.VelocityLauncher;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
@@ -36,7 +40,7 @@ import frc.robot.subsystems.LedController_MultiAccess;
 import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
-
+import frc.robot.subsystems.DumbLauncherAngle.Angle;
 import frc.robot.subsystems.LedController.FixedPalletePatternType;
 import frc.robot.subsystems.LedController.StripType;
 import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
@@ -103,7 +107,7 @@ public class RobotContainer implements Loggable {
 
   private void createSubsystems() {
     fisheye = new Camera("fisheye", 0, 320, 240, 300);
-    leds = new LedController_MultiAccess(new LedController(0, stripType.Adressable));
+    leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable));
     intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
     launcher = new LauncherV2();
     launcherAngle = new DumbLauncherAngle(
@@ -189,29 +193,29 @@ public class RobotContainer implements Loggable {
 
     driverController.x().whileTrue(resetGyro); // if not working use repeatcommand
     
-    SequentialCommandGroup launcherIntakeGroup = new SequentialCommandGroup(highAngle, launcherIntakeCommand);
-    driverController.y().onTrue(launcherIntakeGroup);
+    //SequentialCommandGroup launcherIntakeGroup = new SequentialCommandGroup(highAngle, launcherIntakeCommand);
+    //driverController.y().onTrue(launcherIntakeGroup);
     
     
-    SequentialCommandGroup floorIntakeGroup = new SequentialCommandGroup(highAngle, intakeCommand);
-    driverController.a().onTrue(floorIntakeGroup);
+    //SequentialCommandGroup floorIntakeGroup = new SequentialCommandGroup(highAngle, intakeCommand);
+    //driverController.a().onTrue(floorIntakeGroup);
 
     driverController.leftTrigger().onTrue(highAngle);
     driverController.rightTrigger().onTrue(lowAngle);
     
-    SequentialCommandGroup ampShotGroup = new SequentialCommandGroup(lowAngle, ampShot);
-    driverController.leftBumper().onTrue(ampShotGroup);
+    //SequentialCommandGroup ampShotGroup = new SequentialCommandGroup(lowAngle, ampShot);
+    //driverController.leftBumper().onTrue(ampShotGroup);
 
-    SequentialCommandGroup speakerShotGroup = new SequentialCommandGroup(lowAngle, speakerShot);
-    driverController.rightBumper().onTrue(speakerShotGroup);
+    //SequentialCommandGroup speakerShotGroup = new SequentialCommandGroup(lowAngle, speakerShot);
+    //driverController.rightBumper().onTrue(speakerShotGroup);
 
     driverController.start().onTrue(eject);
     driverController.povDown().onTrue(shooterFeed);
 
     // secondaryController.a().onTrue(ampShot);
-    secondaryController.y().onTrue(speakerShotGroup);
+    //secondaryController.y().onTrue(speakerShotGroup);
       
-    secondaryController.b().onTrue(ampShotGroup);
+    //secondaryController.b().onTrue(ampShotGroup);
     secondaryController.start().onTrue(shooterFeed);
     secondaryController.a().onTrue(stopShooterComponents);
     secondaryController.rightBumper().onTrue(stopShooterComponents);
@@ -220,7 +224,7 @@ public class RobotContainer implements Loggable {
     secondaryController.povDown().onTrue(lowAngle);
     secondaryController.povUp().onTrue(highAngle);
     secondaryController.povLeft().onTrue(intakeCommand);
-    secondaryController.povRight().onTrue(launcherIntakeGroup);
+    //secondaryController.povRight().onTrue(launcherIntakeGroup);
   }
 
   public Command getAutonomousCommand() {
