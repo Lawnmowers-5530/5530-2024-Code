@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Config;
 
 //TODO: RETUNE THIS
 public class LauncherV2 extends Launcher implements Loggable {
@@ -48,7 +47,6 @@ public class LauncherV2 extends Launcher implements Loggable {
         SmartDashboard.putNumber("right velocity", rightEncoder.getVelocity());
     }
 
-    @Override
     public Command reset() {
         return this.runOnce(() -> {
             leftPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);
@@ -63,32 +61,12 @@ public class LauncherV2 extends Launcher implements Loggable {
         SmartDashboard.putNumber("Right Encoder 2", rightEncoder2.getPosition());
     }
 
-    //// temp testing
-    // @Config
-    // public void setkP(double kP) {
-    // this.kP = kP;
-    // leftPIDController.setP(kP);
-    // rightPIDController.setP(kP);
-    // }
-    //
-    // @Config
-    // public void setkI(double kI) {
-    // this.kI = kI;
-    // leftPIDController.setI(kI);
-    // rightPIDController.setI(kI);
-    // }
-    //
-    // @Config
-    // public void setkD(double kD) {
-    // this.kD = kD;
-    // leftPIDController.setD(kD);
-    // rightPIDController.setD(kD);
-    // }
-    //
-    // @Config
-    // public void setkF(double kF) {
-    // this.kF = kF;
-    // leftPIDController.setFF(kF);
-    // rightPIDController.setFF(kF);
-    // }
+    public Command stopLauncherCommand() {
+        return this.reset().andThen(
+                this.runOnce(() -> {
+                    leftMotor.set(0);
+                    rightMotor.set(0);
+                }));
+    }
+
 }

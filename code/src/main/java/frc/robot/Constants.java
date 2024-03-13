@@ -102,7 +102,7 @@ public final class Constants {
     }
 
     public static final class LauncherIntakeConstants{
-        public static final int theshold = 55;
+        public static final int threshold = 55;
         public static final double speed = 0.175;
     }
 
@@ -127,6 +127,8 @@ public final class Constants {
     }
 
     public static final double shotDistance = 1;
+
+    public static final double ejectSpeed = -0.3;
   
   
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);

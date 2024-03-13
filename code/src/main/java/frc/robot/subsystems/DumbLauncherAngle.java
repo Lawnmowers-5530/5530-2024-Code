@@ -2,11 +2,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
-
-@Deprecated
 public class DumbLauncherAngle extends SubsystemBase {
     CANSparkMax motor;
     boolean relaxed = true;
@@ -39,5 +37,19 @@ public class DumbLauncherAngle extends SubsystemBase {
 
     public boolean getRelaxed() {
         return relaxed;
+    }
+
+    public Command ampAngleCommand() {
+        return this.runOnce(
+                () -> {
+                    this.forceUp();
+                });
+    }
+
+    public Command speakerAngleCommand() {
+        return this.runOnce(
+                () -> {
+                    this.forceDown();
+                });
     }
 }

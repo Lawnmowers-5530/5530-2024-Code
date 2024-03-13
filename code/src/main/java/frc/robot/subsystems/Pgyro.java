@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.interfaces.Gyro;
 
@@ -92,5 +94,11 @@ public class Pgyro extends SubsystemBase implements Gyro<Pigeon2> {
     a = (Math.PI*2)-Math.abs(getRad()%(Math.PI*2));
     }
     return a;
+  }
+
+  public static Command zeroGyroCommand() {
+    return new InstantCommand(() -> {
+      pigeon.setYaw((0));
+    });
   }
 }
