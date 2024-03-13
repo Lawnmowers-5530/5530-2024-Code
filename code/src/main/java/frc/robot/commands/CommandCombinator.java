@@ -78,8 +78,7 @@ public class CommandCombinator {
                 launcherAngle.ampAngleCommand(),
                 new SequentialCommandGroup(
                         new WaitCommand(0.5),
-                        loader.feedShooterCommand().until(loader::isNotLoaded).andThen(loader.stopLoaderCommand())
-                                .alongWith(stopShooterComponents()))));
+                        loader.feedShooterCommand().until(loader::isNotLoaded).andThen(stopShooterComponents()))));
     };
 
     public Command ampShot() {
@@ -96,7 +95,6 @@ public class CommandCombinator {
                 launcherAngle.ampAngleCommand(),
                 new SequentialCommandGroup(
                         new WaitCommand(0.5),
-                        loader.feedShooterCommand().until(loader::isNotLoaded).andThen(loader.stopLoaderCommand())
-                                .alongWith(stopShooterComponents()))));
+                        loader.feedShooterCommand().until(loader::isNotLoaded).andThen(stopShooterComponents()))));
     };
 }

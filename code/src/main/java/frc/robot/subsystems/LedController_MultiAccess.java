@@ -2,8 +2,12 @@ package frc.robot.subsystems;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.LedController.PatternType;
+import frc.robot.subsystems.LedController.fixedPalattePatternType;
+import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
 
 public class LedController_MultiAccess extends SubsystemBase {
     LedController controller;
@@ -64,5 +68,14 @@ public class LedController_MultiAccess extends SubsystemBase {
                 queue.clear();
             }
         }
+    }
+
+    public Command LedControllerCommand(PatternType patternType, int priority) {
+        return this.runOnce(
+        () -> {
+          LedControllerProxy ledProxy = this.getController();
+          ledProxy.setPattern(fixedPalattePatternType.ColorWavesOcean, 1);
+        }
+        );
     }
 }

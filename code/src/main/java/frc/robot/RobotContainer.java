@@ -62,8 +62,8 @@ public class RobotContainer implements Loggable {
 
   private Command speakerAngle;
   private Command ampAngle;
-  private Command speakerLauncherCommand;
-  private Command ampLauncherCommand;
+  private Command speakerLauncher;
+  private Command ampLauncher;
   private Command zeroGyro;
   private Command sourceIntake;
   private Command groundIntake;
@@ -81,7 +81,7 @@ public class RobotContainer implements Loggable {
     createCommands();
 
     NamedCommands.registerCommand("intake", intakeCommand);
-    NamedCommands.registerCommand("shoot", ampLauncherCommand);
+    NamedCommands.registerCommand("shoot", ampLauncher);
     NamedCommands.registerCommand("feed", shooterFeed);
     NamedCommands.registerCommand("stop", stopShooterComponents);
 
@@ -142,14 +142,14 @@ public class RobotContainer implements Loggable {
     shooterFeed = loader.feedShooterCommand().until(loader::isNotLoaded).andThen(loader.stopLoaderCommand());
     stopShooterComponents = combinator.stopShooterComponents();
 
-    speakerLauncherCommand = combinator.speakerShot();
-    ampLauncherCommand = combinator.ampShot();
+    speakerLauncher = combinator.speakerShot();
+    ampLauncher = combinator.ampShot();
 
     sourceIntake = combinator.sourceIntake();
     groundIntake = combinator.groundIntake();
     eject = combinator.eject();
 
-    ampLauncherCommand = new VelocityLauncher(
+    ampLauncher = new VelocityLauncher(
         launcher,
         () -> {
           return Constants.LauncherConstants.LAUNCHER_LOW_REVS;
@@ -165,11 +165,7 @@ public class RobotContainer implements Loggable {
     swerve.setDefaultCommand(swerveCmd); //both joysticks
     climber.setDefaultCommand(climberManual);
 
-    driverController.b().onTrue(new RunCommand(
-        () -> {
-          LedControllerProxy ledProxy = leds.getController();
-          ledProxy.setPattern(fixedPalattePatternType.ColorWavesOcean, 1);
-        }, new Subsystem[] {}));
+    driverController.b().onTrue(leds.LedControllerCommand(fixedPalattePatternType.Rainbow, 0));
 
     driverController.x().onTrue(zeroGyro);
 
@@ -179,17 +175,17 @@ public class RobotContainer implements Loggable {
     driverController.leftTrigger().onTrue(speakerAngle);
     driverController.rightTrigger().onTrue(ampAngle);
 
-    driverController.leftBumper().onTrue(ampLauncherCommand);
+    driverController.leftBumper().onTrue(ampLauncher);
 
-    driverController.rightBumper().onTrue(speakerLauncherCommand);
+    driverController.rightBumper().onTrue(speakerLauncher);
 
     driverController.start().onTrue(eject);
     driverController.povDown().onTrue(shooterFeed);
     
 
-    secondaryController.y().onTrue(speakerLauncherCommand);
+    secondaryController.y().onTrue(speakerLauncher);
 
-    secondaryController.b().onTrue(ampLauncherCommand);
+    secondaryController.b().onTrue(ampLauncher);
 
     secondaryController.start().onTrue(shooterFeed);
     secondaryController.a().onTrue(stopShooterComponents);
