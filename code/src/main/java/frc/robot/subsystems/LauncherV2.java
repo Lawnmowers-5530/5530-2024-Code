@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -67,6 +69,19 @@ public class LauncherV2 extends Launcher implements Loggable {
                     leftMotor.set(0);
                     rightMotor.set(0);
                 }));
+    }
+    /**
+     * Returns a Command to run the launcher at a given velocity
+     * @param leftVelocitySupplier  Supplier for left velocity
+     * @param rightVelocitySupplier Supplier for right velocity
+     * @return Command to run the launcher at a given velocity
+     */
+    public Command runLauncherCommand(DoubleSupplier leftVelocitySupplier, DoubleSupplier rightVelocitySupplier) {
+        return this.runOnce(
+            () -> {
+                this.setVelocity(leftVelocitySupplier.getAsDouble(), rightVelocitySupplier.getAsDouble());
+            }
+        );
     }
 
 }

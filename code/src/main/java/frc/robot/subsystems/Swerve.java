@@ -57,6 +57,8 @@ public class Swerve extends SubsystemBase implements Loggable{
   @Log
   String frontRightPosition = "a";
 
+  private SwerveModuleState[] states;
+
   public Swerve() {
     rotationPID = new PIDController(Constants.RotationConstants.kP, Constants.RotationConstants.kI, Constants.RotationConstants.kD);
     rotationPID.setTolerance(2);
@@ -100,7 +102,7 @@ public class Swerve extends SubsystemBase implements Loggable{
     }
     ChassisSpeeds speeds = new ChassisSpeeds(rotated.getvX(), rotated.getvY(), -omegaRadSec);
 
-    SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(speeds);
+    states = Constants.kinematics.toSwerveModuleStates(speeds);
     Mod_0.setState(states[0]);
     Mod_1.setState(states[1]);
     Mod_2.setState(states[2]);
@@ -150,7 +152,7 @@ public class Swerve extends SubsystemBase implements Loggable{
 
   //chassis speeds consumer
   public void setChassisSpeeds(ChassisSpeeds speeds){
-    SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(speeds);
+    states = Constants.kinematics.toSwerveModuleStates(speeds);
     Mod_0.setState(states[0]);
     Mod_1.setState(states[1]);
     Mod_2.setState(states[2]);

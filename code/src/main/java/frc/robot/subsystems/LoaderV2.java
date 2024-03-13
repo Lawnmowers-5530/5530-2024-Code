@@ -32,10 +32,10 @@ public class LoaderV2 extends Loader {
     }
 
     public Command feedShooterCommand() {
-        return this.runOnce(
+        return new RunCommand(
             () -> {
-              this.run(-Constants.LoaderConstants.loaderSpeed);
-            });
+              this.run(Constants.LoaderConstants.loaderSpeed);
+            }, this);
     }
 
     public Command stopLoaderCommand() {
