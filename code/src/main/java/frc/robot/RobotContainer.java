@@ -23,11 +23,8 @@ import frc.robot.commands.ClimberManual;
 import frc.robot.commands.IntakeOffFloor;
 import frc.robot.commands.AngleLauncher;
 import frc.robot.commands.LauncherIntake;
-import frc.robot.commands.RunIntake;
-import frc.robot.commands.RunLauncher;
-import frc.robot.commands.RunLoader;
-import frc.robot.commands.StopCommand;
-import frc.robot.subsystems.DumbLauncherAngle.Angle;
+import frc.robot.commands.VelocityLauncher;
+import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DashboardIndicators;
 import frc.robot.subsystems.DistanceSensor;
@@ -57,11 +54,13 @@ public class RobotContainer implements Loggable {
   private Climber climber;
   private Intake intake;
   private LedController_MultiAccess leds;
+  private Camera fisheye;
 
   private DashboardIndicators dash;
 
   private CommandXboxController driverController;
   private CommandXboxController secondaryController;
+
 
   private Command intakeCommand;
   private Command swerveCmd;
@@ -103,7 +102,8 @@ public class RobotContainer implements Loggable {
   }
 
   private void createSubsystems() {
-    leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable));
+    fisheye = new Camera("fisheye", 0, 320, 240, 300);
+    leds = new LedController_MultiAccess(new LedController(0, stripType.Adressable));
     intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
     launcher = new LauncherV2();
     launcherAngle = new DumbLauncherAngle(
