@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
@@ -177,6 +178,10 @@ public class Swerve extends SubsystemBase implements Loggable{
     this.drive(new Vector2D(0, 0, false), output, false);
 
     return rotationPID.atSetpoint();
+  }
+
+  public Command pathFind(Pose2d endPose){
+    return AutoBuilder.pathfindToPose(endPose, Constants.PathPlannerConstants.constraints);
   }
 
 }

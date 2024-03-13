@@ -9,14 +9,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import io.github.oblarg.oblog.Loggable;
-import frc.lib.ShotCalculator;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
 import frc.robot.commands.CommandCombinator;
-import frc.robot.commands.LauncherIntake;
 import frc.robot.commands.VelocityLauncher;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
@@ -31,7 +28,6 @@ import frc.robot.subsystems.Swerve;
 
 import frc.robot.subsystems.LedController.fixedPalattePatternType;
 import frc.robot.subsystems.LedController.stripType;
-import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -70,7 +66,6 @@ public class RobotContainer implements Loggable {
 
   private CommandCombinator combinator;
 
-  private Command pathFindCommand;
 
   public RobotContainer() {
     driverController = new CommandXboxController(0);
@@ -112,9 +107,6 @@ public class RobotContainer implements Loggable {
 
   private void createCommands() {
     combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor);
-
-    pathFindCommand = AutoBuilder.pathfindToPose(
-        ShotCalculator.getDistPose(swerve.getPose()), Constants.PathPlannerConstants.constraints);
 
     swerveCmd = new RunCommand(
         () -> {
