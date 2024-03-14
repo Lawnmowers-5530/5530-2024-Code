@@ -61,6 +61,7 @@ public class RobotContainer implements Loggable {
 
   private Command speakerAngle;
   private Command ampAngle;
+  private Command farSpeakerLaunch;
   private Command speakerLauncher;
   private Command speakerFarLauncher;
   private Command ampLauncher;
@@ -97,7 +98,7 @@ public class RobotContainer implements Loggable {
   }
 
   private void createSubsystems() {
-    leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable));
+    leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable, "Competition"));
     ledManager = new LedManager(leds.getController());
     fisheye = new Camera("fisheye", 0, 320, 240, 300);
 
@@ -142,7 +143,7 @@ public class RobotContainer implements Loggable {
     zeroGyro = Pgyro.zeroGyroCommand();
 
     // manual climber operation, no limits
-    climberManual = climber.runRaw(driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis());
+    climberManual = climber.runRaw(() -> {return secondaryController.getRightTriggerAxis() - secondaryController.getLeftTriggerAxis();});
     // move climber up with limits
     climberUp = climber.moveUpCommand();
     // move climber down with limits
@@ -173,6 +174,8 @@ public class RobotContainer implements Loggable {
     // eject note
     // make eject a toggle button
     eject = combinator.eject();
+
+    speakerFarLauncher = combinator.speakerFarShot();
   }
 
   private void createStateSuppliers() {
@@ -214,15 +217,17 @@ public class RobotContainer implements Loggable {
 
     secondaryController.start().onTrue(eject);
     secondaryController.x().onTrue(stopShooterComponents);
+    secondaryController.a().onTrue(speakerFarLauncher);
 
-    secondaryController.leftBumper().whileTrue(climberDown);
-    secondaryController.rightBumper().whileTrue(climberUp);
+    secondaryController.rightBumper().whileTrue(climberDown);
+    secondaryController.leftBumper().whileTrue(climberUp);
 
     secondaryController.povDown().onTrue(ampAngle);
     secondaryController.povUp().onTrue(speakerAngle);
 
     secondaryController.povLeft().onTrue(groundIntake);
     secondaryController.povRight().onTrue(sourceIntake);
+
   }
 
   public Command getAutonomousCommand() {

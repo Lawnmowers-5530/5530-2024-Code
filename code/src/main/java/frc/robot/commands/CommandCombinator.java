@@ -49,7 +49,7 @@ public class CommandCombinator {
 	}
 
 	public Command sourceIntake() {
-		return launcherAngle.speakerAngleCommand()
+		return launcherAngle.ampAngleCommand()
 			.andThen(
 				new LauncherIntake(distanceSensor, loader, launcher,
 						Constants.LauncherIntakeConstants.threshold,
@@ -77,7 +77,7 @@ public class CommandCombinator {
 			.andThen(
 				new ParallelDeadlineGroup(
 					new SequentialCommandGroup(
-						new WaitCommand(0.5),
+						new WaitCommand(0.75),
 						loader.feedShooterCommand().until(loader::isNotLoaded)
 					),
 					launcher.speakerLauncherCommand()
@@ -91,7 +91,7 @@ public class CommandCombinator {
 			.andThen(
 				new ParallelDeadlineGroup(
 					new SequentialCommandGroup(
-						new WaitCommand(0.5),
+						new WaitCommand(0.75),
 						loader.feedShooterCommand().until(loader::isNotLoaded)
 					),
 				launcher.speakerLauncherCommand()
