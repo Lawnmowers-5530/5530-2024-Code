@@ -1,14 +1,18 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import io.github.oblarg.oblog.Loggable;
 
-public class LauncherV2 extends Launcher implements Loggable{
+//TODO: RETUNE THIS
+public class LauncherV2 extends Launcher implements Loggable {
     RelativeEncoder leftEncoder;
     RelativeEncoder rightEncoder;
     RelativeEncoder leftEncoder2;
@@ -45,10 +49,11 @@ public class LauncherV2 extends Launcher implements Loggable{
         SmartDashboard.putNumber("right velocity", rightEncoder.getVelocity());
     }
 
-    @Override
-    public void reset() {
-        leftPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);
-        rightPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);
+    public Command reset() {
+        return this.runOnce(() -> {
+            leftPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);
+            rightPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);
+        });
     }
 
     public void logEncoder() {
@@ -58,34 +63,46 @@ public class LauncherV2 extends Launcher implements Loggable{
         SmartDashboard.putNumber("Right Encoder 2", rightEncoder2.getPosition());
     }
 
+    public Command stopLauncherCommand() {
+        return this.reset().andThen(
+                this.runOnce(() -> {
+                    leftMotor.set(0);
+                    rightMotor.set(0);
+                }));
+    }
 
+    public Command runLauncherCommand(DoubleSupplier leftVelocitySupplier, DoubleSupplier rightVelocitySupplier) {
+        return this.runOnce(
+            () -> {
+                this.setVelocity(leftVelocitySupplier.getAsDouble(), rightVelocitySupplier.getAsDouble());
+            }
+        );
+    }
 
-    ////temp testing
-    //@Config
-    //public void setkP(double kP) {
-    //    this.kP = kP;
-    //    leftPIDController.setP(kP);
-    //    rightPIDController.setP(kP);
-    //}
-    //
-    //@Config
-    //public void setkI(double kI) {
-    //    this.kI = kI;
-    //    leftPIDController.setI(kI);
-    //    rightPIDController.setI(kI);
-    //}
-//
-    //@Config
-    //public void setkD(double kD) {
-    //    this.kD = kD;
-    //    leftPIDController.setD(kD);
-    //    rightPIDController.setD(kD);
-    //}
-//
-    //@Config
-    //public void setkF(double kF) {
-    //    this.kF = kF;
-    //    leftPIDController.setFF(kF);
-    //    rightPIDController.setFF(kF);
-    //}
+    public Command ampLauncherCommand() {
+        return this.runLauncherCommand(
+            () -> {
+                    return Constants.LauncherConstants.LAUNCHER_LOW_REVS;
+            },
+            () -> {
+                    return Constants.LauncherConstants.LAUNCHER_LOW_REVS
+                                    / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+            });
+    }
+
+    public Command speakerLauncherCommand() {
+        return this.runLauncherCommand(
+            () -> {
+                    return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;
+            },
+            () -> {
+                    return Constants.LauncherConstants.LAUNCHER_HIGH_REVS
+                                    / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+            });
+    }
+
+    public boolean isRunningIntake(){
+        return leftMotor.get() <= 0 && rightMotor.get() <= 0;
+    }
+
 }

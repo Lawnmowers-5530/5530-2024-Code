@@ -16,9 +16,9 @@ public class LauncherIntake extends Command {
     DistanceSensor distanceSensor;
     Loader loaderSubsystem;
     Launcher launcherSubsystem;
-    int threshold = 0;
-    int stage = 0;
-    double speed = 0;
+    int threshold;
+    int stage;
+    double speed;
     public LauncherIntake(DistanceSensor distanceSensor, LoaderV2 loaderSubsystem, LauncherV2 launcherSubsystem, int threshold, double speed) {
         addRequirements(loaderSubsystem, launcherSubsystem);
         this.distanceSensor = distanceSensor;

@@ -47,10 +47,23 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
 
         feedforward = new ArmFeedforward(0.07, -0.03, 0.035, -0.35); //0.05, -0.0175, 0.03, -0.225
     }
+
     @Config
     public void setAngle(double angle) {
         this.sP = angle;
         upPid.setSetpoint(angle);
+    }
+
+    public void setTolerance(double tolerance) {
+        upPid.setTolerance(tolerance);
+    }
+
+    public double getError() {
+        return upPid.getPositionError();
+    }
+
+    public boolean withinTolerance() {
+        return upPid.atSetpoint();
     }
 
     public void periodic() {

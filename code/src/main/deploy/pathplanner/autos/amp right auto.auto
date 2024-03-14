@@ -1,0 +1,67 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.749954642766429,
+      "y": 4.368518451322617
+    },
+    "rotation": -59.26451229807987
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "amp right to right note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "right note to middle amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle amp to middle ring"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle ring to middle amp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle amp to left note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left ring to left amp"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

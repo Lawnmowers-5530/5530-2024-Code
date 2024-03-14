@@ -27,8 +27,4 @@ public class Launcher extends SubsystemBase {
         rightMotor.set(right);
     }
 
-    public void reset() {
-        leftMotor.set(0);
-        rightMotor.set(0);
-    }
 }

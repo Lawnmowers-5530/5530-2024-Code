@@ -97,8 +97,9 @@ public final class Constants {
         public static final double kD = 0.00;
 
         public static final double conversionFactor = 8192/360;
-        public static final double HIGH_ANGLE_MEASUREMENT = -1; // TODO: find out what this is
-        public static final double LOW_ANGLE_MEASUREMENT = -1; // TODO: find out what this is
+
+        public static final double ampPosition = 30;
+        public static final double positionTolerance = 5;
     }
 
     public static final class IntakeConstants{
@@ -108,7 +109,7 @@ public final class Constants {
     }
 
     public static final class LauncherIntakeConstants{
-        public static final int theshold = 55;
+        public static final int threshold = 55;
         public static final double speed = 0.175;
     }
 
@@ -132,7 +133,29 @@ public final class Constants {
     );
     }
 
+    public static final class LedConstants{
+        public static final int groundIntakeAndAmpAnglePriority = 50;
+        public static final PatternType groundIntakeAndAmpAnglePattern = SolidColorType.Red;
+
+        public static final int intakeFromSourceReadyPriority = 40;
+        public static final PatternType intakeFromSourceReadyPattern = SolidColorType.Aqua;
+
+        public static final int readyToShootPriority = 30;
+        public static final PatternType readyToShootPattern = SolidColorType.Gold;
+
+        public static final int noteLoadedPriority = 20;
+        public static final PatternType noteLoadedPattern = SolidColorType.Green;
+
+        public static final int slowModePriority = 10;
+        public static final PatternType slowModePattern = SolidColorType.White;
+
+        public static final int defaultPriority = 0;
+        public static final PatternType defaultPattern = SolidColorType.LawnGreen;
+    }
+
     public static final double shotDistance = 1;
+
+    public static final double ejectSpeed = -0.3;
   
   
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);

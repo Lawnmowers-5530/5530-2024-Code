@@ -8,14 +8,18 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
-
-public class Climber extends SubsystemBase {
+public class Climber extends SubsystemBase implements Loggable {
   private CANSparkMax motor;
   private RelativeEncoder encoder;
+
+  @Log
+  private double position;
 
   public Climber() {
     motor = new CANSparkMax(Constants.ClimberConstants.motorPort, MotorType.kBrushless);
@@ -24,46 +28,45 @@ public class Climber extends SubsystemBase {
     encoder.setPosition(0);
   }
 
-  public void runRaw(double speed){
-    motor.set(-speed);
-  }
-
-  public void run(double speed) {
-    if(encoder.getPosition() < Constants.ClimberConstants.maxHeight && encoder.getPosition() > Constants.ClimberConstants.minHeight){
+  public Command runRaw(double speed) {
+    return this.run(() -> {
       motor.set(-speed);
-    }else{
-      motor.set(0);
-    }
+    });
   }
 
-  public void moveDown(){
-    if (encoder.getPosition() > Constants.ClimberConstants.maxHeight){
-      motor.set(0);
-    } else {
-      motor.set(Constants.ClimberConstants.speed);
-    }
-  }
-  
-  public void moveUp(){
-    if (encoder.getPosition() < Constants.ClimberConstants.minHeight){
-      motor.set(0);
-    } else {
-      motor.set(-Constants.ClimberConstants.speed);
-    }
+  public Command run(double speed) {
+    return this.run(() -> {
+      if (encoder.getPosition() < Constants.ClimberConstants.maxHeight
+          && encoder.getPosition() > Constants.ClimberConstants.minHeight) {
+        motor.set(speed); // was a -speed : removed for sense making but may need to be redid
+      } else {
+        motor.set(0);
+      }
+    });
   }
 
-  public void runLimited( double speed ) {
-    if (encoder.getPosition() > Constants.ClimberConstants.maxHeight){
-      motor.set(0);
-    } else if (encoder.getPosition() < Constants.ClimberConstants.minHeight){
-      motor.set(0);
-    } else {
-      motor.set(speed);
-    }
+  public Command moveDownCommand() {
+    return this.run(() -> {
+      if (encoder.getPosition() > Constants.ClimberConstants.maxHeight) {
+        motor.set(0);
+      } else {
+        motor.set(Constants.ClimberConstants.speed);
+      }
+    });
   }
+
+  public Command moveUpCommand() {
+    return this.run(() -> {
+      if (encoder.getPosition() < Constants.ClimberConstants.minHeight) {
+        motor.set(0);
+      } else {
+        motor.set(-Constants.ClimberConstants.speed);
+      }
+    });
+  }
+
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("climber position", encoder.getPosition());
-    // This method will be called once per scheduler run
+    position = encoder.getPosition();
   }
 }

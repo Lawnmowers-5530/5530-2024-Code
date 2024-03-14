@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants;
 import frc.robot.data.GlobalState;
 
@@ -12,22 +14,43 @@ public class LoaderV2 extends Loader {
         this.distanceSensor = distanceSensor;
     }
 
-    public boolean runUntilBeamBreak(double speed, double cutoffDistance) {
-            if (distanceSensor.getDistance() < cutoffDistance) {
-                run(0);
-                return true;
-            } else {
-                run(speed);
-                return false;
-            }
+    public boolean isLoaded() {
+        return distanceSensor.checkBeamBreak(Constants.LoaderConstants.loaderCutoffDistance);
     }
 
-    @Override
-    public void periodic() {
-        if (distanceSensor.getDistance() < Constants.LoaderConstants.loaderCutoffDistance) {
-            GlobalState.noteLoaded = true;
-        } else {
-            GlobalState.noteLoaded = false;
-        }
+    public boolean isNotLoaded() {
+        return !isLoaded();
+    }
+
+    public Command runLoaderCommand() {
+        return new RunCommand(
+            () -> {
+                if (!isLoaded()) {
+                    this.run(Constants.LoaderConstants.loaderSpeed);
+                } else {
+                    this.run(0);
+                }
+            });
+    }
+
+    public Command feedShooterCommand() {
+        return new RunCommand(
+            () -> {
+              this.run(Constants.LoaderConstants.loaderSpeed);
+            }, this);
+    }
+
+    public Command stopLoaderCommand() {
+        return this.runOnce(
+            () -> {
+                this.run(0);
+            });
+    }
+
+    public Command ejectCommand() {
+        return this.runOnce(
+            () -> {
+                this.run(Constants.ejectSpeed);
+            });
     }
 }
