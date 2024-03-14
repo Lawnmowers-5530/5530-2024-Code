@@ -39,23 +39,11 @@ public class Swerve extends SubsystemBase implements Loggable{
   private static final SwerveModule Mod_3 = Constants.Modules.Mod_3;
   @Log
   String poseStr = "";
-  @Log
-  String output = "";
+
+  double rotationOutput;
 
   @Log
   String robotRelativeSpeeds = "";
-
-  @Log
-  String frontLeftState = "a";
-  @Log
-  String rearLeftState = "a";
-  @Log
-  String rearRightState = "a";
-  @Log
-  String frontRightState = "a";
-
-  @Log
-  String frontRightPosition = "a";
 
   private SwerveModuleState[] states;
 
@@ -115,13 +103,6 @@ public class Swerve extends SubsystemBase implements Loggable{
     poseStr = getPose().toString();
     robotRelativeSpeeds = this.getRobotRelativeSpeeds().toString();
 
-    frontLeftState = Mod_0.getState().toString();
-    frontRightState = Mod_1.getState().toString();
-    rearLeftState = Mod_2.getState().toString();
-    rearRightState = Mod_3.getState().toString();
-
-    frontRightPosition = Mod_1.getPos().toString();
-
     SmartDashboard.putString("robot rel speeds", getRobotRelativeSpeeds().toString());
   }
 
@@ -171,19 +152,20 @@ public class Swerve extends SubsystemBase implements Loggable{
   public void autoDriveRobotRelative(ChassisSpeeds speeds){
     SmartDashboard.putString("drive goal", speeds.toString());
     Vector2D vector = new Vector2D(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, false);
-    output = vector.toString();
     this.drive(vector, speeds.omegaRadiansPerSecond, false);
   }
 
-  public boolean rotateToAngle(double angle){
-    double output = rotationPID.calculate(Pgyro.getRot().getDegrees(), angle);
-    this.drive(new Vector2D(0, 0, false), output, false);
-
-    return rotationPID.atSetpoint();
+  public void rotateToAngle(double angle){
+    rotationOutput = rotationPID.calculate(Pgyro.getRot().getDegrees(), angle);
+    this.drive(new Vector2D(0, 0, false), rotationOutput, false);
   }
 
   public Command pathFind(Pose2d endPose){
     return AutoBuilder.pathfindToPose(endPose, Constants.PathPlannerConstants.constraints);
+  }
+
+  public boolean atTargetAngle(){
+    return rotationPID.atSetpoint();
   }
 
 }

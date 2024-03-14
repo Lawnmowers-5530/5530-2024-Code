@@ -4,14 +4,11 @@ import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
 
 public class DistanceSensor extends SubsystemBase {
     Rev2mDistanceSensor sensor;
-    LedControllerProxy proxy;
 
-    public DistanceSensor(LedControllerProxy proxy) {
-        this.proxy = proxy;
+    public DistanceSensor() {
         sensor = new Rev2mDistanceSensor(Port.kOnboard);
         sensor.setDistanceUnits(Rev2mDistanceSensor.Unit.kMillimeters);
         this.setEnabled(true);

@@ -4,6 +4,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.SwerveModule;
+import frc.robot.subsystems.LedController.PatternType;
+import frc.robot.subsystems.LedController.solidColorType;
 
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PIDConstants;
@@ -93,6 +95,9 @@ public final class Constants {
         public static final double kD = 0.00;
 
         public static final double conversionFactor = 8192/360;
+
+        public static final double ampPosition = 30;
+        public static final double positionTolerance = 5;
     }
 
     public static final class IntakeConstants{
@@ -124,6 +129,26 @@ public final class Constants {
         3, 2, //linear
         360, 420 //angular
     );
+    }
+
+    public static final class LedConstants{
+        public static final int groundIntakeAndAmpAnglePriority = 50;
+        public static final PatternType groundIntakeAndAmpAnglePattern = solidColorType.Red;
+
+        public static final int intakeFromSourceReadyPriority = 40;
+        public static final PatternType intakeFromSourceReadyPattern = solidColorType.Aqua;
+
+        public static final int readyToShootPriority = 30;
+        public static final PatternType readyToShootPattern = solidColorType.Gold;
+
+        public static final int noteLoadedPriority = 20;
+        public static final PatternType noteLoadedPattern = solidColorType.Green;
+
+        public static final int slowModePriority = 10;
+        public static final PatternType slowModePattern = solidColorType.White;
+
+        public static final int defaultPriority = 0;
+        public static final PatternType defaultPattern = solidColorType.LawnGreen;
     }
 
     public static final double shotDistance = 1;

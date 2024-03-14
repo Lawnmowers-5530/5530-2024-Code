@@ -26,6 +26,9 @@ import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.LedController.fixedPalattePatternType;
 import frc.robot.subsystems.LedController.stripType;
+
+import java.util.function.BooleanSupplier;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -64,6 +67,12 @@ public class RobotContainer implements Loggable {
 
   private CommandCombinator combinator;
 
+  private BooleanSupplier groundIntakeRunningAmpAngle;
+  private BooleanSupplier readyToIntakeFromSource;
+  private BooleanSupplier readyToShoot;
+  private BooleanSupplier noteLoaded;
+  private BooleanSupplier slowMode;
+
   public RobotContainer() {
     driverController = new CommandXboxController(0);
     secondaryController = new CommandXboxController(1);
@@ -76,7 +85,10 @@ public class RobotContainer implements Loggable {
     NamedCommands.registerCommand("shoot", speakerFarLauncher);
     NamedCommands.registerCommand("stop", stopShooterComponents);
 
+    createStateSuppliers();
+
     configureBindings();
+
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auton chooser", autoChooser);
@@ -89,7 +101,7 @@ public class RobotContainer implements Loggable {
     launcherAngle = new DumbLauncherAngle(
         Constants.LauncherAngleConstants.motorPort,
         Constants.LauncherAngleConstants.isReversed);
-    distanceSensor = new DistanceSensor(leds.getController());
+    distanceSensor = new DistanceSensor();
     loader = new LoaderV2(
         Constants.LoaderConstants.leftMotorPort,
         Constants.LoaderConstants.rightMotorPort,
@@ -158,12 +170,24 @@ public class RobotContainer implements Loggable {
     eject = combinator.eject();
   }
 
+  private void createStateSuppliers() {
+    groundIntakeRunningAmpAngle = () -> intake.isRunning() && launcherAngle.isAmpAngle();
+    readyToIntakeFromSource = () -> launcher.isRunningIntake() && !loader.isLoaded() && launcherAngle.isAmpAngle();
+    readyToShoot = () -> loader.isLoaded() && swerve.atTargetAngle();
+    noteLoaded = () -> loader.isLoaded();
+    slowMode = () -> driverController.b().getAsBoolean();
+  }
+
   private void configureBindings() {
+    leds.setDefaultCommand(leds.LedControllingCommand(
+      groundIntakeRunningAmpAngle,
+      readyToIntakeFromSource,
+      readyToShoot,
+      noteLoaded,
+      slowMode));
 
     swerve.setDefaultCommand(swerveCmd); // both joysticks
     climber.setDefaultCommand(climberManual); // right trigger and left trigger
-
-    driverController.b().onTrue(leds.LedControllerCommand(fixedPalattePatternType.Rainbow, 2));
 
     driverController.x().onTrue(zeroGyro);
 

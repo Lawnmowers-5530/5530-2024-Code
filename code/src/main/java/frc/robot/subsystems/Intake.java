@@ -18,6 +18,10 @@ public class Intake extends SubsystemBase {
         motor.set(speed);
     }
 
+    public boolean isRunning() {
+        return motor.get() != 0;
+    }
+
     public Command intakeWheelCommand() {
         return this.run(() -> {
             this.run(Constants.IntakeConstants.intakeSpeed);

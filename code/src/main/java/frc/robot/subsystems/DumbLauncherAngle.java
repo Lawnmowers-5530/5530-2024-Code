@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class DumbLauncherAngle extends SubsystemBase {
     CANSparkMax motor;
@@ -51,5 +52,9 @@ public class DumbLauncherAngle extends SubsystemBase {
                 () -> {
                     this.forceDown();
                 });
+    }
+
+    public boolean isAmpAngle() {
+        return motor.get() > Constants.LauncherAngleConstants.ampPosition - Constants.LauncherAngleConstants.positionTolerance || motor.get() < Constants.LauncherAngleConstants.ampPosition + Constants.LauncherAngleConstants.positionTolerance;
     }
 }
