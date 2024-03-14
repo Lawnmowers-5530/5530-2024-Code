@@ -68,6 +68,11 @@ public class Limelight extends SubsystemBase {
         return table.getEntry("tc").getDouble(0);
     }
 
+    //get limelight tid value (id of the primary target being tracked)
+    public double getTargetID() {
+        return table.getEntry("tid").getDouble(0);
+    }
+
     public Pose2d getPose2DBlue() {
         double[] botpose = table.getEntry("botpose_wpiblue").getDoubleArray(new double[]{0,0,0,0,0,0,-1,-1});
         Rotation2d rotation = new Rotation2d(botpose[3],botpose[4]);

@@ -161,16 +161,6 @@ public final class Constants {
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
 
     public static final Translation2d targetTranslation = new Translation2d(0, 5);
-
-    public static final class LEDConstants {
-        public static final int LED_PORT = 0;
-        public static final class Priorities {
-            public static final int BACKGROUND = 0;
-            public static final int LOW = 50;
-            public static final int MEDIUM = 100;
-            public static final int HIGH = 150;
-            public static final int CRITICAL = 200;
-        }
         public static final class Patterns {
             public static final PatternType NOTE_LOADED = SolidColorType.Blue;
             public static final PatternType NO_NOTE_ARM_READY = SolidColorType.Red;
