@@ -49,47 +49,69 @@ public class CommandCombinator {
 	}
 
 	public Command sourceIntake() {
-		return launcherAngle.speakerAngleCommand().andThen(new ParallelCommandGroup(
+		return launcherAngle.speakerAngleCommand()
+			.andThen(
 				new LauncherIntake(distanceSensor, loader, launcher,
 						Constants.LauncherIntakeConstants.threshold,
 						Constants.LauncherIntakeConstants.speed)
-				.until(loader::isLoaded),
-				launcherAngle.ampAngleCommand()
+				.until(loader::isLoaded)
 
-		).andThen(stopShooterComponents()));
+			)
+			.andThen(stopShooterComponents());
 	}
 
 	public Command groundIntake() {
-		return launcherAngle.speakerAngleCommand().andThen(new ParallelCommandGroup(
-				intake.intakeWheelCommand(),
-				loader.runLoaderCommand())
-				.until(loader::isLoaded)
-
-				.andThen(stopShooterComponents()));
+		return launcherAngle.speakerAngleCommand()
+			.andThen(
+				new ParallelCommandGroup(
+					intake.intakeWheelCommand(),
+					loader.runLoaderCommand()
+				)
+					.until(loader::isLoaded)
+					.andThen(stopShooterComponents())
+			);
 	}
 
 	public Command speakerShot() {
-		return launcherAngle.ampAngleCommand().andThen(new ParallelDeadlineGroup(
-				new SequentialCommandGroup(
+		return launcherAngle.ampAngleCommand()
+			.andThen(
+				new ParallelDeadlineGroup(
+					new SequentialCommandGroup(
 						new WaitCommand(0.5),
-						loader.feedShooterCommand().until(loader::isNotLoaded)),
-				launcher.speakerLauncherCommand())).andThen(stopShooterComponents());
+						loader.feedShooterCommand().until(loader::isNotLoaded)
+					),
+					launcher.speakerLauncherCommand()
+				)
+			)
+			.andThen(stopShooterComponents());
 	};
 
 	public Command speakerFarShot() {
-		return launcherAngle.speakerAngleCommand().andThen(new ParallelDeadlineGroup(
-				new SequentialCommandGroup(
+		return launcherAngle.speakerAngleCommand()
+			.andThen(
+				new ParallelDeadlineGroup(
+					new SequentialCommandGroup(
 						new WaitCommand(0.5),
-						loader.feedShooterCommand().until(loader::isNotLoaded)),
-				launcher.speakerLauncherCommand())).andThen(stopShooterComponents());
+						loader.feedShooterCommand().until(loader::isNotLoaded)
+					),
+				launcher.speakerLauncherCommand()
+				)
+			)
+			.andThen(stopShooterComponents());
 	};
 
 	public Command ampShot() {
-		return launcherAngle.ampAngleCommand().andThen(new ParallelDeadlineGroup(
-				new SequentialCommandGroup(
+		return launcherAngle.ampAngleCommand()
+			.andThen(
+				new ParallelDeadlineGroup(
+					new SequentialCommandGroup(
 						new WaitCommand(0.5),
-						loader.feedShooterCommand().until(loader::isNotLoaded)),
-				launcher.ampLauncherCommand())).andThen(stopShooterComponents());
+						loader.feedShooterCommand().until(loader::isNotLoaded)
+					),
+					launcher.ampLauncherCommand()
+				)
+			)
+			.andThen(stopShooterComponents());
 	};
 
 	private Command logFinish(String cmdName) {
