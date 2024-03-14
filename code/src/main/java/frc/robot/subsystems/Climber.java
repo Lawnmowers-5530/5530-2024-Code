@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -28,9 +30,9 @@ public class Climber extends SubsystemBase implements Loggable {
     encoder.setPosition(0);
   }
 
-  public Command runRaw(double speed) {
+  public Command runRaw(DoubleSupplier speed) {
     return this.run(() -> {
-      motor.set(-speed);
+      motor.set(speed.getAsDouble());
     });
   }
 

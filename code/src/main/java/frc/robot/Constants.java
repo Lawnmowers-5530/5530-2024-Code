@@ -12,6 +12,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PIDConstants;
 
 public final class Constants {
+    public static final boolean DEBUG_LOGGING = true;
 
     public static final double trackWidth = Units.inchesToMeters(24);
     public static final double wheelBase = Units.inchesToMeters(24);
@@ -96,9 +97,10 @@ public final class Constants {
         public static final double kI = 0.00;
         public static final double kD = 0.00;
 
-        public static final double conversionFactor = 8192/360;
+        public static final double conversionFactor = 1/360; //TODO: logically should be 1/360
 
-        public static final double ampPosition = 30;
+        public static final double ampPosition = -1; // TODO: find the correct value
+        public static final double speakerPosition = -1; // TODO: find the correct value
         public static final double positionTolerance = 5;
     }
 
@@ -118,7 +120,7 @@ public final class Constants {
         public static final boolean isReversed = true;
 
         public static final double speed = 1;
-        public static final double maxHeight = 605;
+        public static final double maxHeight = 442.863220;
         public static final double minHeight = 0;
         
     }

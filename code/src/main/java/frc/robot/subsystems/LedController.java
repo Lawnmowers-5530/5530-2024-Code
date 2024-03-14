@@ -190,7 +190,7 @@ public class LedController extends SubsystemBase {
         this.ledStripType = type;
         this.ledController = new Spark(portID);
         this.duplicateOnShuffleboard = true;
-        this.widget = Shuffleboard.getTab("SmartDashboard")
+        this.widget = Shuffleboard.getTab(tabName)
             .add("Status", false)
             .withProperties(Map.of("colorWhenFalse", "black"));
         this.entry = widget.getEntry();

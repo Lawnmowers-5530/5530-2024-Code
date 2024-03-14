@@ -22,6 +22,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherV2;
 import frc.robot.subsystems.LedController;
 import frc.robot.subsystems.LedController_MultiAccess;
+import frc.robot.subsystems.LedManager;
 import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
@@ -44,6 +45,7 @@ public class RobotContainer implements Loggable {
   private Intake intake;
   private LedController_MultiAccess leds;
   private Camera fisheye;
+  private LedManager ledManager;
 
   private CommandXboxController driverController;
   private CommandXboxController secondaryController;
@@ -59,6 +61,7 @@ public class RobotContainer implements Loggable {
 
   private Command speakerAngle;
   private Command ampAngle;
+  private Command farSpeakerLaunch;
   private Command speakerLauncher;
   private Command speakerFarLauncher;
   private Command ampLauncher;
@@ -90,14 +93,15 @@ public class RobotContainer implements Loggable {
 
     configureBindings();
 
-
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auton chooser", autoChooser);
   }
 
   private void createSubsystems() {
+    leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable, "Competition"));
+    ledManager = new LedManager(leds.getController());
     fisheye = new Camera("fisheye", 0, 320, 240, 300);
-    leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable));
+
     intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
     launcher = new LauncherV2();
     launcherAngle = new DumbLauncherAngle(
@@ -116,10 +120,10 @@ public class RobotContainer implements Loggable {
   }
 
   private void createCommands() {
-    //combine subsystem commands into sequential/parallel command groups
+    // combine subsystem commands into sequential/parallel command groups
     combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor);
 
-    //drive swerve, slow mode with b
+    // drive swerve, slow mode with b
     swerveCmd = new RunCommand(
         () -> {
           double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
@@ -135,41 +139,43 @@ public class RobotContainer implements Loggable {
 
         }, swerve);
 
-    //set gyro yaw to 0
+    // set gyro yaw to 0
     zeroGyro = Pgyro.zeroGyroCommand();
 
-    //manual climber operation, no limits
-    climberManual = climber.runRaw(driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis());
-    //move climber up with limits
+    // manual climber operation, no limits
+    climberManual = climber.runRaw(() -> {return secondaryController.getRightTriggerAxis() - secondaryController.getLeftTriggerAxis();});
+    // move climber up with limits
     climberUp = climber.moveUpCommand();
-    //move climber down with limits
+    // move climber down with limits
     climberDown = climber.moveDownCommand();
 
-    //backup angle to amp/speaker close shot
+    // backup angle to amp/speaker close shot
     ampAngle = launcherAngle.ampAngleCommand();
-    //backup angle to intake/speaker far shot
+    // backup angle to intake/speaker far shot
     speakerAngle = launcherAngle.speakerAngleCommand();
 
-    //backup shooter feed command
+    // backup shooter feed command
     shooterFeed = loader.feedShooterCommand().until(loader::isNotLoaded).andThen(loader.stopLoaderCommand());
-    //stop all shooter components
+    // stop all shooter components
     stopShooterComponents = combinator.stopShooterComponents();
 
-    //spin up launcher, shoot to speaker after 0.5 seconds
+    // spin up launcher, shoot to speaker after 0.5 seconds
     speakerLauncher = combinator.speakerShot();
-    //spin up launcher, shoot to speaker from intake angle after 0.5 seconds
+    // spin up launcher, shoot to speaker from intake angle after 0.5 seconds
     speakerFarLauncher = combinator.speakerFarShot();
-    //spin up launcher, shoot to amp after 0.5 seconds
+    // spin up launcher, shoot to amp after 0.5 seconds
     ampLauncher = combinator.ampShot();
 
-    //intake note from source, auto stop
+    // intake note from source, auto stop
     sourceIntake = combinator.sourceIntake();
-    //intake note from ground, auto stop
+    // intake note from ground, auto stop
     groundIntake = combinator.groundIntake();
 
-    //eject note
-    //make eject a toggle button
+    // eject note
+    // make eject a toggle button
     eject = combinator.eject();
+
+    speakerFarLauncher = combinator.speakerFarShot();
   }
 
   private void createStateSuppliers() {
@@ -181,12 +187,12 @@ public class RobotContainer implements Loggable {
   }
 
   private void configureBindings() {
-    leds.setDefaultCommand(leds.LedControllingCommand(
-      groundIntakeRunningAmpAngle,
-      readyToIntakeFromSource,
-      readyToShoot,
-      noteLoaded,
-      slowMode));
+    ledManager.setDefaultCommand(ledManager.LedControllingCommand(
+        groundIntakeRunningAmpAngle,
+        readyToIntakeFromSource,
+        readyToShoot,
+        noteLoaded,
+        slowMode));
 
     swerve.setDefaultCommand(swerveCmd); // both joysticks
     climber.setDefaultCommand(climberManual); // right trigger and left trigger
@@ -210,16 +216,18 @@ public class RobotContainer implements Loggable {
     secondaryController.b().onTrue(ampLauncher);
 
     secondaryController.start().onTrue(eject);
-    secondaryController.a().onTrue(stopShooterComponents);
+    secondaryController.x().onTrue(stopShooterComponents);
+    secondaryController.a().onTrue(speakerFarLauncher);
 
-    secondaryController.leftBumper().whileTrue(climberDown);
-    secondaryController.rightBumper().whileTrue(climberUp);
+    secondaryController.rightBumper().whileTrue(climberDown);
+    secondaryController.leftBumper().whileTrue(climberUp);
 
     secondaryController.povDown().onTrue(ampAngle);
     secondaryController.povUp().onTrue(speakerAngle);
 
     secondaryController.povLeft().onTrue(groundIntake);
     secondaryController.povRight().onTrue(sourceIntake);
+
   }
 
   public Command getAutonomousCommand() {
@@ -227,6 +235,6 @@ public class RobotContainer implements Loggable {
   }
 
   public void disabledPeriodic() {
-      swerve.disabledPeriodic();
+    swerve.disabledPeriodic();
   }
 }
