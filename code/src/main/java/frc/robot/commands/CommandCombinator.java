@@ -19,105 +19,84 @@ import frc.robot.subsystems.LoaderV2;
 //credit skyline stole this idea from them
 //listen I cant just steal the idea and not name it slightly differently that wouldnt be in the ripoff spirit
 public class CommandCombinator {
-        Climber climber;
-        Intake intake;
-        LauncherV2 launcher;
-        LoaderV2 loader;
-        DistanceSensor distanceSensor;
-        DumbLauncherAngle launcherAngle;
+	Climber climber;
+	Intake intake;
+	LauncherV2 launcher;
+	LoaderV2 loader;
+	DistanceSensor distanceSensor;
+	DumbLauncherAngle launcherAngle;
 
-        public CommandCombinator(Climber climber, Intake intake, LauncherV2 launcher, LoaderV2 loader,
-                        DumbLauncherAngle launcherAngle, DistanceSensor distanceSensor) {
-                this.climber = climber;
-                this.intake = intake;
-                this.launcher = launcher;
-                this.loader = loader;
-                this.distanceSensor = distanceSensor;
-                this.launcherAngle = launcherAngle;
-        }
+	public CommandCombinator(Climber climber, Intake intake, LauncherV2 launcher, LoaderV2 loader,
+			DumbLauncherAngle launcherAngle, DistanceSensor distanceSensor) {
+		this.climber = climber;
+		this.intake = intake;
+		this.launcher = launcher;
+		this.loader = loader;
+		this.distanceSensor = distanceSensor;
+		this.launcherAngle = launcherAngle;
+	}
 
-        public Command eject() {
-                return new ParallelCommandGroup(
-                                intake.ejectCommand(),
-                                loader.ejectCommand());
-        }
+	public Command eject() {
+		return new ParallelCommandGroup(
+				intake.ejectCommand(),
+				loader.ejectCommand());
+	}
 
-        public Command stopShooterComponents() {
-                return new ParallelCommandGroup(
-                                intake.stopIntakeWheelCommand(),
-                                loader.stopLoaderCommand(),
-                                launcher.stopLauncherCommand());
-        }
+	public Command stopShooterComponents() {
+		return new ParallelCommandGroup(
+				intake.stopIntakeWheelCommand(),
+				loader.stopLoaderCommand(),
+				launcher.stopLauncherCommand());
+	}
 
-        public Command sourceIntake() {
-                return launcherAngle.speakerAngleCommand().andThen(new ParallelCommandGroup(
-                                new LauncherIntake(distanceSensor, loader, launcher,
-                                                Constants.LauncherIntakeConstants.threshold,
-                                                Constants.LauncherIntakeConstants.speed)
-                                                .until(loader::isLoaded),
-                                launcherAngle.ampAngleCommand()
+	public Command sourceIntake() {
+		return launcherAngle.speakerAngleCommand().andThen(new ParallelCommandGroup(
+				new LauncherIntake(distanceSensor, loader, launcher,
+						Constants.LauncherIntakeConstants.threshold,
+						Constants.LauncherIntakeConstants.speed)
+				.until(loader::isLoaded),
+				launcherAngle.ampAngleCommand()
 
-                ).andThen(stopShooterComponents()));
-        }
+		).andThen(stopShooterComponents()));
+	}
 
-        public Command groundIntake() {
-                return launcherAngle.speakerAngleCommand().andThen(new ParallelCommandGroup(
-                                intake.intakeWheelCommand(),
-                                loader.runLoaderCommand())
-                                .until(loader::isLoaded)
+	public Command groundIntake() {
+		return launcherAngle.speakerAngleCommand().andThen(new ParallelCommandGroup(
+				intake.intakeWheelCommand(),
+				loader.runLoaderCommand())
+				.until(loader::isLoaded)
 
-                                .andThen(stopShooterComponents()));
-        }
+				.andThen(stopShooterComponents()));
+	}
 
-        public Command speakerShot() {
-                return launcherAngle.ampAngleCommand().andThen(new ParallelDeadlineGroup(
-                                new SequentialCommandGroup(
-                                                new WaitCommand(0.5),
-                                                loader.feedShooterCommand().until(loader::isNotLoaded)),
-                                launcher.runLauncherCommand(
-                                                () -> {
-                                                        return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;
-                                                },
-                                                () -> {
-                                                        return Constants.LauncherConstants.LAUNCHER_HIGH_REVS
-                                                                        / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
-                                                }))).andThen(stopShooterComponents());
-        };
+	public Command speakerShot() {
+		return launcherAngle.ampAngleCommand().andThen(new ParallelDeadlineGroup(
+				new SequentialCommandGroup(
+						new WaitCommand(0.5),
+						loader.feedShooterCommand().until(loader::isNotLoaded)),
+				launcher.speakerLauncherCommand())).andThen(stopShooterComponents());
+	};
 
-        public Command speakerFarShot() {
-                return launcherAngle.speakerAngleCommand().andThen(new ParallelDeadlineGroup(
-                                new SequentialCommandGroup(
-                                                new WaitCommand(0.5),
-                                                loader.feedShooterCommand().until(loader::isNotLoaded)),
-                                launcher.runLauncherCommand(
-                                                () -> {
-                                                        return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;
-                                                },
-                                                () -> {
-                                                        return Constants.LauncherConstants.LAUNCHER_HIGH_REVS
-                                                                        / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
-                                                }))).andThen(stopShooterComponents());
-        };
+	public Command speakerFarShot() {
+		return launcherAngle.speakerAngleCommand().andThen(new ParallelDeadlineGroup(
+				new SequentialCommandGroup(
+						new WaitCommand(0.5),
+						loader.feedShooterCommand().until(loader::isNotLoaded)),
+				launcher.speakerLauncherCommand())).andThen(stopShooterComponents());
+	};
 
-        public Command ampShot() {
-                return launcherAngle.ampAngleCommand().andThen(new ParallelDeadlineGroup(
-                                new SequentialCommandGroup(
-                                                new WaitCommand(0.5),
-                                                loader.feedShooterCommand().until(loader::isNotLoaded)),
-                                launcher.runLauncherCommand(
-                                                () -> {
-                                                        return Constants.LauncherConstants.LAUNCHER_LOW_REVS;
-                                                },
-                                                () -> {
-                                                        return Constants.LauncherConstants.LAUNCHER_LOW_REVS
-                                                                        / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
-                                                }))).andThen(stopShooterComponents());
-        };
+	public Command ampShot() {
+		return launcherAngle.ampAngleCommand().andThen(new ParallelDeadlineGroup(
+				new SequentialCommandGroup(
+						new WaitCommand(0.5),
+						loader.feedShooterCommand().until(loader::isNotLoaded)),
+				launcher.ampLauncherCommand())).andThen(stopShooterComponents());
+	};
 
-        private Command logCommand(String cmdName) {
-                return new RunCommand(
-                                () -> {
-                                        System.out.println(cmdName + " finished");
-                                }, new Subsystem[] {});
-        }
+	private Command logCommand(String cmdName) {
+		return new RunCommand(
+				() -> {
+					System.out.println(cmdName + " finished");
+				}, new Subsystem[] {});
+	}
 }

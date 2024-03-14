@@ -70,18 +70,35 @@ public class LauncherV2 extends Launcher implements Loggable {
                     rightMotor.set(0);
                 }));
     }
-    /**
-     * Returns a Command to run the launcher at a given velocity
-     * @param leftVelocitySupplier  Supplier for left velocity
-     * @param rightVelocitySupplier Supplier for right velocity
-     * @return Command to run the launcher at a given velocity
-     */
+
     public Command runLauncherCommand(DoubleSupplier leftVelocitySupplier, DoubleSupplier rightVelocitySupplier) {
         return this.runOnce(
             () -> {
                 this.setVelocity(leftVelocitySupplier.getAsDouble(), rightVelocitySupplier.getAsDouble());
             }
         );
+    }
+
+    public Command ampLauncherCommand() {
+        return this.runLauncherCommand(
+            () -> {
+                    return Constants.LauncherConstants.LAUNCHER_LOW_REVS;
+            },
+            () -> {
+                    return Constants.LauncherConstants.LAUNCHER_LOW_REVS
+                                    / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+            });
+    }
+
+    public Command speakerLauncherCommand() {
+        return this.runLauncherCommand(
+            () -> {
+                    return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;
+            },
+            () -> {
+                    return Constants.LauncherConstants.LAUNCHER_HIGH_REVS
+                                    / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+            });
     }
 
 }
