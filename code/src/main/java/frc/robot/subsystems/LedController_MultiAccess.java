@@ -82,44 +82,4 @@ public class LedController_MultiAccess extends SubsystemBase {
             controller.setPattern(defaultPatternType);
         }
     }
-    /**
-    *A command that sets the pattern to be displayed based on the state of the robot
-    *@param groundIntakeRunningAmpAngle A boolean supplier that returns true if the ground intake is running and the launcher is at the amp angle
-    *@param readyToIntakeFromSource A boolean supplier that returns true if the robot is ready to intake from the source
-    *@param readyToShoot A boolean supplier that returns true if the robot is ready to shoot
-    *@param noteLoaded A boolean supplier that returns true if the note is loaded
-    *@param slowMode A boolean supplier that returns true if the robot is in slow mode
-    *@return A command that sets the pattern to be displayed based on the state of the robot
-    */
-    public Command LedControllingCommand(BooleanSupplier groundIntakeRunningAmpAngle, BooleanSupplier readyToIntakeFromSource, BooleanSupplier readyToShoot, BooleanSupplier noteLoaded, BooleanSupplier slowMode) {
-        return new RunCommand(
-            () -> {
-                LedControllerProxy controller = this.getController();
-                
-                if (groundIntakeRunningAmpAngle.getAsBoolean())
-                {
-                    controller.setPattern(Constants.LedConstants.groundIntakeAndAmpAnglePattern, Constants.LedConstants.groundIntakeAndAmpAnglePriority);
-                }
-                else if (readyToIntakeFromSource.getAsBoolean())
-                {
-                    controller.setPattern(Constants.LedConstants.intakeFromSourceReadyPattern, Constants.LedConstants.intakeFromSourceReadyPriority);
-                }
-                else if (readyToShoot.getAsBoolean())
-                {
-                    controller.setPattern(Constants.LedConstants.readyToShootPattern, Constants.LedConstants.readyToShootPriority);
-                }
-                else if (noteLoaded.getAsBoolean())
-                {
-                    controller.setPattern(Constants.LedConstants.noteLoadedPattern, Constants.LedConstants.noteLoadedPriority);
-                }
-                else if (slowMode.getAsBoolean())
-                {
-                    controller.setPattern(Constants.LedConstants.slowModePattern, Constants.LedConstants.slowModePriority);
-                }
-                else
-                {
-                    controller.setPattern(Constants.LedConstants.defaultPattern, Constants.LedConstants.defaultPriority);
-                }
-            }, this);
-    }
 }
