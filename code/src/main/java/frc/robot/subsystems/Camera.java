@@ -3,13 +3,10 @@ package frc.robot.subsystems;
 import org.opencv.core.Mat;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CameraServerCvJNI;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.util.PixelFormat;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Camera extends SubsystemBase {
