@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.sql.Driver;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -16,7 +18,10 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -49,13 +54,15 @@ public class Swerve extends SubsystemBase implements Loggable {
 
   private SwerveModuleState[] states;
 
+  private ManualSideOverride sideChooser = new ManualSideOverride();
+
   public Swerve() {
     rotationPID = new PIDController(Constants.RotationConstants.kP, Constants.RotationConstants.kI,
         Constants.RotationConstants.kD);
     rotationPID.setTolerance(2);
     SwerveModulePosition[] modPos = getModulePositions();
     odometry = new SwerveDriveOdometry(Constants.kinematics, Pgyro.getRot(), modPos);
-
+    Shuffleboard.getTab("Settings").add(sideChooser);
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::resetPose,
@@ -72,14 +79,49 @@ public class Swerve extends SubsystemBase implements Loggable {
           // alliance
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
+          if (!DriverStation.isFMSAttached()) {
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          } else {
+            return sideChooser.side == ManualSideOverride.Side.RED;
           }
-          return false;
         },
         this);
+  }
+
+  public class ManualSideOverride implements Sendable {
+    public enum Side {
+      RED, BLUE;
+    }
+
+    private Side side;
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Manual Side Chooser");
+        builder.addStringProperty("Side Input:", this::getSide, this::setSide);
+    }
+
+    public void setSide(String sideInput) {
+        if (sideInput == "Red" || sideInput == "red") {
+            this.side = Side.RED;
+        } else if (sideInput == "Blue" || sideInput == "blue") {
+            this.side = Side.BLUE;
+        }
+    }
+
+    public String getSide() {
+        switch (side) {
+            case RED:
+                return "Red";
+            case BLUE:
+                return "Blue";
+            default:
+                return "Blue";
+        }
+    }
   }
 
   public void drive(Vector2D vector, double omegaRadSec, boolean fieldRelative) {
