@@ -42,7 +42,7 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
 
     private void sharedInit() {
         this.encoder = this.motor.getAbsoluteEncoder();
-        this.encoder.setPositionConversionFactor(Constants.LauncherAngleConstants.conversionFactor);
+        this.encoder.setPositionConversionFactor(1);
         this.state = Angle.RELAXED;
     }
 
@@ -72,7 +72,7 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
     }
     
     public double getEncoderMeasurement() {
-        return encoder.getPosition();
+        return encoder.getPosition() * Constants.LauncherAngleConstants.conversionFactor;
     }
 
     public Command ampAngleCommand() {
@@ -97,12 +97,12 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
     }
 
     public boolean isAmpAngle() {
-        return motor.get() > Constants.LauncherAngleConstants.ampPosition - Constants.LauncherAngleConstants.positionTolerance || motor.get() < Constants.LauncherAngleConstants.ampPosition + Constants.LauncherAngleConstants.positionTolerance;
+        return this.getEncoderMeasurement() < Constants.LauncherAngleConstants.ampPosition + Constants.LauncherAngleConstants.positionTolerance;
     }
 
     @Override 
     public void periodic() {
-        ticks = encoder.getPosition();
+        ticks = this.getEncoderMeasurement();
 
         setState(state);
     }

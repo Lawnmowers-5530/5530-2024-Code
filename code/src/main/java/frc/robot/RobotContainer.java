@@ -182,7 +182,7 @@ public class RobotContainer implements Loggable {
   private void createStateSuppliers() {
     groundIntakeRunningAmpAngle = () -> intake.isRunning() && launcherAngle.isAmpAngle();
     readyToIntakeFromSource = () -> launcher.isRunningIntake() && !loader.isLoaded() && launcherAngle.isAmpAngle();
-    readyToShoot = () -> loader.isLoaded() && swerve.atTargetAngle();
+    readyToShoot = () -> loader.isLoaded() && swerve.atTargetAngle() && false; //disabled not ready
     noteLoaded = () -> loader.isLoaded();
     slowMode = () -> driverController.b().getAsBoolean();
   }

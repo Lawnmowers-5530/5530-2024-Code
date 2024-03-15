@@ -67,7 +67,7 @@ public final class Constants {
         public static final int rightMotorPort = 21;
         public static final boolean isReversed = true;
         public static final double loaderSpeed = 0.3;
-        public static final double loaderCutoffDistance = 195;
+        public static final double loaderCutoffDistance = 180;
         public static final int NOTE_LOADED_PRIORITY = 15;
     }
 
@@ -97,11 +97,11 @@ public final class Constants {
         public static final double kI = 0.00;
         public static final double kD = 0.00;
 
-        public static final double conversionFactor = 1/360; //TODO: logically should be 1/360
+        public static final double conversionFactor = 5192/360; //TODO: logically should be 1/360
 
-        public static final double ampPosition = -1; // TODO: find the correct value
-        public static final double speakerPosition = -1; // TODO: find the correct value
-        public static final double positionTolerance = 5;
+        public static final double ampPosition = 0.191; // TODO: find the correct value
+        public static final double speakerPosition = 0.665; // TODO: find the correct value
+        public static final double positionTolerance = 0.08;
     }
 
     public static final class IntakeConstants{
@@ -111,7 +111,7 @@ public final class Constants {
     }
 
     public static final class LauncherIntakeConstants{
-        public static final int threshold = 55;
+        public static final int threshold = 70;
         public static final double speed = 0.175;
     }
 

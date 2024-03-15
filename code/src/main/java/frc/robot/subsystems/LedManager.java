@@ -53,10 +53,6 @@ public class LedManager extends SubsystemBase {
                 {
                     ledcontroller.setPattern(Constants.LedConstants.intakeFromSourceReadyPattern, Constants.LedConstants.intakeFromSourceReadyPriority);
                 }
-                else if (readyToShoot.getAsBoolean())
-                {
-                    ledcontroller.setPattern(Constants.LedConstants.readyToShootPattern, Constants.LedConstants.readyToShootPriority);
-                }
                 else if (noteLoaded.getAsBoolean())
                 {
                     ledcontroller.setPattern(Constants.LedConstants.noteLoadedPattern, Constants.LedConstants.noteLoadedPriority);
