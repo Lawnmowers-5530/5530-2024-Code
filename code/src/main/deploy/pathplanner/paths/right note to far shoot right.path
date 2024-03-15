@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4944301317174067,
-        "y": 7.007220871584601
+        "x": 2.6032534947952777,
+        "y": 4.123137615644601
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3216735004898588,
-        "y": 7.065858703145978
+        "x": 2.6532534947952775,
+        "y": 4.123137615644601
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.7352951848760846,
-        "y": 6.714031713777714
+        "x": 2.38,
+        "y": 4.275
       },
       "prevControl": {
-        "x": 0.7059762690953958,
-        "y": 7.593599187198376
+        "x": 2.33,
+        "y": 4.275
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,18 +32,18 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.1,
-    "maxAcceleration": 0.6,
+    "maxVelocity": 1.2,
+    "maxAcceleration": 0.75,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 120.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 60.43964553531928,
+    "rotation": -26.41489737644523,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "far shoot paths",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

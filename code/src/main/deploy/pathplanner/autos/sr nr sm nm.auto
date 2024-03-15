@@ -20,13 +20,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "amp right to right note"
+            "pathName": "right subwoofer to right note"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "right note to middle amp"
+            "pathName": "right note to middle subwoofer"
           }
         },
         {
@@ -38,13 +38,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middle amp to middle ring"
+            "pathName": "middle subwoofer to middle note"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "middle ring to middle amp"
+            "pathName": "middle note to middle subwoofer"
           }
         },
         {

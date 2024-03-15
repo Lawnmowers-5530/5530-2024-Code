@@ -2,10 +2,16 @@
   "robotWidth": 0.9,
   "robotLength": 0.9,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "center note paths",
+    "close shoot paths",
+    "far shoot paths",
+    "move out paths",
+    "subwoofer to note paths"
+  ],
   "autoFolders": [],
-  "defaultMaxVel": 1.1,
-  "defaultMaxAccel": 0.6,
+  "defaultMaxVel": 1.2,
+  "defaultMaxAccel": 0.75,
   "defaultMaxAngVel": 180.0,
   "defaultMaxAngAccel": 120.0,
   "maxModuleSpeed": 4.5
