@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.749954642766429,
-      "y": 4.368518451322617
+      "x": 0.7059762690953959,
+      "y": 4.353858993432273
     },
-    "rotation": -59.26451229807987
+    "rotation": -59.30027744918559
   },
   "command": {
     "type": "sequential",
@@ -48,15 +48,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "middle amp to left note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "left ring to left amp"
+            "name": "shoot"
           }
         }
       ]

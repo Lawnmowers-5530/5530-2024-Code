@@ -5,16 +5,22 @@
       "x": 0.7206357269857403,
       "y": 4.368518451322617
     },
-    "rotation": -59.62087398863165
+    "rotation": -59.03624346792651
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "rot tune path"
+            "pathName": "note and run away"
           }
         }
       ]

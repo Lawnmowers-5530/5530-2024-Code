@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command stopIntakeWheelCommand() {
-        return this.run(() -> {
+        return this.runOnce(() -> {
             this.run(0);
         });
     }

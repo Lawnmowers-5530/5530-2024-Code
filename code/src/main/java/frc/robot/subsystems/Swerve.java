@@ -68,17 +68,19 @@ public class Swerve extends SubsystemBase implements Loggable {
             Constants.driveBaseRadius,
             new ReplanningConfig()),
         () -> {
+          return false;
           // Boolean supplier that controls when the path will be mirrored for the red
           // alliance
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-        },
+        //  var alliance = DriverStation.getAlliance();
+        //  if (alliance.isPresent()) {
+        //    return alliance.get() == DriverStation.Alliance.Red;
+        //  }
+        //  return false;
+        //
+      },
         this);
   }
 

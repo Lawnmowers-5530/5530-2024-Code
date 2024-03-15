@@ -3,13 +3,9 @@ package frc.robot.subsystems;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.LEDConstants.Patterns;
-import frc.robot.Constants.LEDConstants.Priorities;
-import frc.robot.data.GlobalState;
 import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
 
 public class LedManager extends SubsystemBase {
