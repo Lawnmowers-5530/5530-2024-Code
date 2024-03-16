@@ -202,6 +202,8 @@ public class RobotContainer implements Loggable {
         readyToShoot,
         noteLoaded,
         slowMode));
+    //add zero gyro button
+    Shuffleboard.getTab("Settings").add("Zero Gyro", zeroGyro);
 
     swerve.setDefaultCommand(swerveCmd); // both joysticks
     climber.setDefaultCommand(climberManual); // right trigger and left trigger
