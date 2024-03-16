@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.sql.Driver;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -18,10 +17,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -54,15 +50,12 @@ public class Swerve extends SubsystemBase implements Loggable {
 
   private SwerveModuleState[] states;
 
-  private ManualSideOverride sideChooser = new ManualSideOverride();
-
   public Swerve() {
     rotationPID = new PIDController(Constants.RotationConstants.kP, Constants.RotationConstants.kI,
         Constants.RotationConstants.kD);
     rotationPID.setTolerance(2);
     SwerveModulePosition[] modPos = getModulePositions();
     odometry = new SwerveDriveOdometry(Constants.kinematics, Pgyro.getRot(), modPos);
-    Shuffleboard.getTab("Settings").add(sideChooser).with;
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::resetPose,
@@ -79,19 +72,15 @@ public class Swerve extends SubsystemBase implements Loggable {
           // alliance
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-          if (!DriverStation.isFMSAttached()) {
             var alliance = DriverStation.getAlliance();
             if (alliance.isPresent()) {
               return alliance.get() == DriverStation.Alliance.Red;
             }
             return false;
-          } else {
-            return sideChooser.side == ManualSideOverride.Side.RED;
-          }
         },
         this);
   }
-
+  /** 
   public class ManualSideOverride implements Sendable {
     public enum Side {
       RED, BLUE;
@@ -122,7 +111,7 @@ public class Swerve extends SubsystemBase implements Loggable {
                 return "Blue";
         }
     }
-  }
+  }**/
 
   public void drive(Vector2D vector, double omegaRadSec, boolean fieldRelative) {
 
