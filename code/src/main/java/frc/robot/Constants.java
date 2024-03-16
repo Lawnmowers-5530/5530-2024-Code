@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.subsystems.SwerveModule;
 import frc.robot.subsystems.LedController.FixedPalletePatternType;
 import frc.robot.subsystems.LedController.PatternType;
@@ -99,9 +100,9 @@ public final class Constants {
 
         public static final double conversionFactor = 5192/360; //TODO: logically should be 1/360
 
-        public static final double ampPosition = 0.191; // TODO: find the correct value
-        public static final double speakerPosition = 0.665; // TODO: find the correct value
-        public static final double positionTolerance = 0.08;
+        public static final double ampPosition = 0.260; // TODO: find the correct value
+        public static final double speakerPosition = 0.679; // TODO: find the correct value
+        public static final double positionTolerance = 0.11;
     }
 
     public static final class IntakeConstants{
@@ -140,7 +141,7 @@ public final class Constants {
         public static final PatternType groundIntakeAndAmpAnglePattern = SolidColorType.Red;
 
         public static final int intakeFromSourceReadyPriority = 40;
-        public static final PatternType intakeFromSourceReadyPattern = SolidColorType.Aqua;
+        public static final PatternType intakeFromSourceReadyPattern = SolidColorType.Blue;
 
         public static final int readyToShootPriority = 30;
         public static final PatternType readyToShootPattern = SolidColorType.Gold;

@@ -102,7 +102,7 @@ public class LauncherV2 extends Launcher implements Loggable {
     }
 
     public boolean isRunningIntake(){
-        return leftMotor.get() <= 0 && rightMotor.get() <= 0;
+        return leftMotor.get() < 0 && rightMotor.get() < 0;
     }
 
 }

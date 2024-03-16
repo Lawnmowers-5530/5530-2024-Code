@@ -100,6 +100,10 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
         return this.getEncoderMeasurement() < Constants.LauncherAngleConstants.ampPosition + Constants.LauncherAngleConstants.positionTolerance;
     }
 
+    public boolean isSpeakerAngle() {
+        return this.getEncoderMeasurement() > Constants.LauncherAngleConstants.speakerPosition - Constants.LauncherAngleConstants.positionTolerance;
+    }
+
     @Override 
     public void periodic() {
         ticks = this.getEncoderMeasurement();

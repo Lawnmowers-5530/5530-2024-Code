@@ -94,7 +94,15 @@ public class RobotContainer implements Loggable {
 
     configureBindings();
 
-    autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = new SendableChooser<>();
+    autoChooser.addOption("shoot only any pos", AutoBuilder.buildAuto("shoot only any pos"));
+    autoChooser.addOption("sl mo", AutoBuilder.buildAuto("sl mo"));
+    autoChooser.addOption("sl nl fs", AutoBuilder.buildAuto("sl nl fs"));
+    autoChooser.addOption("sl nl sl mo", AutoBuilder.buildAuto("sl nl sl mo"));
+    autoChooser.addOption("sm nm fs nl fs", AutoBuilder.buildAuto("sm nm fs nl fs"));
+    autoChooser.addOption("sr mo", AutoBuilder.buildAuto("sr mo"));
+    autoChooser.addOption("sr nr fs nm fs nl", AutoBuilder.buildAuto("sr nr fs nm fs nl"));
+    autoChooser.addOption("sr nr sm nm", AutoBuilder.buildAuto("sr nr sm nm"));
     SmartDashboard.putData("Auton chooser", autoChooser);
   }
 
