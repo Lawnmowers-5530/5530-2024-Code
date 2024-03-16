@@ -3,6 +3,7 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
+    "red",
     "center note paths",
     "close shoot paths",
     "far shoot paths",

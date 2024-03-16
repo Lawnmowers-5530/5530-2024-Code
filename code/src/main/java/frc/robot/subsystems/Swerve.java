@@ -62,7 +62,7 @@ public class Swerve extends SubsystemBase implements Loggable {
     rotationPID.setTolerance(2);
     SwerveModulePosition[] modPos = getModulePositions();
     odometry = new SwerveDriveOdometry(Constants.kinematics, Pgyro.getRot(), modPos);
-    Shuffleboard.getTab("Settings").add(sideChooser);
+    Shuffleboard.getTab("Settings").add(sideChooser).with;
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::resetPose,

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7206357269857403,
-      "y": 4.368518451322617
+      "x": 0.7912916726734353,
+      "y": 6.665430988519635
     },
-    "rotation": -59.03624346792651
+    "rotation": 60.10109816138547
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right note and run away"
+            "pathName": "left note and run away"
           }
         }
       ]

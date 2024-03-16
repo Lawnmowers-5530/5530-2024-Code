@@ -12,9 +12,27 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "closeShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "left subwoofer to left note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left note to far shoot left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "farShoot"
           }
         }
       ]

@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3552185662929883,
+      "y": 5.546821904454621
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "closeShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle subwoofer to middle note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle note to far shoot middle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "farShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "far shoot middle to left note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left note to far shoot left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "farShoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
