@@ -106,7 +106,7 @@ public class CommandCombinator {
 			.andThen(
 				new ParallelDeadlineGroup(
 					new SequentialCommandGroup(
-						new WaitCommand(0.5),
+						new WaitCommand(0.75),
 						loader.feedShooterCommand().until(loader::isNotLoaded)
 					),
 					launcher.ampLauncherCommand()
