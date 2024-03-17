@@ -128,7 +128,7 @@ public final class Constants {
 
     public static final class PathPlannerConstants{
         public static final PIDConstants translationConstants = new PIDConstants(2, 0, 0.0);
-    public static final PIDConstants rotationConstants = new PIDConstants(1.5, 0.0, 0);
+    public static final PIDConstants rotationConstants = new PIDConstants(0.9, 0.0, 0);
 
     public static final PathConstraints constraints = new PathConstraints(
         3, 2, //linear

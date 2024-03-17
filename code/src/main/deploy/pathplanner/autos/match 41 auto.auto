@@ -2,31 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7352951848760846,
-      "y": 6.728691171668058
+      "x": 1.4846444107302628,
+      "y": 5.556066607628711
     },
-    "rotation": 60.395549253995014
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "closeShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "left subwoofer to left note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "left note to left subwoofer"
+            "waitTime": 0.75
           }
         },
         {
@@ -38,7 +26,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left note and run away"
+            "pathName": "middle subwoofer to middle note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle note to far shoot middle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "farShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "match 41 path part"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "match 41 path part 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "farShoot"
           }
         }
       ]

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7792735585471178,
-      "y": 6.831307376900469
+      "x": 0.8085924743278065,
+      "y": 6.816647919010124
     },
-    "rotation": 59.349332042947076
+    "rotation": 61.821409890040826
   },
   "command": {
     "type": "sequential",
@@ -33,6 +33,12 @@
           "type": "named",
           "data": {
             "name": "farShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "match 49 path 1"
           }
         }
       ]

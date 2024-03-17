@@ -103,6 +103,14 @@ public class RobotContainer implements Loggable {
     autoChooser.addOption("sr mo", AutoBuilder.buildAuto("sr mo"));
     autoChooser.addOption("sr nr fs nm fs nl", AutoBuilder.buildAuto("sr nr fs nm fs nl"));
     autoChooser.addOption("sr nr sm nm", AutoBuilder.buildAuto("sr nr sm nm"));
+    autoChooser.addOption("match 2 auto", AutoBuilder.buildAuto("match 2 auto"));
+    autoChooser.addOption("match 12 auto", AutoBuilder.buildAuto("match 12 auto"));
+    autoChooser.addOption("match 19 auto", AutoBuilder.buildAuto("match 19 auto"));
+    autoChooser.addOption("match 24 auto", AutoBuilder.buildAuto("match 24 auto"));
+    autoChooser.addOption("match 41 auto", AutoBuilder.buildAuto("match 41 auto"));
+    autoChooser.addOption("match 41 auto alternate", AutoBuilder.buildAuto("match 41 auto alternate"));
+    autoChooser.addOption("match 49 auto", AutoBuilder.buildAuto("match 49 auto"));
+    autoChooser.addOption("match 55 auto", AutoBuilder.buildAuto("match 55 auto"));
     SmartDashboard.putData("Auton chooser", autoChooser);
   }
 
@@ -135,9 +143,9 @@ public class RobotContainer implements Loggable {
     // drive swerve, slow mode with b
     swerveCmd = new RunCommand(
         () -> {
-          double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
-          double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15);
-          double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15);
+          double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.06);
+          double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.06);
+          double w = MathUtil.applyDeadband(driverController.getRightX(), 0.06);
 
           Vector2D vector = new Vector2D(y, x, false);
           swerve.drive(vector, -w, true);

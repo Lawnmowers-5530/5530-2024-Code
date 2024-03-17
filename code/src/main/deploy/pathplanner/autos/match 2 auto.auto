@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7792735585471178,
-      "y": 6.831307376900469
+      "x": 0.8379113901084951,
+      "y": 4.280561703980552
     },
-    "rotation": 59.349332042947076
+    "rotation": -59.53445508054016
   },
   "command": {
     "type": "sequential",
@@ -20,19 +20,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left subwoofer to left note"
+            "pathName": "match 2 auto p1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left note to far shoot left"
+            "pathName": "right note to far shoot right"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "farShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "far shoot right to right right note"
           }
         }
       ]
