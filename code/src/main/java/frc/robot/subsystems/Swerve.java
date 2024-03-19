@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -55,7 +56,6 @@ public class Swerve extends SubsystemBase implements Loggable {
     rotationPID.setTolerance(2);
     SwerveModulePosition[] modPos = getModulePositions();
     odometry = new SwerveDriveOdometry(Constants.kinematics, Pgyro.getRot(), modPos);
-
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::resetPose,
@@ -68,21 +68,50 @@ public class Swerve extends SubsystemBase implements Loggable {
             Constants.driveBaseRadius,
             new ReplanningConfig()),
         () -> {
-          return false;
           // Boolean supplier that controls when the path will be mirrored for the red
           // alliance
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-        //  var alliance = DriverStation.getAlliance();
-        //  if (alliance.isPresent()) {
-        //    return alliance.get() == DriverStation.Alliance.Red;
-        //  }
-        //  return false;
-        //
-      },
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+        },
         this);
   }
+  /** 
+  public class ManualSideOverride implements Sendable {
+    public enum Side {
+      RED, BLUE;
+    }
+
+    private Side side;
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Manual Side Chooser");
+        builder.addStringProperty("Side Input:", this::getSide, this::setSide);
+    }
+
+    public void setSide(String sideInput) {
+        if (sideInput == "Red" || sideInput == "red") {
+            this.side = Side.RED;
+        } else if (sideInput == "Blue" || sideInput == "blue") {
+            this.side = Side.BLUE;
+        }
+    }
+
+    public String getSide() {
+        switch (side) {
+            case RED:
+                return "Red";
+            case BLUE:
+                return "Blue";
+            default:
+                return "Blue";
+        }
+    }
+  }**/
 
   public void drive(Vector2D vector, double omegaRadSec, boolean fieldRelative) {
 
@@ -181,7 +210,7 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public boolean atTargetAngle() {
-    return rotationPID.atSetpoint();
+    return false;//rotationPID.atSetpoint();
   }
 
   public void disabledPeriodic() {

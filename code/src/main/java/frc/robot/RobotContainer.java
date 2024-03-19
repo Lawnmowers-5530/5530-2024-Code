@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -94,7 +95,10 @@ public class RobotContainer implements Loggable {
 
     configureBindings();
 
-    autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = new SendableChooser<>();
+    autoChooser.addOption("shoot only any pos", AutoBuilder.buildAuto("shoot only any pos"));
+    autoChooser.addOption("tuner", AutoBuilder.buildAuto("tuner"));
+    autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
     SmartDashboard.putData("Auton chooser", autoChooser);
   }
 
@@ -127,9 +131,9 @@ public class RobotContainer implements Loggable {
     // drive swerve, slow mode with b
     swerveCmd = new RunCommand(
         () -> {
-          double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.15);
-          double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.15);
-          double w = MathUtil.applyDeadband(driverController.getRightX(), 0.15);
+          double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.06);
+          double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.06);
+          double w = MathUtil.applyDeadband(driverController.getRightX(), 0.06);
 
           Vector2D vector = new Vector2D(y, x, false);
           swerve.drive(vector, -w, true);
@@ -182,7 +186,7 @@ public class RobotContainer implements Loggable {
   private void createStateSuppliers() {
     groundIntakeRunningAmpAngle = () -> intake.isRunning() && launcherAngle.isAmpAngle();
     readyToIntakeFromSource = () -> launcher.isRunningIntake() && !loader.isLoaded() && launcherAngle.isAmpAngle();
-    readyToShoot = () -> loader.isLoaded() && swerve.atTargetAngle();
+    readyToShoot = () -> loader.isLoaded() && swerve.atTargetAngle() && false; //disabled not ready
     noteLoaded = () -> loader.isLoaded();
     slowMode = () -> driverController.b().getAsBoolean();
   }
@@ -194,6 +198,8 @@ public class RobotContainer implements Loggable {
         readyToShoot,
         noteLoaded,
         slowMode));
+    //add zero gyro button
+    Shuffleboard.getTab("Settings").add("Zero Gyro", zeroGyro);
 
     swerve.setDefaultCommand(swerveCmd); // both joysticks
     climber.setDefaultCommand(climberManual); // right trigger and left trigger

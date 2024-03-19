@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.890235494756704,
-        "y": 6.992561413694256
+        "x": 3.0,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.940235494756704,
-        "y": 6.992561413694256
+        "x": 3.05,
+        "y": 7.0
       },
       "isLocked": false,
       "linkedName": null
@@ -32,15 +32,15 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.2,
-    "maxAcceleration": 0.75,
+    "maxVelocity": 0.5,
+    "maxAcceleration": 0.85,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 120.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 36.28699758906686,
-    "rotateFast": false
+    "rotation": 33.16803930369046,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "far shoot paths",
@@ -48,5 +48,5 @@
     "rotation": 0.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

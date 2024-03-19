@@ -3,15 +3,17 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.subsystems.SwerveModule;
 import frc.robot.subsystems.LedController.FixedPalletePatternType;
 import frc.robot.subsystems.LedController.PatternType;
 import frc.robot.subsystems.LedController.SolidColorType;
+import io.github.oblarg.oblog.Loggable;
 
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PIDConstants;
 
-public final class Constants {
+public final class Constants{
     public static final boolean DEBUG_LOGGING = true;
 
     public static final double trackWidth = Units.inchesToMeters(24);
@@ -66,8 +68,8 @@ public final class Constants {
         public static final int leftMotorPort = 20;
         public static final int rightMotorPort = 21;
         public static final boolean isReversed = true;
-        public static final double loaderSpeed = 0.3;
-        public static final double loaderCutoffDistance = 195;
+        public static final double loaderSpeed = 0.25;
+        public static final double loaderCutoffDistance = 180;
         public static final int NOTE_LOADED_PRIORITY = 15;
     }
 
@@ -82,11 +84,11 @@ public final class Constants {
 
         public static final double loaderShotSpeed = 0.35;
 
-        public static final double LAUNCHER_LOW_REVS = 1000; //1500 // low speed for the launcher
+        public static final double LAUNCHER_LOW_REVS = 465; //1000 // low speed for the launcher
         public static final double LAUNCHER_MED_REVS = 3000; // medium speed for the launcher
         public static final double LAUNCHER_HIGH_REVS = 4500; // high speed for the launcher
 
-        public static final double LAUNCHER_SPEED_DIFF_PERCENT = 0.2;
+        public static final double LAUNCHER_SPEED_DIFF_PERCENT = 0.4;//was 0.2
     }
 
     public static final class LauncherAngleConstants{
@@ -97,21 +99,21 @@ public final class Constants {
         public static final double kI = 0.00;
         public static final double kD = 0.00;
 
-        public static final double conversionFactor = 1/360; //TODO: logically should be 1/360
+        public static final double conversionFactor = 5192/360; //TODO: logically should be 1/360
 
-        public static final double ampPosition = -1; // TODO: find the correct value
-        public static final double speakerPosition = -1; // TODO: find the correct value
-        public static final double positionTolerance = 5;
+        public static final double ampPosition = 0.235; // TODO: find the correct value
+        public static final double speakerPosition = 0.59; // TODO: find the correct value
+        public static final double positionTolerance = 0.11;
     }
 
     public static final class IntakeConstants{
         public static final int motorPort = 24;
         public static final boolean isReversed = false;
-        public static final double intakeSpeed = 0.33;
+        public static final double intakeSpeed = 0.5  ;
     }
 
     public static final class LauncherIntakeConstants{
-        public static final int threshold = 55;
+        public static final int threshold = 70;
         public static final double speed = 0.175;
     }
 
@@ -126,12 +128,12 @@ public final class Constants {
     }
 
     public static final class PathPlannerConstants{
-        public static final PIDConstants translationConstants = new PIDConstants(2, 0, 0.0);
-    public static final PIDConstants rotationConstants = new PIDConstants(1.5, 0.0, 0);
+        public static final PIDConstants translationConstants = new PIDConstants(4, 0, 0.0);
+    public static final PIDConstants rotationConstants = new PIDConstants(3, 0.0, 0);
 
     public static final PathConstraints constraints = new PathConstraints(
-        3, 2, //linear
-        360, 420 //angular
+        3, 1.5, //linear
+        240, 280 //angular
     );
     }
 
@@ -140,7 +142,7 @@ public final class Constants {
         public static final PatternType groundIntakeAndAmpAnglePattern = SolidColorType.Red;
 
         public static final int intakeFromSourceReadyPriority = 40;
-        public static final PatternType intakeFromSourceReadyPattern = SolidColorType.Aqua;
+        public static final PatternType intakeFromSourceReadyPattern = SolidColorType.Blue;
 
         public static final int readyToShootPriority = 30;
         public static final PatternType readyToShootPattern = SolidColorType.Gold;

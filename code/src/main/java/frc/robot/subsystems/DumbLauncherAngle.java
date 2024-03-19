@@ -1,13 +1,11 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.data.GlobalState;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -44,7 +42,7 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
 
     private void sharedInit() {
         this.encoder = this.motor.getAbsoluteEncoder();
-        this.encoder.setPositionConversionFactor(Constants.LauncherAngleConstants.conversionFactor);
+        this.encoder.setPositionConversionFactor(1);
         this.state = Angle.RELAXED;
     }
 
@@ -56,7 +54,7 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
                 break;
             }
             case DOWN: {
-                motor.set(-power);
+                motor.set(-power-0.025);
                 //System.out.println("set power down");
                 break;
             }
@@ -74,7 +72,7 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
     }
     
     public double getEncoderMeasurement() {
-        return encoder.getPosition();
+        return encoder.getPosition() * Constants.LauncherAngleConstants.conversionFactor;
     }
 
     public Command ampAngleCommand() {
@@ -99,12 +97,16 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
     }
 
     public boolean isAmpAngle() {
-        return motor.get() > Constants.LauncherAngleConstants.ampPosition - Constants.LauncherAngleConstants.positionTolerance || motor.get() < Constants.LauncherAngleConstants.ampPosition + Constants.LauncherAngleConstants.positionTolerance;
+        return this.getEncoderMeasurement() < Constants.LauncherAngleConstants.ampPosition + Constants.LauncherAngleConstants.positionTolerance;
+    }
+
+    public boolean isSpeakerAngle() {
+        return this.getEncoderMeasurement() > Constants.LauncherAngleConstants.speakerPosition - Constants.LauncherAngleConstants.positionTolerance;
     }
 
     @Override 
     public void periodic() {
-        ticks = encoder.getPosition();
+        ticks = this.getEncoderMeasurement();
 
         setState(state);
     }
