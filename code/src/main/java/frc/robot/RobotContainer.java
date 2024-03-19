@@ -18,8 +18,8 @@ import frc.robot.commands.CommandCombinator;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
-import frc.robot.subsystems.DumbLauncherAngle;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LauncherAngle;
 import frc.robot.subsystems.LauncherV2;
 import frc.robot.subsystems.LedController;
 import frc.robot.subsystems.LedController_MultiAccess;
@@ -39,7 +39,7 @@ public class RobotContainer implements Loggable {
 
   private Swerve swerve;
   private DistanceSensor distanceSensor;
-  private DumbLauncherAngle launcherAngle;
+  private LauncherAngle launcherAngle;
   private LoaderV2 loader;
   private LauncherV2 launcher;
   private Climber climber;
@@ -108,9 +108,9 @@ public class RobotContainer implements Loggable {
 
     intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
     launcher = new LauncherV2();
-    launcherAngle = new DumbLauncherAngle(
+    launcherAngle = new LauncherAngle(
         Constants.LauncherAngleConstants.motorPort,
-        Constants.LauncherAngleConstants.isReversed);
+        Constants.LauncherAngleConstants.isReversed, Constants.LauncherAngleConstants.conversionFactor);
     distanceSensor = new DistanceSensor();
     loader = new LoaderV2(
         Constants.LoaderConstants.leftMotorPort,

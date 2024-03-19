@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
-import frc.robot.subsystems.DumbLauncherAngle;
+import frc.robot.subsystems.LauncherAngle;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherV2;
 import frc.robot.subsystems.LoaderV2;
@@ -23,10 +23,10 @@ public class CommandCombinator {
 	LauncherV2 launcher;
 	LoaderV2 loader;
 	DistanceSensor distanceSensor;
-	DumbLauncherAngle launcherAngle;
+	LauncherAngle launcherAngle;
 
 	public CommandCombinator(Climber climber, Intake intake, LauncherV2 launcher, LoaderV2 loader,
-			DumbLauncherAngle launcherAngle, DistanceSensor distanceSensor) {
+			LauncherAngle launcherAngle, DistanceSensor distanceSensor) {
 		this.climber = climber;
 		this.intake = intake;
 		this.launcher = launcher;

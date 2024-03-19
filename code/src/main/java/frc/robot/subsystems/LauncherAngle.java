@@ -4,10 +4,11 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
@@ -16,10 +17,9 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
     CANSparkMax motor;
     SparkAbsoluteEncoder encoder;
 
-    PIDController upPid;
+    PIDController pidController;
 
     ArmFeedforward feedforward;
-    //SparkPIDController pid;
     @Log
     double sP;
 
@@ -32,53 +32,76 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
     @Log
     String encoderPos = "a";
 
-    public LauncherAngle(int motorPort, boolean reversed, double kP, double kI, double kD, double conversionFactor) {
+    public LauncherAngle(int motorPort, boolean reversed, double conversionFactor) {
         motor = new CANSparkMax(motorPort, CANSparkMax.MotorType.kBrushless);
         motor.setInverted(reversed);
 
-        upPid = new PIDController(0.009, 0.005, 0.00);
-        upPid.setIntegratorRange(-0.2, 0.2);
-        upPid.setIZone(15);
+        pidController = new PIDController(Constants.LauncherAngleConstants.kP, Constants.LauncherAngleConstants.kI, Constants.LauncherAngleConstants.kD);
+        pidController.setIntegratorRange(-0.2, 0.2);
+        pidController.setIZone(15);
 
         encoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-        encoder.setPositionConversionFactor(360);
+        encoder.setPositionConversionFactor(conversionFactor);
         encoder.setZeroOffset(116);
         sP = 30;
 
-        feedforward = new ArmFeedforward(0.07, -0.03, 0.035, -0.35); //0.05, -0.0175, 0.03, -0.225
+        feedforward = new ArmFeedforward(0,0,0,0); //0.05, -0.0175, 0.03, -0.225
     }
 
     @Config
     public void setAngle(double angle) {
         this.sP = angle;
-        upPid.setSetpoint(angle);
+        pidController.setSetpoint(angle);
     }
 
     public void setTolerance(double tolerance) {
-        upPid.setTolerance(tolerance);
+        pidController.setTolerance(tolerance);
     }
 
     public double getError() {
-        return upPid.getPositionError();
+        return pidController.getPositionError();
     }
 
     public boolean withinTolerance() {
-        return upPid.atSetpoint();
+        return pidController.atSetpoint();
     }
 
-    public void periodic() {
+    public void periodic() {}
 
-        double pidOut;
-        pidOut = upPid.calculate(encoder.getPosition(), sP);
-        double feedOut = feedforward.calculate(encoder.getPosition(), MathUtil.applyDeadband(encoder.getVelocity(), 0.005));
+        public double getEncoderMeasurement() {
+        return encoder.getPosition() * Constants.LauncherAngleConstants.conversionFactor;
+    }
 
-        //motor.set(MathUtil.clamp(output, -0.25, 0.25));
+    public Command ampAngleCommand() {
+        return this.runOnce(
+                () -> {
+                    this.setAngle(Constants.LauncherAngleConstants.ampPosition);
+                });
+    }
 
-        encoderPos = Double.toString(encoder.getPosition());
+    public Command speakerAngleCommand() {
+        return this.runOnce(
+                () -> {
+                    this.setAngle(Constants.LauncherAngleConstants.speakerPosition);
+                });
+    }
 
-        pidOutput = Double.toString(pidOut);
-        feedOutput = Double.toString(feedOut);
+    public Command setAngleCommand(double angle) {
+        return this.runOnce(
+                () -> {
+                    this.setAngle(angle);
+                });
+    }
 
-        //motor.set(feedOut + pidOut);
+    public boolean atSetpoint() {
+        return pidController.atSetpoint();
+    }
+
+    public boolean isAmpAngle() {
+        return this.getEncoderMeasurement() < Constants.LauncherAngleConstants.ampPosition + Constants.LauncherAngleConstants.positionTolerance;
+    }
+
+    public boolean isSpeakerAngle() {
+        return this.getEncoderMeasurement() > Constants.LauncherAngleConstants.speakerPosition - Constants.LauncherAngleConstants.positionTolerance;
     }
 }
