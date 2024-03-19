@@ -11,9 +11,9 @@
     "subwoofer to note paths"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 1.2,
-  "defaultMaxAccel": 0.75,
-  "defaultMaxAngVel": 180.0,
-  "defaultMaxAngAccel": 120.0,
+  "defaultMaxVel": 3.0,
+  "defaultMaxAccel": 1.5,
+  "defaultMaxAngVel": 240.0,
+  "defaultMaxAngAccel": 280.0,
   "maxModuleSpeed": 4.5
 }

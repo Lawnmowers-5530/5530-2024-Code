@@ -96,21 +96,8 @@ public class RobotContainer implements Loggable {
 
     autoChooser = new SendableChooser<>();
     autoChooser.addOption("shoot only any pos", AutoBuilder.buildAuto("shoot only any pos"));
-    autoChooser.addOption("sl mo", AutoBuilder.buildAuto("sl mo"));
-    autoChooser.addOption("sl nl fs", AutoBuilder.buildAuto("sl nl fs"));
-    autoChooser.addOption("sl nl sl mo", AutoBuilder.buildAuto("sl nl sl mo"));
-    autoChooser.addOption("sm nm fs nl fs", AutoBuilder.buildAuto("sm nm fs nl fs"));
-    autoChooser.addOption("sr mo", AutoBuilder.buildAuto("sr mo"));
-    autoChooser.addOption("sr nr fs nm fs nl", AutoBuilder.buildAuto("sr nr fs nm fs nl"));
-    autoChooser.addOption("sr nr sm nm", AutoBuilder.buildAuto("sr nr sm nm"));
-    autoChooser.addOption("match 2 auto", AutoBuilder.buildAuto("match 2 auto"));
-    autoChooser.addOption("match 12 auto", AutoBuilder.buildAuto("match 12 auto"));
-    autoChooser.addOption("match 19 auto", AutoBuilder.buildAuto("match 19 auto"));
-    autoChooser.addOption("match 24 auto", AutoBuilder.buildAuto("match 24 auto"));
-    autoChooser.addOption("match 41 auto", AutoBuilder.buildAuto("match 41 auto"));
-    autoChooser.addOption("match 41 auto alternate", AutoBuilder.buildAuto("match 41 auto alternate"));
-    autoChooser.addOption("match 49 auto", AutoBuilder.buildAuto("match 49 auto"));
-    autoChooser.addOption("match 55 auto", AutoBuilder.buildAuto("match 55 auto"));
+    autoChooser.addOption("tuner", AutoBuilder.buildAuto("tuner"));
+    autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
     SmartDashboard.putData("Auton chooser", autoChooser);
   }
 

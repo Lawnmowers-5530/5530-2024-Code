@@ -54,7 +54,7 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
                 break;
             }
             case DOWN: {
-                motor.set(-power);
+                motor.set(-power-0.025);
                 //System.out.println("set power down");
                 break;
             }

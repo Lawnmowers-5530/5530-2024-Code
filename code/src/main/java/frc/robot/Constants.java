@@ -8,11 +8,12 @@ import frc.robot.subsystems.SwerveModule;
 import frc.robot.subsystems.LedController.FixedPalletePatternType;
 import frc.robot.subsystems.LedController.PatternType;
 import frc.robot.subsystems.LedController.SolidColorType;
+import io.github.oblarg.oblog.Loggable;
 
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PIDConstants;
 
-public final class Constants {
+public final class Constants{
     public static final boolean DEBUG_LOGGING = true;
 
     public static final double trackWidth = Units.inchesToMeters(24);
@@ -67,7 +68,7 @@ public final class Constants {
         public static final int leftMotorPort = 20;
         public static final int rightMotorPort = 21;
         public static final boolean isReversed = true;
-        public static final double loaderSpeed = 0.3;
+        public static final double loaderSpeed = 0.25;
         public static final double loaderCutoffDistance = 180;
         public static final int NOTE_LOADED_PRIORITY = 15;
     }
@@ -100,15 +101,15 @@ public final class Constants {
 
         public static final double conversionFactor = 5192/360; //TODO: logically should be 1/360
 
-        public static final double ampPosition = 0.260; // TODO: find the correct value
-        public static final double speakerPosition = 0.679; // TODO: find the correct value
+        public static final double ampPosition = 0.235; // TODO: find the correct value
+        public static final double speakerPosition = 0.59; // TODO: find the correct value
         public static final double positionTolerance = 0.11;
     }
 
     public static final class IntakeConstants{
         public static final int motorPort = 24;
         public static final boolean isReversed = false;
-        public static final double intakeSpeed = 0.33;
+        public static final double intakeSpeed = 0.5  ;
     }
 
     public static final class LauncherIntakeConstants{
@@ -127,12 +128,12 @@ public final class Constants {
     }
 
     public static final class PathPlannerConstants{
-        public static final PIDConstants translationConstants = new PIDConstants(2, 0, 0.0);
-    public static final PIDConstants rotationConstants = new PIDConstants(0.9, 0.0, 0);
+        public static final PIDConstants translationConstants = new PIDConstants(4, 0, 0.0);
+    public static final PIDConstants rotationConstants = new PIDConstants(3, 0.0, 0);
 
     public static final PathConstraints constraints = new PathConstraints(
-        3, 2, //linear
-        360, 420 //angular
+        3, 1.5, //linear
+        240, 280 //angular
     );
     }
 

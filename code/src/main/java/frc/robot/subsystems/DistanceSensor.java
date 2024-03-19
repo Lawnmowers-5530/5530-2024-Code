@@ -4,8 +4,12 @@ import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
-public class DistanceSensor extends SubsystemBase {
+public class DistanceSensor extends SubsystemBase implements Loggable{
+    @Log
+    double pos;
     Rev2mDistanceSensor sensor;
 
     public DistanceSensor() {
@@ -38,5 +42,6 @@ public class DistanceSensor extends SubsystemBase {
 
     @Override
     public void periodic(){
+        pos = this.sensor.getRange();
     }
 }

@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.46,
+        "x": 3.0,
         "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.51,
+        "x": 3.05,
         "y": 7.0
       },
       "isLocked": false,
@@ -40,7 +40,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 33.16803930369046,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "far shoot paths",
