@@ -62,7 +62,6 @@ public class RobotContainer implements Loggable {
 
   private Command speakerAngle;
   private Command ampAngle;
-  private Command farSpeakerLaunch;
   private Command speakerLauncher;
   private Command speakerFarLauncher;
   private Command ampLauncher;
