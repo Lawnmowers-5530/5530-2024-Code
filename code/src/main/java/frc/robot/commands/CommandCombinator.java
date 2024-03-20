@@ -9,11 +9,9 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.lib.LimelightHelpers;
 import frc.lib.Shot;
 import frc.lib.ShotCalculator;
 import frc.lib.Vector2D;
-import frc.lib.VectorOperator;
 import frc.robot.Constants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
@@ -21,7 +19,6 @@ import frc.robot.subsystems.LauncherAngle;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherV2;
 import frc.robot.subsystems.LoaderV2;
-import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
 
 //credit skyline stole this idea from them
