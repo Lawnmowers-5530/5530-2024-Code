@@ -49,6 +49,18 @@ public class LauncherV2 extends Launcher implements Loggable {
         SmartDashboard.putNumber("right velocity", rightEncoder.getVelocity());
     }
 
+    public Command shootMps(double mps){
+        double speed = mps * Constants.LauncherConstants.MPS_TO_RPM;
+        return this.runLauncherCommand(
+            () -> {
+                    return speed;
+            },
+            () -> {
+                    return speed
+                        / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+            });
+    }
+
     public Command reset() {
         return this.runOnce(() -> {
             leftPIDController.setReference(0, CANSparkBase.ControlType.kDutyCycle);

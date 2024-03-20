@@ -13,7 +13,7 @@ public class Shot {
         double vx = vec.getvX();
         double vy = vec.getvY();
         double vz = vec.getvZ();
-        this.speedfps = Math.sqrt(Math.pow(vx,2)+Math.pow(vz,2));
+        this.speedfps = Math.sqrt(Math.pow(vx,2)+Math.pow(vy, 2) + Math.pow(vz,2));
         this.theta = Math.atan(vz/vx);
         this.phi = Math.atan(vy/vx);
     }

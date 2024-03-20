@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.lib.Shot;
 import frc.lib.ShotCalculator;
-import frc.lib.Vector2D;
 import frc.robot.Constants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
@@ -131,32 +130,25 @@ public class CommandCombinator {
 
 
 	//Shoot anywhere command based on swerve current pose
-	public Command shootPoseCommand() {
+	public Command shootPoseCommand() { //TODO
 		return new RunCommand(
       () -> {
-        Pose2d currentPose = swerve.getPose();
-
-        // find field oriented vector of robot
-        Vector2D robotVector = swerve.getFieldRelativeSpeeds();
-
-        // find distance and angle to target
-        double distToTarget = Constants.targetTranslation.getDistance(currentPose.getTranslation());
-        double angleToTarget = ShotCalculator.angleToTarget(currentPose);
-
         //use shooter library to calculate final shot vector
-        Shot shot = ShotCalculator.vecFinal(robotVector, distToTarget, angleToTarget);
+        Shot shot = ShotCalculator.vecFinal(swerve.getPose(), swerve.getFieldRelativeSpeeds());
 
 		if(shot != null){
         // shoot the calculated shot
-        double leftSpeed = 0.4;
-        double rightSpeed = 0.4;
 
-        launcher.setVelocity(leftSpeed, rightSpeed);
-        launcherAngle.setAngle(shot.getThetaDeg());
+        //launcher.shootMps(shot.getSpeed());
+        //launcherAngle.setAngle(shot.getThetaDeg());
 
-        loader.run(Constants.LauncherConstants.loaderShotSpeed);
+        //loader.run(Constants.LauncherConstants.loaderShotSpeed);
 
-        swerve.rotateToAngle(Math.toDegrees(shot.getPhiDeg()));
+        //swerve.rotateToAngle(Math.toDegrees(shot.getPhiDeg()));
+
+		SmartDashboard.putNumber("speed", shot.getSpeed());
+		SmartDashboard.putNumber("theta", shot.getThetaDeg());
+		SmartDashboard.putNumber("phi", shot.getPhiDeg());
 		}else{
 			System.out.println("Shot is not possible");
 		}

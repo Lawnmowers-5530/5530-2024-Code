@@ -1,65 +1,51 @@
 package frc.lib;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
+import frc.robot.Constants.LauncherConstants;
 
 public class ShotCalculator {
-    public static Shot vecFinal(Vector2D robotVec, double dist, double angleToTarget){
-        dist = Units.metersToFeet(dist);
-        double shooterHeight = 20/12; //height of shooter
-        double derivPosSubtracted = 1; //distance behind goal point to consider derivative from
-        double maxSpeed = 30; //max speed in fps of shooter
-        double goalDeriv = 0.1; //goal derivative by derivPos
-        double vxStep = 0.05; //step of vx to achieve goal derivative
-        double scaleFactor = 1; //scale factor for original vx value
+    private static Vector2D straightShot(Pose2d currentPose){
+        double dist = getDistPose(currentPose);
+
+        double vx = LauncherConstants.vxScaleFactor * Math.log(dist);
+        double vy = (LauncherConstants.height * vx - (0.5 * -9.81 * Math.pow(dist, 2)) / vx) / dist;
+
+        return new Vector2D(vx, vy, false);
+    }
+    public static Shot vecFinal(Pose2d currentPose, Vector2D robotVec){
+        Vector2D strShot = straightShot(currentPose);
+        double angleToTarget = angleToTarget(currentPose);
+        
+        double maxSpeed = LauncherConstants.maxSpeed; //max speed in fps of shooter
         Vector3D goalVector;
-        double height = (78/12)-shooterHeight; //height of target
 
-        double vx = dist*scaleFactor;
-        double vz = 0;
-
-        double g = -9.81;
-
-        double deriv;
-
-        boolean optimized=false;
-        while(!optimized){
-            vz = (height*vx-(0.5*g*Math.pow(dist,2))/vx)/dist; //calc vz
-            deriv = ((dist-derivPosSubtracted)*g + vx*vz)/Math.pow(vx, 2); //calc deriv at goal point
-            if(deriv<goalDeriv){ //step scaleFactor to get closer to deriv
-                scaleFactor+=vxStep;
-                vx = dist*scaleFactor;
-            }else{
-                optimized=true;
-            }
-            if(Math.sqrt(vx+vz)>maxSpeed){ //return null if shot is not possible
-                return null;
-            }
-        }
+        double vx = strShot.getvX();
+        double vz = strShot.getvY();
         
 
-        double vxFinal = vx*Math.cos(angleToTarget);
-        double vyFinal = vx*Math.sin(angleToTarget);
+        double vxFinal = vx*Math.sin(angleToTarget + (Math.PI/2));
+        double vyFinal = vx*Math.cos(angleToTarget + (Math.PI/2));
         double vzFinal = vz;
 
         goalVector = new Vector3D(vxFinal, vyFinal, vzFinal);
-        Shot shot = new Shot(VectorOperator.subtract(goalVector, robotVec));
+
+        Vector3D shotVector = VectorOperator.subtract(goalVector, robotVec);
+        if(shotVector.getMagnitude() > maxSpeed){
+            return null;
+        }
+        Shot shot = new Shot(shotVector);
 
         return shot;
     }
 
-    public static double angleToTarget(Pose2d currentPose){
-        return Math.atan2((Constants.targetTranslation.getX()-currentPose.getX()),(-Constants.targetTranslation.getY()+currentPose.getY()))-(Math.PI/2);
+    private static double angleToTarget(Pose2d currentPose){
+        return Math.atan2((currentPose.getX()-Constants.targetTranslation.getX()),(currentPose.getY()-Constants.targetTranslation.getY()))-(Math.PI/2);
     }
 
-    public static Pose2d getDistPose(Pose2d currentPose){
-        double theta = Math.atan2((currentPose.getX()-Constants.targetTranslation.getX()),(-currentPose.getY()+Constants.targetTranslation.getY()));
-        double x = Constants.targetTranslation.getX() + Constants.shotDistance*Math.cos(theta);
-        double y = Constants.targetTranslation.getY() - Constants.shotDistance*Math.sin(theta);
-
-        return new Pose2d(x, y, Rotation2d.fromDegrees(theta + 180));
+    private static double getDistPose(Pose2d currentPose){
+        double dist = Constants.targetTranslation.getDistance(currentPose.getTranslation());
+        return dist;
     }
 }
 

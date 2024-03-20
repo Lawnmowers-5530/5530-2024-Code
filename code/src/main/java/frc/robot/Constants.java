@@ -87,6 +87,16 @@ public final class Constants{
         public static final double LAUNCHER_HIGH_REVS = 4500; // high speed for the launcher
 
         public static final double LAUNCHER_SPEED_DIFF_PERCENT = 0.4;//was 0.2
+
+        public static final double vxScaleFactor = 8;
+
+        public static final double shooterHeight = Units.inchesToMeters(20); //height of shooter
+
+        public static final double height = Units.inchesToMeters(78)-shooterHeight; //height of target
+
+        public static final double maxSpeed = 20; //max speed in m/s of shooter
+
+        public static final double MPS_TO_RPM = 60/0.0254; //convert m/s to rpm
     }
 
     public static final class LauncherAngleConstants{

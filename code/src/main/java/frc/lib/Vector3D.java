@@ -26,6 +26,10 @@ public class Vector3D {
   public double getvZ(){
       return this.vz;
   }
+  public double getMagnitude(){
+        return Math.sqrt(Math.pow(this.vx, 2) + Math.pow(this.vy, 2) + Math.pow(this.vz, 2));
+    
+  }
   public void printVector(){
       System.out.println("["+this.vx+","+this.vy+","+this.vz+"]");
   } //prints the vector in the form [vx,vy,vz]

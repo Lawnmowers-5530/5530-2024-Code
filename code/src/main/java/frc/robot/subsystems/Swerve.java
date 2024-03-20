@@ -20,7 +20,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,19 +38,21 @@ public class Swerve extends SubsystemBase implements Loggable {
 
   private SwerveDrivePoseEstimator poseEstimator;
 
-  PIDController rotationPID;
+  private PIDController rotationPID;
 
   @Log
   boolean isUpdating;
+
   private boolean isCoasting;
   private static final SwerveModule Mod_0 = Constants.Modules.Mod_0;
   private static final SwerveModule Mod_1 = Constants.Modules.Mod_1;
   private static final SwerveModule Mod_2 = Constants.Modules.Mod_2;
   private static final SwerveModule Mod_3 = Constants.Modules.Mod_3;
+  
   @Log
   String poseStr = "";
 
-  double rotationOutput;
+  private double rotationOutput;
 
   private SwerveModuleState[] states;
 
