@@ -51,7 +51,7 @@ public class Swerve extends SubsystemBase implements Loggable {
   private SwerveModuleState[] states;
 
   public Swerve() {
-    poseEstimator = new SwerveDrivePoseEstimator(Constants.kinematics , Pgyro.getRot(), getModulePositions(), getPose());
+    poseEstimator = new SwerveDrivePoseEstimator(Constants.kinematics, Pgyro.getRot(), getModulePositions(), new Pose2d());
     poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(1, 1, Rotation2d.fromDegrees(45).getRadians())); //set vision measurement trust tolerance to 1 meter and 45 degrees
 
     rotationPID = new PIDController(Constants.RotationConstants.kP, Constants.RotationConstants.kI,

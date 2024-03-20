@@ -97,10 +97,10 @@ public final class Constants{
         public static final double kI = 0.00;
         public static final double kD = 0.00;
 
-        public static final double conversionFactor = 5192/360; //TODO: logically should be 1/360
+        public static final double conversionFactor = 5192/360;
 
-        public static final double ampPosition = 0.235; // TODO: find the correct value
-        public static final double speakerPosition = 0.59; // TODO: find the correct value
+        public static final double ampPosition = 0.235;
+        public static final double speakerPosition = 0.59;
         public static final double positionTolerance = 0.11;
     }
 
