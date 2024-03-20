@@ -1,5 +1,9 @@
 package frc.lib;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.numbers.N2;
+
 public class Shot {
     private double speedfps;
 

@@ -10,7 +10,10 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -21,6 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.LimelightHelpers;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
 import frc.robot.Constants;
@@ -30,9 +34,10 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class Swerve extends SubsystemBase implements Loggable {
 
+  private SwerveDrivePoseEstimator poseEstimator;
+
   PIDController rotationPID;
 
-  SwerveDriveOdometry odometry;
   @Log
   boolean isUpdating;
   private boolean isCoasting;
@@ -45,17 +50,16 @@ public class Swerve extends SubsystemBase implements Loggable {
 
   double rotationOutput;
 
-  @Log
-  String robotRelativeSpeeds = "";
-
   private SwerveModuleState[] states;
 
   public Swerve() {
+    poseEstimator = new SwerveDrivePoseEstimator(Constants.kinematics , Pgyro.getRot(), getModulePositions(), getPose());
+    poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(1, 1, Rotation2d.fromDegrees(45).getRadians())); //set vision measurement trust tolerance to 1 meter and 45 degrees
+
     rotationPID = new PIDController(Constants.RotationConstants.kP, Constants.RotationConstants.kI,
         Constants.RotationConstants.kD);
     rotationPID.setTolerance(2);
-    SwerveModulePosition[] modPos = getModulePositions();
-    odometry = new SwerveDriveOdometry(Constants.kinematics, Pgyro.getRot(), modPos);
+
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::resetPose,
@@ -80,38 +84,6 @@ public class Swerve extends SubsystemBase implements Loggable {
         },
         this);
   }
-  /** 
-  public class ManualSideOverride implements Sendable {
-    public enum Side {
-      RED, BLUE;
-    }
-
-    private Side side;
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("Manual Side Chooser");
-        builder.addStringProperty("Side Input:", this::getSide, this::setSide);
-    }
-
-    public void setSide(String sideInput) {
-        if (sideInput == "Red" || sideInput == "red") {
-            this.side = Side.RED;
-        } else if (sideInput == "Blue" || sideInput == "blue") {
-            this.side = Side.BLUE;
-        }
-    }
-
-    public String getSide() {
-        switch (side) {
-            case RED:
-                return "Red";
-            case BLUE:
-                return "Blue";
-            default:
-                return "Blue";
-        }
-    }
-  }**/
 
   public void drive(Vector2D vector, double omegaRadSec, boolean fieldRelative) {
 
@@ -141,15 +113,14 @@ public class Swerve extends SubsystemBase implements Loggable {
       Mod_3.setIdleMode(IdleMode.kBrake);
       isCoasting = false;
     }
+
+
     updateOdometry();
     poseStr = getPose().toString();
-    robotRelativeSpeeds = this.getRobotRelativeSpeeds().toString();
-
-    SmartDashboard.putString("robot rel speeds", getRobotRelativeSpeeds().toString());
   }
 
   public Pose2d getPose() {
-    return odometry.getPoseMeters();
+    return poseEstimator.getEstimatedPosition();
   }
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -164,14 +135,9 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public void updateOdometry() {
-    if (StaticLimeLight.getValidTarget()) {
-      odometry.resetPosition(Pgyro.getRot(), getModulePositions(),
-          new Pose2d(StaticLimeLight.getPose2DBlue().getTranslation(), Pgyro.getRot()));
-      isUpdating = true;
-    } else {
-      odometry.update(Pgyro.getRot(), getModulePositions());
-      isUpdating = false;
-    }
+    LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    poseEstimator.update(Pgyro.getRot(), getModulePositions());
+    poseEstimator.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
   }
 
   // chassis speeds consumer
@@ -184,7 +150,7 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public void resetPose(Pose2d pose) {
-    odometry.resetPosition(Pgyro.getRot(), getModulePositions(), pose);
+    poseEstimator.resetPosition(Pgyro.getRot(), getModulePositions(), pose);
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {
@@ -192,6 +158,10 @@ public class Swerve extends SubsystemBase implements Loggable {
         Mod_3.getState());
     return new ChassisSpeeds(-badSpeeds.vxMetersPerSecond, -badSpeeds.vyMetersPerSecond,
         badSpeeds.omegaRadiansPerSecond);
+  }
+
+  public Vector2D getFieldRelativeSpeeds() {
+    return VectorOperator.rotateVector2D(new Vector2D(this.getRobotRelativeSpeeds().vxMetersPerSecond, this.getRobotRelativeSpeeds().vyMetersPerSecond, false), Pgyro.getRot().times(-1));
   }
 
   public void autoDriveRobotRelative(ChassisSpeeds speeds) {

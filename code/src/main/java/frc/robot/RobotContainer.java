@@ -125,7 +125,7 @@ public class RobotContainer implements Loggable {
 
   private void createCommands() {
     // combine subsystem commands into sequential/parallel command groups
-    combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor);
+    combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor, swerve);
 
     // drive swerve, slow mode with b
     swerveCmd = new RunCommand(
