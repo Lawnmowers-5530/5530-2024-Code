@@ -65,7 +65,7 @@ public class Swerve extends SubsystemBase implements Loggable {
               return alliance.get() == DriverStation.Alliance.Red;
             }
             return false;
-        }
+        };
 
   public Swerve() {
     poseEstimator = new SwerveDrivePoseEstimator(Constants.kinematics, Pgyro.getRot(), getModulePositions(), new Pose2d());
@@ -145,11 +145,6 @@ public class Swerve extends SubsystemBase implements Loggable {
     }else{
       limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
     }
-
-    if(limelightMeasurement == null){
-      throw new Exception("limelight botpose estimate null");
-    }
-    
     poseEstimator.update(Pgyro.getRot(), getModulePositions());
     poseEstimator.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
   }
