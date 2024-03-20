@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 
+import java.util.function.BooleanSupplier;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -18,6 +20,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,6 +34,8 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class Swerve extends SubsystemBase implements Loggable {
+
+  private LimelightHelpers.PoseEstimate limelightMeasurement;
 
   private SwerveDrivePoseEstimator poseEstimator;
 
@@ -49,6 +54,18 @@ public class Swerve extends SubsystemBase implements Loggable {
   double rotationOutput;
 
   private SwerveModuleState[] states;
+
+  private BooleanSupplier sideSupplier = () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+        }
 
   public Swerve() {
     poseEstimator = new SwerveDrivePoseEstimator(Constants.kinematics, Pgyro.getRot(), getModulePositions(), new Pose2d());
@@ -69,17 +86,7 @@ public class Swerve extends SubsystemBase implements Loggable {
             3.8,
             Constants.driveBaseRadius,
             new ReplanningConfig()),
-        () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red
-          // alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Red;
-            }
-            return false;
-        },
+        sideSupplier,
         this);
   }
 
@@ -133,7 +140,16 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public void updateOdometry() {
-    LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    if(sideSupplier.getAsBoolean()){
+      limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiRed("limelight");
+    }else{
+      limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    }
+
+    if(limelightMeasurement == null){
+      throw new Exception("limelight botpose estimate null");
+    }
+    
     poseEstimator.update(Pgyro.getRot(), getModulePositions());
     poseEstimator.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
   }
