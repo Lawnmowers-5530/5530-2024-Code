@@ -36,7 +36,7 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
         motor = new CANSparkMax(motorPort, CANSparkMax.MotorType.kBrushless);
         motor.setInverted(reversed);
 
-        pidController = new PIDController(Constants.LauncherAngleConstants.kP, Constants.LauncherAngleConstants.kI, Constants.LauncherAngleConstants.kD);
+        pidController = new PIDController(0,0,0); //TODO: change these values
         pidController.setIntegratorRange(-0.2, 0.2);
         pidController.setIZone(15);
 
