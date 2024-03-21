@@ -146,8 +146,11 @@ public class Swerve extends SubsystemBase implements Loggable {
     }else{
       limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
     }
-    poseEstimator.update(Pgyro.getRot(), getModulePositions());
+    if(limelightMeasurement.tagCount >= 2){
     poseEstimator.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
+    }
+    
+    poseEstimator.update(Pgyro.getRot(), getModulePositions());
   }
 
   // chassis speeds consumer
