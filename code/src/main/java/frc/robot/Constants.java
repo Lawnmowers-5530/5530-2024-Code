@@ -98,9 +98,9 @@ public final class Constants{
 
         public static final double height = Units.inchesToMeters(78)-shooterHeight; //height of target
 
-        public static final double maxSpeed = 20; //max speed in m/s of shooter
+        public static final double maxSpeed = 15; //max speed in m/s of shooter
 
-        public static final double MPS_TO_RPM = 60/0.0254; //convert m/s to rpm
+        public static final double MPS_TO_RPM = 60/0.0254; //TODO convert m/s to rpm
     }
 
     public static final class LauncherAngleConstants{
@@ -121,7 +121,7 @@ public final class Constants{
     public static final class IntakeConstants{
         public static final int motorPort = 24;
         public static final boolean isReversed = false;
-        public static final double intakeSpeed = 0.5  ;
+        public static final double intakeSpeed = 0.5;
     }
 
     public static final class LauncherIntakeConstants{
@@ -167,17 +167,15 @@ public final class Constants{
 
         public static final int defaultPriority = 0;
         public static final PatternType defaultPattern = SolidColorType.LawnGreen;
-    }
 
-    public static final double shotDistance = 1;
-
-    public static final double ejectSpeed = -0.3;
-
-    public static final Translation2d targetTranslation = new Translation2d(0, 5);
         public static final class Patterns {
             public static final PatternType NOTE_LOADED = SolidColorType.Blue;
             public static final PatternType NO_NOTE_ARM_READY = SolidColorType.Red;
             public static final PatternType NOTE_LOADED_IN_ZONE = SolidColorType.Green;
             public static final PatternType NO_NOTE_ARM_NOT_READY = FixedPalletePatternType.StrobeRed;
         }
+    }
+    public static final double ejectSpeed = -0.3;
+
+    public static final Translation2d targetTranslation = new Translation2d(0, 5);
     }
