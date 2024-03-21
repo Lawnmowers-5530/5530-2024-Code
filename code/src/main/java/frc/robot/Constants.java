@@ -167,13 +167,6 @@ public final class Constants{
 
         public static final int defaultPriority = 0;
         public static final PatternType defaultPattern = SolidColorType.LawnGreen;
-
-        public static final class Patterns {
-            public static final PatternType NOTE_LOADED = SolidColorType.Blue;
-            public static final PatternType NO_NOTE_ARM_READY = SolidColorType.Red;
-            public static final PatternType NOTE_LOADED_IN_ZONE = SolidColorType.Green;
-            public static final PatternType NO_NOTE_ARM_NOT_READY = FixedPalletePatternType.StrobeRed;
-        }
     }
     public static final double ejectSpeed = -0.3;
 
