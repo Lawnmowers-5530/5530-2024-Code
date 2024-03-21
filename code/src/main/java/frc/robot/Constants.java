@@ -14,6 +14,7 @@ import com.pathplanner.lib.util.PIDConstants;
 public final class Constants{
     public static final boolean DEBUG_LOGGING = true;
 
+    public static final class DriveConstants{
     public static final double trackWidth = Units.inchesToMeters(24);
     public static final double wheelBase = Units.inchesToMeters(24);
 
@@ -44,17 +45,20 @@ public final class Constants{
         public static final int canCoder = 16;
         public static final double angleOffset = 0;
     }
-    public static Translation2d m0 = new Translation2d(Constants.trackWidth/2, Constants.wheelBase/2);
-    public static Translation2d m1 = new Translation2d(Constants.trackWidth/2, -Constants.wheelBase/2);
-    public static Translation2d m2 = new Translation2d(-Constants.trackWidth/2, Constants.wheelBase/2);
-    public static Translation2d m3 = new Translation2d(-Constants.trackWidth/2, -Constants.wheelBase/2);
+    public static Translation2d m0 = new Translation2d(Constants.DriveConstants.trackWidth/2, Constants.DriveConstants.wheelBase/2);
+    public static Translation2d m1 = new Translation2d(Constants.DriveConstants.trackWidth/2, -Constants.DriveConstants.wheelBase/2);
+    public static Translation2d m2 = new Translation2d(-Constants.DriveConstants.trackWidth/2, Constants.DriveConstants.wheelBase/2);
+    public static Translation2d m3 = new Translation2d(-Constants.DriveConstants.trackWidth/2, -Constants.DriveConstants.wheelBase/2);
 
     public static final class Modules{
-        public static final SwerveModule Mod_0 = new SwerveModule(Constants.Mod0.driveMotor, Constants.Mod0.turnMotor, Constants.Mod0.canCoder, Constants.Mod0.angleOffset);
-        public static final SwerveModule Mod_1 = new SwerveModule(Constants.Mod1.driveMotor, Constants.Mod1.turnMotor, Constants.Mod1.canCoder, Constants.Mod1.angleOffset);
-        public static final SwerveModule Mod_2 = new SwerveModule(Constants.Mod2.driveMotor, Constants.Mod2.turnMotor, Constants.Mod2.canCoder, Constants.Mod2.angleOffset);
-        public static final SwerveModule Mod_3 = new SwerveModule(Constants.Mod3.driveMotor, Constants.Mod3.turnMotor, Constants.Mod3.canCoder, Constants.Mod3.angleOffset);
+        public static final SwerveModule Mod_0 = new SwerveModule(Constants.DriveConstants.Mod0.driveMotor, Constants.DriveConstants.Mod0.turnMotor, Constants.DriveConstants.Mod0.canCoder, Constants.DriveConstants.Mod0.angleOffset);
+        public static final SwerveModule Mod_1 = new SwerveModule(Constants.DriveConstants.Mod1.driveMotor, Constants.DriveConstants.Mod1.turnMotor, Constants.DriveConstants.Mod1.canCoder, Constants.DriveConstants.Mod1.angleOffset);
+        public static final SwerveModule Mod_2 = new SwerveModule(Constants.DriveConstants.Mod2.driveMotor, Constants.DriveConstants.Mod2.turnMotor, Constants.DriveConstants.Mod2.canCoder, Constants.DriveConstants.Mod2.angleOffset);
+        public static final SwerveModule Mod_3 = new SwerveModule(Constants.DriveConstants.Mod3.driveMotor, Constants.DriveConstants.Mod3.turnMotor, Constants.DriveConstants.Mod3.canCoder, Constants.DriveConstants.Mod3.angleOffset);
     }
+
+    public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
+}
 
     public static final class RotationConstants{
         public static final double kP = 0.1;
@@ -168,9 +172,6 @@ public final class Constants{
     public static final double shotDistance = 1;
 
     public static final double ejectSpeed = -0.3;
-  
-  
-    public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
 
     public static final Translation2d targetTranslation = new Translation2d(0, 5);
         public static final class Patterns {

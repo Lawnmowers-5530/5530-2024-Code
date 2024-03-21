@@ -44,10 +44,10 @@ public class Swerve extends SubsystemBase implements Loggable {
   boolean isUpdating;
 
   private boolean isCoasting;
-  private static final SwerveModule Mod_0 = Constants.Modules.Mod_0;
-  private static final SwerveModule Mod_1 = Constants.Modules.Mod_1;
-  private static final SwerveModule Mod_2 = Constants.Modules.Mod_2;
-  private static final SwerveModule Mod_3 = Constants.Modules.Mod_3;
+  private static final SwerveModule Mod_0 = Constants.DriveConstants.Modules.Mod_0;
+  private static final SwerveModule Mod_1 = Constants.DriveConstants.Modules.Mod_1;
+  private static final SwerveModule Mod_2 = Constants.DriveConstants.Modules.Mod_2;
+  private static final SwerveModule Mod_3 = Constants.DriveConstants.Modules.Mod_3;
   
   @Log
   String poseStr = "";
@@ -56,6 +56,9 @@ public class Swerve extends SubsystemBase implements Loggable {
 
   private SwerveModuleState[] states;
 
+  /**
+   * Boolean supplier that returns true if the robot is on the red alliance
+   */
   private BooleanSupplier sideSupplier = () -> {
           // Boolean supplier that controls when the path will be mirrored for the red
           // alliance
@@ -69,7 +72,7 @@ public class Swerve extends SubsystemBase implements Loggable {
         };
 
   public Swerve() {
-    poseEstimator = new SwerveDrivePoseEstimator(Constants.kinematics, Pgyro.getRot(), getModulePositions(), new Pose2d());
+    poseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.kinematics, Pgyro.getRot(), getModulePositions(), new Pose2d());
     poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(1, 1, Rotation2d.fromDegrees(45).getRadians())); //set vision measurement trust tolerance to 1 meter and 45 degrees
 
     rotationPID = new PIDController(Constants.RotationConstants.kP, Constants.RotationConstants.kI,
@@ -85,12 +88,18 @@ public class Swerve extends SubsystemBase implements Loggable {
             Constants.PathPlannerConstants.translationConstants,
             Constants.PathPlannerConstants.rotationConstants,
             3.8,
-            Constants.driveBaseRadius,
+            Constants.DriveConstants.driveBaseRadius,
             new ReplanningConfig()),
         sideSupplier,
         this);
   }
 
+  /**
+   * Drive the robot
+   * @param vector
+   * @param omegaRadSec CCW+ radians per second
+   * @param fieldRelative If true, vector will be considered field relative
+   */
   public void drive(Vector2D vector, double omegaRadSec, boolean fieldRelative) {
 
     Rotation2d gyroAngle = Pgyro.getRot();
@@ -102,7 +111,7 @@ public class Swerve extends SubsystemBase implements Loggable {
     }
     ChassisSpeeds speeds = new ChassisSpeeds(rotated.getvX(), rotated.getvY(), -omegaRadSec);
 
-    states = Constants.kinematics.toSwerveModuleStates(speeds);
+    states = Constants.DriveConstants.kinematics.toSwerveModuleStates(speeds);
     Mod_0.setState(states[0]);
     Mod_1.setState(states[1]);
     Mod_2.setState(states[2]);
@@ -155,7 +164,7 @@ public class Swerve extends SubsystemBase implements Loggable {
 
   // chassis speeds consumer
   public void setChassisSpeeds(ChassisSpeeds speeds) {
-    states = Constants.kinematics.toSwerveModuleStates(speeds);
+    states = Constants.DriveConstants.kinematics.toSwerveModuleStates(speeds);
     Mod_0.setState(states[0]);
     Mod_1.setState(states[1]);
     Mod_2.setState(states[2]);
@@ -167,7 +176,7 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {
-    ChassisSpeeds badSpeeds = Constants.kinematics.toChassisSpeeds(Mod_0.getState(), Mod_1.getState(), Mod_2.getState(),
+    ChassisSpeeds badSpeeds = Constants.DriveConstants.kinematics.toChassisSpeeds(Mod_0.getState(), Mod_1.getState(), Mod_2.getState(),
         Mod_3.getState());
     return new ChassisSpeeds(-badSpeeds.vxMetersPerSecond, -badSpeeds.vyMetersPerSecond,
         badSpeeds.omegaRadiansPerSecond);
