@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -77,6 +78,9 @@ public class RobotContainer implements Loggable {
   private BooleanSupplier noteLoaded;
   private BooleanSupplier slowMode;
 
+  private SlewRateLimiter translationLimiter = new SlewRateLimiter(3);
+  private SlewRateLimiter rotationLimiter = new SlewRateLimiter(3);
+
   public RobotContainer() {
     driverController = new CommandXboxController(0);
     secondaryController = new CommandXboxController(1);
@@ -130,10 +134,9 @@ public class RobotContainer implements Loggable {
     // drive swerve, slow mode with b
     swerveCmd = new RunCommand(
         () -> {
-          double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.06);
-          double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.06);
-          double w = MathUtil.applyDeadband(driverController.getRightX(), 0.06);
-
+          double y = MathUtil.applyDeadband(translationLimiter.calculate(driverController.getLeftY()), 0.06);
+          double x = MathUtil.applyDeadband(translationLimiter.calculate(driverController.getLeftX()), 0.06);
+          double w = MathUtil.applyDeadband(rotationLimiter.calculate(driverController.getRightX()), 0.06);
           Vector2D vector = new Vector2D(y, x, false);
           swerve.drive(vector, -w, true);
 
