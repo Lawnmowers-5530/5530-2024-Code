@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;import io.github.oblarg.oblog.annotations.Log;
 
 //TODO: RETUNE THIS
 public class LauncherV2 extends Launcher implements Loggable {
@@ -40,6 +41,7 @@ public class LauncherV2 extends Launcher implements Loggable {
         rightPIDController.setFF(Constants.LauncherConstants.kF);
     }
 
+    @Config
     public void setVelocity(double left, double right) {
         leftPIDController.setReference(left, CANSparkBase.ControlType.kVelocity);
         rightPIDController.setReference(right, CANSparkBase.ControlType.kVelocity);
@@ -47,6 +49,11 @@ public class LauncherV2 extends Launcher implements Loggable {
         SmartDashboard.putNumber("Right Target", right);
         SmartDashboard.putNumber("left velocity", leftEncoder.getVelocity());
         SmartDashboard.putNumber("right velocity", rightEncoder.getVelocity());
+    }
+
+    @Log
+    public double getVelocity() {
+        return (leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2;
     }
 
     public Command reset() {
@@ -100,6 +107,8 @@ public class LauncherV2 extends Launcher implements Loggable {
                                     / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
             });
     }
+
+
 
     public boolean isRunningIntake(){
         return leftMotor.get() < 0 && rightMotor.get() < 0;

@@ -2,8 +2,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import io.github.oblarg.oblog.Loggable;
 
-public class Launcher extends SubsystemBase {
+public class Launcher extends SubsystemBase implements Loggable {
     static final double kP = 0.0001;
     static final double kI = 0.0001;
     static final double kD = 0.0001;
@@ -26,5 +27,6 @@ public class Launcher extends SubsystemBase {
         leftMotor.set(left);
         rightMotor.set(right);
     }
+
 
 }

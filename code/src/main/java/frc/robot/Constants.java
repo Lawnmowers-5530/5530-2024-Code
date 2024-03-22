@@ -82,7 +82,7 @@ public final class Constants{
 
         public static final double loaderShotSpeed = 0.35;
 
-        public static final double LAUNCHER_LOW_REVS = 465; //1000 // low speed for the launcher
+        public static final double LAUNCHER_LOW_REVS = 515; //1000 // low speed for the launcher
         public static final double LAUNCHER_MED_REVS = 3000; // medium speed for the launcher
         public static final double LAUNCHER_HIGH_REVS = 4500; // high speed for the launcher
 
