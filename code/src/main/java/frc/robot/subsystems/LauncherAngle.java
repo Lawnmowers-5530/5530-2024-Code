@@ -24,28 +24,24 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
     double sP;
 
     @Log
-    String pidOutput = "a";
+    double output;
 
     @Log
-    String feedOutput = "a";
-
-    @Log
-    String encoderPos = "a";
+    double encoderPos;
 
     public LauncherAngle(int motorPort, boolean reversed, double conversionFactor) {
         motor = new CANSparkMax(motorPort, CANSparkMax.MotorType.kBrushless);
         motor.setInverted(reversed);
 
         pidController = new PIDController(0,0,0); //TODO: change these values
-        pidController.setIntegratorRange(-0.2, 0.2);
-        pidController.setIZone(15);
+        pidController.setIZone(0.02);
 
         encoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         encoder.setPositionConversionFactor(conversionFactor);
         encoder.setZeroOffset(116);
         sP = 30;
 
-        feedforward = new ArmFeedforward(0,0,0,0); //0.05, -0.0175, 0.03, -0.225
+        feedforward = new ArmFeedforward(0,0.12,0,0); //0.05, -0.0175, 0.03, -0.225
     }
 
     @Config
@@ -66,7 +62,13 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
         return pidController.atSetpoint();
     }
 
-    public void periodic() {}
+    public void periodic() {
+        encoderPos = encoder.getPosition();
+        double encoderVelocity = encoder.getVelocity();
+        output = pidController.calculate(encoderPos) - feedforward.calculate(encoderPos * Math.PI * 2, encoderVelocity * Math.PI * 2);
+
+        motor.set(output);
+    }
 
         public double getEncoderMeasurement() {
         return encoder.getPosition() * Constants.LauncherAngleConstants.conversionFactor;
@@ -100,7 +102,7 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
     public boolean isAmpAngle() {
         return this.getEncoderMeasurement() < Constants.LauncherAngleConstants.ampPosition + Constants.LauncherAngleConstants.positionTolerance;
     }
-
+    
     public boolean isSpeakerAngle() {
         return this.getEncoderMeasurement() > Constants.LauncherAngleConstants.speakerPosition - Constants.LauncherAngleConstants.positionTolerance;
     }

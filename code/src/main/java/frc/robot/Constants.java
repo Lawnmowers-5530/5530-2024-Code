@@ -111,7 +111,7 @@ public final class Constants{
         public static final double kI = 0.00;
         public static final double kD = 0.00;
 
-        public static final double conversionFactor = 5192/360;
+        public static final double conversionFactor = 1;
 
         public static final double ampPosition = 0.235;
         public static final double speakerPosition = 0.59;
