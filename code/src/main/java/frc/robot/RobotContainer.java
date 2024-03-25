@@ -103,12 +103,13 @@ public class RobotContainer implements Loggable {
     autoChooser.addOption("shoot only any pos", AutoBuilder.buildAuto("shoot only any pos"));
     autoChooser.addOption("tuner", AutoBuilder.buildAuto("tuner"));
     autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
+    autoChooser.addOption("match 41 auto", AutoBuilder.buildAuto("match 41 auto"));
     SmartDashboard.putData("Auton chooser", autoChooser);
   }
 
   private void createSubsystems() {
     //distanceSensorMXP = new DistanceSensorMXP();
-    ampAssist = new AmpAssist(1);
+    ampAssist = new AmpAssist();
     leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable, "Competition"));
     ledManager = new LedManager(leds.getController());
     fisheye = new Camera("fisheye", 0, 320, 240, 300);

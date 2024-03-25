@@ -135,6 +135,12 @@ public final class Constants{
     );
     }
 
+    public static final class ampAssistConstants{
+        public static int servoPort = 1;
+        public static double up = 0.92;
+        public static double down = 0;
+    }
+
     public static final class LedConstants{
         public static final int groundIntakeAndAmpAnglePriority = 50;
         public static final PatternType groundIntakeAndAmpAnglePattern = SolidColorType.Red;
