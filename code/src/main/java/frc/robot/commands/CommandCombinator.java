@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.subsystems.AmpAssist;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
 import frc.robot.subsystems.DumbLauncherAngle;
@@ -24,15 +25,18 @@ public class CommandCombinator {
 	LoaderV2 loader;
 	DistanceSensor distanceSensor;
 	DumbLauncherAngle launcherAngle;
+	AmpAssist ampAssist;
 
 	public CommandCombinator(Climber climber, Intake intake, LauncherV2 launcher, LoaderV2 loader,
-			DumbLauncherAngle launcherAngle, DistanceSensor distanceSensor) {
+			DumbLauncherAngle launcherAngle, DistanceSensor distanceSensor, AmpAssist ampAssist) {
 		this.climber = climber;
 		this.intake = intake;
 		this.launcher = launcher;
 		this.loader = loader;
 		this.distanceSensor = distanceSensor;
 		this.launcherAngle = launcherAngle;
+		this.ampAssist = ampAssist;
+		
 	}
 
 	public Command eject() {
@@ -102,6 +106,7 @@ public class CommandCombinator {
 
 	public Command ampShot() {
 		return launcherAngle.ampAngleCommand()
+
 			.andThen(
 				new ParallelDeadlineGroup(
 					new SequentialCommandGroup(
@@ -112,6 +117,22 @@ public class CommandCombinator {
 				)
 			)
 			.andThen(stopShooterComponents());
+	};
+
+	public Command ampShotAssist() {
+		return new ParallelDeadlineGroup(new WaitCommand(0.75),
+			launcherAngle.ampAngleCommand(), ampAssist.up())
+		
+			.andThen(
+				new ParallelDeadlineGroup(
+					new SequentialCommandGroup(
+						new WaitCommand(0.75),
+						loader.feedShooterCommand().until(loader::isNotLoaded)
+					),
+					launcher.ampLauncherCommand()
+				)
+			)
+			.andThen(new WaitCommand(0.75), stopShooterComponents(), ampAssist.down());
 	};
 
 	private Command logFinish(String cmdName) {

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5,
-        "y": 5.55
+        "x": 2.375,
+        "y": 7.003524257048515
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5207316041655616,
-        "y": 5.55
+        "x": 2.0625,
+        "y": 7.005286385572772
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.4,
-        "y": 5.55
+        "x": 2.0,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 2.350000000000001,
-        "y": 5.55
+        "x": 2.0,
+        "y": 7.009398018796037
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,14 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 125.73977846882853,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "far shoot paths",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

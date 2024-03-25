@@ -73,6 +73,7 @@ public class RobotContainer implements Loggable {
   private Command groundIntake;
   private Command ampAssistUp;
   private Command ampAssistDown;
+  private Command ampLauncherAssist;
 
   private CommandCombinator combinator;
 
@@ -133,7 +134,7 @@ public class RobotContainer implements Loggable {
 
   private void createCommands() {
     // combine subsystem commands into sequential/parallel command groups
-    combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor);
+    combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor, ampAssist);
 
     // drive swerve, slow mode with b
     swerveCmd = new RunCommand(
@@ -177,6 +178,8 @@ public class RobotContainer implements Loggable {
     speakerFarLauncher = combinator.speakerFarShot();
     // spin up launcher, shoot to amp after 0.5 seconds
     ampLauncher = combinator.ampShot();
+
+    ampLauncherAssist = combinator.ampShotAssist();
 
     // intake note from source, auto stop
     sourceIntake = combinator.sourceIntake();
@@ -234,7 +237,7 @@ public class RobotContainer implements Loggable {
 
     secondaryController.y().onTrue(speakerLauncher);
 
-    secondaryController.b().onTrue(ampLauncher);
+    secondaryController.b().onTrue(ampLauncherAssist);
 
     secondaryController.start().onTrue(eject);
     secondaryController.x().onTrue(stopShooterComponents);
