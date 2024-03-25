@@ -99,8 +99,8 @@ public final class Constants{
 
         public static final double conversionFactor = 5192/360; //TODO: logically should be 1/360
 
-        public static final double ampPosition = 0.235; // TODO: find the correct value
-        public static final double speakerPosition = 0.59; // TODO: find the correct value
+        public static final double upPosition = 0.245; // TODO: find the correct value
+        public static final double downPosition = 0.58; // TODO: find the correct value
         public static final double positionTolerance = 0.11;
     }
 

@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,10 +17,17 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
 
     CANSparkMax motor;
     Angle state;
-    double power = 0.2;
+    final double power = 0.2;
+    @Log
+    double calculatedPower = 0;
     SparkAbsoluteEncoder encoder;
     @Log
     double ticks;
+
+    @Log
+    boolean isUp;
+    @Log
+    boolean isDown;
 
     public DumbLauncherAngle(int motorPort, boolean isReversed) {
         motor = new CANSparkMax(motorPort, CANSparkMax.MotorType.kBrushless);
@@ -27,35 +35,31 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
         sharedInit();
     }
 
-    public DumbLauncherAngle(int motorPort, double power) {
-        motor = new CANSparkMax(motorPort, CANSparkMax.MotorType.kBrushless);
-        this.power = power;
-        sharedInit();
-    }
-
-    public DumbLauncherAngle(int motorPort, boolean isReversed, double power) {
-        motor = new CANSparkMax(motorPort, CANSparkMax.MotorType.kBrushless);
-        motor.setInverted(isReversed);
-        this.power = power;
-        sharedInit();
-    }
-
     private void sharedInit() {
         this.encoder = this.motor.getAbsoluteEncoder();
-        this.encoder.setPositionConversionFactor(1);
-        this.state = Angle.RELAXED;
+        this.encoder.setPositionConversionFactor(Constants.LauncherAngleConstants.conversionFactor);
+        setState(Angle.RELAXED);
     }
 
     public void setState(Angle state) {
-        double calculatedPower = 0;
-        switch (state) {
+        this.state = state;
+    }
+
+    public void updateState() {
+        switch (this.state) {
             case UP: {
                 calculatedPower = power;
+                if (isUp()) {
+                    calculatedPower = calculatedPower * 0.2;
+                }
                 //System.out.println("set power up");
                 break;
             }
             case DOWN: {
                 calculatedPower = -power-0.025;
+                if (isDown()) {
+                    calculatedPower = calculatedPower * 0.2;
+                }
                 //System.out.println("set power down");
                 break;
             }
@@ -65,14 +69,7 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
                 break;
             }
         }
-
-        if (isAmpAngle() || isSpeakerAngle()) {
-            calculatedPower = 0.2 * calculatedPower;
-        }
-
-        this.power = calculatedPower;
-        
-        this.state = state;
+        motor.set(calculatedPower);
     }
 
     public Angle getState() {
@@ -80,7 +77,7 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
     }
     
     public double getEncoderMeasurement() {
-        return encoder.getPosition() * Constants.LauncherAngleConstants.conversionFactor;
+        return encoder.getPosition();
     }
 
     public Command ampAngleCommand() {
@@ -104,17 +101,22 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
                 });
     }
 
-    public boolean isAmpAngle() {
-        return this.getEncoderMeasurement() < Constants.LauncherAngleConstants.ampPosition + Constants.LauncherAngleConstants.positionTolerance;
+    public boolean isUp() {
+        this.isUp = this.getEncoderMeasurement() < Constants.LauncherAngleConstants.upPosition + Constants.LauncherAngleConstants.positionTolerance;
+        return this.isUp;
     }
 
-    public boolean isSpeakerAngle() {
-        return this.getEncoderMeasurement() > Constants.LauncherAngleConstants.speakerPosition - Constants.LauncherAngleConstants.positionTolerance;
+    public boolean isDown() {
+        this.isDown = this.getEncoderMeasurement() > Constants.LauncherAngleConstants.downPosition - Constants.LauncherAngleConstants.positionTolerance;
+        return this.isDown;
     }
 
     @Override 
     public void periodic() {
         ticks = this.getEncoderMeasurement();
+        updateState();
+        isUp();
+        isDown();
 
     }
 }
