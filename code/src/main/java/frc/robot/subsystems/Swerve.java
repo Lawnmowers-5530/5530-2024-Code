@@ -64,7 +64,7 @@ public class Swerve extends SubsystemBase implements Loggable {
         new HolonomicPathFollowerConfig(
             Constants.PathPlannerConstants.translationConstants,
             Constants.PathPlannerConstants.rotationConstants,
-            3.8,
+            4.6, //was 3.8
             Constants.driveBaseRadius,
             new ReplanningConfig()),
         () -> {

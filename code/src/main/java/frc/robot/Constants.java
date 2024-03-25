@@ -135,7 +135,7 @@ public final class Constants {
 
     public static final class PathPlannerConstants {
         public static final PIDConstants translationConstants = new PIDConstants(4, 0, 0.0);
-        public static final PIDConstants rotationConstants = new PIDConstants(2.4, 0.0, 0.05);// d was 0.2 and p was 6
+        public static final PIDConstants rotationConstants = new PIDConstants(5, 0.0, 0.0);// d was 0.2 and p was 6 OTHER 2.4 p 0.05 d not working tho
 
         public static final PathConstraints constraints = new PathConstraints(
                 3, 1.5, // linear
