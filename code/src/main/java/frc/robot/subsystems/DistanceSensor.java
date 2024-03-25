@@ -14,7 +14,7 @@ public class DistanceSensor extends SubsystemBase implements Loggable{
     Rev2mDistanceSensor sensor;
 
     public DistanceSensor() {
-        sensor = new Rev2mDistanceSensor(Port.kOnboard);
+        sensor = new Rev2mDistanceSensor(Port.kMXP);
         sensor.setDistanceUnits(Rev2mDistanceSensor.Unit.kMillimeters);
         Shuffleboard.getTab("DistanceSensor").addNumber("distance", this::getDistance);
         this.setEnabled(true);

@@ -71,6 +71,8 @@ public class RobotContainer implements Loggable {
   private Command zeroGyro;
   private Command sourceIntake;
   private Command groundIntake;
+  private Command ampAssistUp;
+  private Command ampAssistDown;
 
   private CommandCombinator combinator;
 
@@ -180,6 +182,13 @@ public class RobotContainer implements Loggable {
     // intake note from ground, auto stop
     groundIntake = combinator.groundIntake();
 
+    //amp assist up
+    ampAssistUp = ampAssist.up();
+
+    //amp Assist down
+    ampAssistDown = ampAssist.down();
+    
+
     // eject note
     // make eject a toggle button
     eject = combinator.eject();
@@ -236,15 +245,11 @@ public class RobotContainer implements Loggable {
     //secondaryController.povDown().onTrue(ampAngle);
     //secondaryController.povUp().onTrue(speakerAngle);
 
-    secondaryController.povDown().onTrue(ampAssist.setAngle(0));
-    secondaryController.povUp().onTrue(ampAssist.setAngle(0.88));
+    secondaryController.povDown().onTrue(ampAssist.down());
+    secondaryController.povUp().onTrue(ampAssist.up());
+
     secondaryController.povLeft().onTrue(groundIntake);
     secondaryController.povRight().onTrue(sourceIntake);
-
-    CommandXboxController devController = new CommandXboxController(3);
-    devController.a().onTrue(ampAssist.setAngle(0));
-    devController.b().onTrue(ampAssist.setAngle(1));
-    devController.x().onTrue(ampAssist.setAngle(0.88));
 
   }
 
@@ -254,5 +259,6 @@ public class RobotContainer implements Loggable {
 
   public void disabledPeriodic() {
     swerve.disabledPeriodic();
+
   }
 }

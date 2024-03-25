@@ -17,17 +17,27 @@ public class AmpAssist extends SubsystemBase implements Loggable{
         servo = new Servo(servoPort);  
     }
 
-    public Command setAngle(double angle) {
+    public Command up() {
         return new InstantCommand(() -> {
-            set(angle);
+            set(0.9);
+        });
+    }
+    public Command down() {
+        return new InstantCommand(() -> {
+            set(0);
         });
     } 
     @Config
     public void set(double angle) {
         this.pos = angle;
     }
+    
 
     public void periodic() {
         servo.set(pos);
     }
+
+    //public void disabledPeriodic() {
+    //    servo.set(pos);
+    //}
 }
