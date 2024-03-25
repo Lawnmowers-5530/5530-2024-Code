@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.lib.LimelightHelpers;
 import frc.lib.Shot;
 import frc.lib.ShotCalculator;
 import frc.robot.Constants;
@@ -18,6 +19,7 @@ import frc.robot.subsystems.LauncherAngle;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherV2;
 import frc.robot.subsystems.LoaderV2;
+import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
 
 //credit skyline stole this idea from them
@@ -130,7 +132,7 @@ public class CommandCombinator {
 
 
 	//Shoot anywhere command based on swerve current pose
-	public Command shootPoseCommand() { //TODO
+	public Command shootPoseCommand() { //TODO: FORMAT THIS PROPERLY NICK
 		return new RunCommand(
       () -> {
         //use shooter library to calculate final shot vector
@@ -153,5 +155,43 @@ public class CommandCombinator {
 			System.out.println("Shot is not possible");
 		}
       }, new Subsystem[] { launcher, launcherAngle, swerve });
-}
+	}
+
+	public Command goToRing() {
+		return new SequentialCommandGroup(alignToRing());
+	}
+
+	double alignToRingOriginalAngle = 0;
+	double alignToRingTargetAngle = 0;
+
+	public Command alignToRing() {
+		return new SequentialCommandGroup(
+			new InstantCommand(
+				() -> {
+					alignToRingOriginalAngle = Pgyro.getDeg();
+					alignToRingTargetAngle = alignToRingOriginalAngle + LimelightHelpers.getTX("ringVision");
+				}
+			),
+			new RunCommand(
+				() -> {
+					swerve.rotateToAngle(alignToRingTargetAngle);
+				},
+				swerve
+			)
+			.until(swerve::atTargetAngle)
+		);
+	}
+
+	double calculatedDistance = 0;
+
+	public Command driveToRing() {
+		return new SequentialCommandGroup(
+			new InstantCommand(
+				() -> {
+					double ringHeight = 5.08;
+				}
+			),
+			)
+		);
+	}
 }
