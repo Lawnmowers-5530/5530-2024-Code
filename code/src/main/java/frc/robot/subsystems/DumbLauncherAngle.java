@@ -16,7 +16,7 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
 
     CANSparkMax motor;
     Angle state;
-    double power = 0.1;
+    double power = 0.2;
     SparkAbsoluteEncoder encoder;
     @Log
     double ticks;

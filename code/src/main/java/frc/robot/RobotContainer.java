@@ -15,9 +15,11 @@ import io.github.oblarg.oblog.Loggable;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
 import frc.robot.commands.CommandCombinator;
+import frc.robot.subsystems.AmpAssist;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
+import frc.robot.subsystems.DistanceSensorMXP;
 import frc.robot.subsystems.DumbLauncherAngle;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherV2;
@@ -47,7 +49,8 @@ public class RobotContainer implements Loggable {
   private LedController_MultiAccess leds;
   private Camera fisheye;
   private LedManager ledManager;
-
+  private AmpAssist ampAssist;
+  private DistanceSensorMXP distanceSensorMXP;
   private CommandXboxController driverController;
   private CommandXboxController secondaryController;
 
@@ -102,6 +105,8 @@ public class RobotContainer implements Loggable {
   }
 
   private void createSubsystems() {
+    //distanceSensorMXP = new DistanceSensorMXP();
+    ampAssist = new AmpAssist(1);
     leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable, "Competition"));
     ledManager = new LedManager(leds.getController());
     fisheye = new Camera("fisheye", 0, 320, 240, 300);
@@ -233,6 +238,11 @@ public class RobotContainer implements Loggable {
 
     secondaryController.povLeft().onTrue(groundIntake);
     secondaryController.povRight().onTrue(sourceIntake);
+
+    CommandXboxController devController = new CommandXboxController(3);
+    devController.a().onTrue(ampAssist.setAngle(0));
+    devController.b().onTrue(ampAssist.setAngle(1));
+    devController.x().onTrue(ampAssist.setAngle(0.88));
 
   }
 
