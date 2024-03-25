@@ -47,23 +47,31 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
     }
 
     public void setState(Angle state) {
+        double calculatedPower = 0;
         switch (state) {
             case UP: {
-                motor.set(power);
+                calculatedPower = power;
                 //System.out.println("set power up");
                 break;
             }
             case DOWN: {
-                motor.set(-power-0.025);
+                calculatedPower = -power-0.025;
                 //System.out.println("set power down");
                 break;
             }
             case RELAXED: {
-                motor.set(0);
+                calculatedPower = 0;
                 //System.out.println("relax power");
                 break;
             }
         }
+
+        if (isAmpAngle() || isSpeakerAngle()) {
+            calculatedPower = 0.2 * calculatedPower;
+        }
+
+        this.power = calculatedPower;
+        
         this.state = state;
     }
 
@@ -108,6 +116,5 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
     public void periodic() {
         ticks = this.getEncoderMeasurement();
 
-        setState(state);
     }
 }
