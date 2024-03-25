@@ -120,8 +120,7 @@ public class CommandCombinator {
 	};
 
 	public Command ampShotAssist() {
-		return new ParallelDeadlineGroup(new WaitCommand(0.75),
-			launcherAngle.ampAngleCommand(), ampAssist.up())
+		return new ParallelDeadlineGroup(launcherAngle.ampAngleCommand(), new WaitCommand(0.75), ampAssist.up())
 		
 			.andThen(
 				new ParallelDeadlineGroup(
