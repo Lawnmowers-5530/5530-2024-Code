@@ -29,6 +29,7 @@ import frc.robot.subsystems.LedManager;
 import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.ExternalIntake;
 import frc.robot.subsystems.LedController.StripType;
 
 import java.util.function.BooleanSupplier;
@@ -46,6 +47,7 @@ public class RobotContainer implements Loggable {
   private LauncherV2 launcher;
   private Climber climber;
   private Intake intake;
+  private ExternalIntake externalIntake;
   private LedController_MultiAccess leds;
   private Camera fisheye;
   private LedManager ledManager;
@@ -71,9 +73,13 @@ public class RobotContainer implements Loggable {
   private Command zeroGyro;
   private Command sourceIntake;
   private Command groundIntake;
+
   private Command ampAssistUp;
   private Command ampAssistDown;
   private Command ampLauncherAssist;
+
+  private Command rollerOn;
+  private Command rollerOff;
 
   private CommandCombinator combinator;
 
@@ -116,6 +122,10 @@ public class RobotContainer implements Loggable {
     fisheye = new Camera("fisheye", 0, 320, 240, 300);
 
     intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
+    externalIntake = new ExternalIntake(
+      Constants.ExternalIntakeConstants.pivotMotorPort, 
+      Constants.ExternalIntakeConstants.rollerMotorPort,
+      Constants.ExternalIntakeConstants.isReversed);
     launcher = new LauncherV2();
     launcherAngle = new DumbLauncherAngle(
         Constants.LauncherAngleConstants.motorPort,
@@ -188,9 +198,13 @@ public class RobotContainer implements Loggable {
 
     //amp assist up
     ampAssistUp = ampAssist.up();
-
     //amp Assist down
     ampAssistDown = ampAssist.down();
+
+    //external intake roller on
+    rollerOn = externalIntake.externalIntakeWheelCommand();
+    //external intake roller off
+    rollerOff = externalIntake.stopExternalIntakeWheelCommand();
     
 
     // eject note

@@ -153,6 +153,8 @@ public final class Constants {
         public static final int pivotMotorPort = 25;
         public static final int rollerMotorPort = 26;
         public static final double rollerSpeed = 0.25;
+
+        public static final boolean isReversed = true;
     }
 
     public static final class LedConstants {
