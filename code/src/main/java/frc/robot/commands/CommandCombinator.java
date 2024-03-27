@@ -150,7 +150,7 @@ public class CommandCombinator {
 					launcher.ampLauncherCommand()
 				)
 			)
-			.andThen(new WaitCommand(0.75), stopShooterComponents(), ampAssist.down());
+			.andThen(new WaitCommand(0.75), ampAssist.down(), stopShooterComponents());
 	};
 
 	private Command logFinish(String cmdName) {
@@ -163,7 +163,7 @@ public class CommandCombinator {
 	public Command ExternalIntakeOn() {
 		return new SequentialCommandGroup(
 			externalIntake.setPivotCommand(Position.DOWN)
-				.until(externalIntake::ready),
+			.until(externalIntake::ready),		
 			externalIntake.externalIntakeWheelCommand()
 		);
 	}
