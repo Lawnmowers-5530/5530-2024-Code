@@ -143,10 +143,16 @@ public final class Constants {
         );
     }
 
-    public static final class ampAssistConstants {
+    public static final class AmpAssistConstants {
         public static int servoPort = 1;
         public static double up = 0.92;
         public static double down = 0;
+    }
+
+    public static final class ExternalIntakeConstants{
+        public static final int pivotMotorPort = 25;
+        public static final int rollerMotorPort = 26;
+        public static final double rollerSpeed = 0.25;
     }
 
     public static final class LedConstants {

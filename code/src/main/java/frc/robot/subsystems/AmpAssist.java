@@ -15,17 +15,17 @@ public class AmpAssist extends SubsystemBase implements Loggable{
     double pos;
     
     public AmpAssist() {
-        servo = new Servo(Constants.ampAssistConstants.servoPort);  
+        servo = new Servo(Constants.AmpAssistConstants.servoPort);  
     }
 
     public Command up() {
         return new InstantCommand(() -> {
-            set(Constants.ampAssistConstants.up);
+            set(Constants.AmpAssistConstants.up);
         });
     }
     public Command down() {
         return new InstantCommand(() -> {
-            set(Constants.ampAssistConstants.down);
+            set(Constants.AmpAssistConstants.down);
         });
     } 
     @Config
