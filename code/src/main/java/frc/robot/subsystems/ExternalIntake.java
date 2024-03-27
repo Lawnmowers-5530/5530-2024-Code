@@ -103,7 +103,7 @@ public class ExternalIntake extends SubsystemBase implements Loggable {
     }
 
     public Command setPivotCommand(Position position) {
-        return this.runOnce(() -> {setPivotPosition(position);});
+        return this.run(() -> {setPivotPosition(position);});
     }
 
     public Command externalIntakeWheelCommand() {
