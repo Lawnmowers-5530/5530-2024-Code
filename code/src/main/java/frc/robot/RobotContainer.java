@@ -75,6 +75,7 @@ public class RobotContainer implements Loggable {
   private Command zeroGyro;
   private Command sourceIntake;
   private Command groundIntake;
+  private Command fullIntake;
 
   private Command ampAssistUp;
   private Command ampAssistDown;
@@ -103,7 +104,7 @@ public class RobotContainer implements Loggable {
 
     createCommands();
 
-    NamedCommands.registerCommand("intake", groundIntake);
+    NamedCommands.registerCommand("intake", fullIntake);
     NamedCommands.registerCommand("closeShoot", speakerLauncher);
     NamedCommands.registerCommand("farShoot", speakerFarLauncher);
     NamedCommands.registerCommand("stop", stopShooterComponents);
@@ -115,7 +116,7 @@ public class RobotContainer implements Loggable {
     configureBindings();
 
     autoChooser = new SendableChooser<>();
-    autoChooser.addOption("shoot only any pos", AutoBuilder.buildAuto("shoot only any pos"));
+    //autoChooser.addOption("shoot only any pos", AutoBuilder.buildAuto("shoot only any pos"));
     autoChooser.addOption("tuner", AutoBuilder.buildAuto("tuner"));
     autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
     autoChooser.addOption("match 41 auto", AutoBuilder.buildAuto("match 41 auto"));
@@ -203,6 +204,7 @@ public class RobotContainer implements Loggable {
     sourceIntake = combinator.sourceIntake();
     // intake note from ground, auto stop
     groundIntake = combinator.groundIntake();
+    fullIntake = combinator.fullIntake();
 
     //amp assist up
     ampAssistUp = ampAssist.up();
@@ -276,8 +278,8 @@ public class RobotContainer implements Loggable {
     //secondaryController.povDown().onTrue(ampAngle);
     //secondaryController.povUp().onTrue(speakerAngle);
 
-    secondaryController.povDown().onTrue(ampAssist.down());
-    secondaryController.povUp().onTrue(ampAssist.up());
+    secondaryController.povDown().onTrue(fullIntake);
+    secondaryController.povUp().onTrue(externalIntakeOff);
 
     secondaryController.povLeft().onTrue(groundIntake);
     secondaryController.povRight().onTrue(sourceIntake);

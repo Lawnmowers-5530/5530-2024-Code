@@ -46,14 +46,16 @@ public class CommandCombinator {
 	public Command eject() {
 		return new ParallelCommandGroup(
 				intake.ejectCommand(),
-				loader.ejectCommand());
+				loader.ejectCommand(),
+				externalIntake.ejectCommand());
 	}
 
 	public Command stopShooterComponents() {
 		return new ParallelCommandGroup(
 				intake.stopIntakeWheelCommand(),
 				loader.stopLoaderCommand(),
-				launcher.stopLauncherCommand());
+				launcher.stopLauncherCommand(),
+				ExternalIntakeOff());
 	}
 
 	public Command sourceIntake() {
@@ -74,6 +76,19 @@ public class CommandCombinator {
 				new ParallelCommandGroup(
 					intake.intakeWheelCommand(),
 					loader.runLoaderCommand()
+				)
+					.until(loader::isLoaded)
+					.andThen(stopShooterComponents())
+			);
+	}
+
+	public Command fullIntake() {
+		return launcherAngle.speakerAngleCommand()
+			.andThen(
+				new ParallelCommandGroup(
+					intake.intakeWheelCommand(),
+					loader.runLoaderCommand(),
+					ExternalIntakeOn()
 				)
 					.until(loader::isLoaded)
 					.andThen(stopShooterComponents())

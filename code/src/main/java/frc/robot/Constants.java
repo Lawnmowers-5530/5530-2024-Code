@@ -31,7 +31,7 @@ public final class Constants {
         public static final int driveMotor = 7;
         public static final int turnMotor = 8;
         public static final int canCoder = 14;
-        public static final double angleOffset = 0;
+        public static final double angleOffset = 13;
     }
 
     public static final class Mod3 { // RR
@@ -119,7 +119,7 @@ public final class Constants {
     }
 
     public static final class LauncherIntakeConstants {
-        public static final int threshold = 70;
+        public static final int threshold = 90;
         public static final double speed = 0.175;
     }
 
@@ -135,11 +135,11 @@ public final class Constants {
 
     public static final class PathPlannerConstants {
         public static final PIDConstants translationConstants = new PIDConstants(4, 0, 0.0);
-        public static final PIDConstants rotationConstants = new PIDConstants(5, 0.0, 0.0);// d was 0.2 and p was 6 OTHER 2.4 p 0.05 d not working tho
+        public static final PIDConstants rotationConstants = new PIDConstants(3.5, 0.0, 0.0);// d was 0.2 and p was 6 OTHER 2.4 p 0.05 d not working tho
 
         public static final PathConstraints constraints = new PathConstraints(
                 3, 1.5, // linear
-                240, 280 // angular
+                180, 180 // angular
         );
     }
 
@@ -152,7 +152,7 @@ public final class Constants {
     public static final class ExternalIntakeConstants{
         public static final int pivotMotorPort = 25;
         public static final int rollerMotorPort = 26;
-        public static final double rollerSpeed = 0.25;
+        public static final double rollerSpeed = 0.35;
 
         //TODO: find the correct values
         public static final boolean isReversed = true;
