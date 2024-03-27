@@ -29,11 +29,13 @@ import frc.robot.subsystems.LedManager;
 import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.ExternalIntake.Position;
 import frc.robot.subsystems.ExternalIntake;
 import frc.robot.subsystems.LedController.StripType;
 
 import java.util.function.BooleanSupplier;
 
+import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -80,7 +82,11 @@ public class RobotContainer implements Loggable {
 
   private Command rollerOn;
   private Command rollerOff;
-
+  private Command externalIntakeUp;
+  private Command externalIntakeDown;
+  private Command externalIntakeOn;
+  private Command externalIntakeOff;
+  
   private CommandCombinator combinator;
 
   private BooleanSupplier groundIntakeRunningAmpAngle;
@@ -101,6 +107,8 @@ public class RobotContainer implements Loggable {
     NamedCommands.registerCommand("closeShoot", speakerLauncher);
     NamedCommands.registerCommand("farShoot", speakerFarLauncher);
     NamedCommands.registerCommand("stop", stopShooterComponents);
+    NamedCommands.registerCommand("externalIntakeOn", externalIntakeOn);
+    NamedCommands.registerCommand("externalIntakeOff", externalIntakeOff);
 
     createStateSuppliers();
 
@@ -144,7 +152,7 @@ public class RobotContainer implements Loggable {
 
   private void createCommands() {
     // combine subsystem commands into sequential/parallel command groups
-    combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor, ampAssist);
+    combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor, ampAssist, externalIntake);
 
     // drive swerve, slow mode with b
     swerveCmd = new RunCommand(
@@ -205,8 +213,13 @@ public class RobotContainer implements Loggable {
     rollerOn = externalIntake.externalIntakeWheelCommand();
     //external intake roller off
     rollerOff = externalIntake.stopExternalIntakeWheelCommand();
-    
 
+    externalIntakeUp = externalIntake.setPivotCommand(Position.UP);
+    externalIntakeDown = externalIntake.setPivotCommand(Position.DOWN);
+
+    externalIntakeOn = combinator.ExternalIntakeOn();
+    externalIntakeOff = combinator.ExternalIntakeOff();
+    
     // eject note
     // make eject a toggle button
     eject = combinator.eject();
@@ -268,6 +281,14 @@ public class RobotContainer implements Loggable {
 
     secondaryController.povLeft().onTrue(groundIntake);
     secondaryController.povRight().onTrue(sourceIntake);
+
+    CommandXboxController testController = new CommandXboxController(5);
+
+    testController.a().onTrue(externalIntakeUp);
+    testController.b().onTrue(externalIntakeDown);
+
+    testController.x().onTrue(externalIntakeOn);
+    testController.y().onTrue(externalIntakeOff);
 
   }
 

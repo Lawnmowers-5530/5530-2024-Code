@@ -12,9 +12,11 @@ import frc.robot.subsystems.AmpAssist;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
 import frc.robot.subsystems.DumbLauncherAngle;
+import frc.robot.subsystems.ExternalIntake;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherV2;
 import frc.robot.subsystems.LoaderV2;
+import frc.robot.subsystems.ExternalIntake.Position;
 
 //credit skyline stole this idea from them
 //listen I cant just steal the idea and not name it slightly differently that wouldnt be in the ripoff spirit
@@ -26,9 +28,10 @@ public class CommandCombinator {
 	DistanceSensor distanceSensor;
 	DumbLauncherAngle launcherAngle;
 	AmpAssist ampAssist;
+	ExternalIntake externalIntake;
 
 	public CommandCombinator(Climber climber, Intake intake, LauncherV2 launcher, LoaderV2 loader,
-			DumbLauncherAngle launcherAngle, DistanceSensor distanceSensor, AmpAssist ampAssist) {
+			DumbLauncherAngle launcherAngle, DistanceSensor distanceSensor, AmpAssist ampAssist, ExternalIntake externalIntake) {
 		this.climber = climber;
 		this.intake = intake;
 		this.launcher = launcher;
@@ -36,6 +39,7 @@ public class CommandCombinator {
 		this.distanceSensor = distanceSensor;
 		this.launcherAngle = launcherAngle;
 		this.ampAssist = ampAssist;
+		this.externalIntake = externalIntake;
 		
 	}
 
@@ -139,5 +143,21 @@ public class CommandCombinator {
 				() -> {
 					System.out.println(cmdName + " finished");
 				}, new Subsystem[] {});
+	}
+
+	public Command ExternalIntakeOn() {
+		return new SequentialCommandGroup(
+			externalIntake.setPivotCommand(Position.DOWN)
+				.until(externalIntake::ready),
+			externalIntake.externalIntakeWheelCommand()
+		);
+	}
+
+	public Command ExternalIntakeOff() {
+		return new SequentialCommandGroup(
+			externalIntake.stopExternalIntakeWheelCommand(),
+			externalIntake.setPivotCommand(Position.UP)
+				.until(externalIntake::ready)
+		);
 	}
 }

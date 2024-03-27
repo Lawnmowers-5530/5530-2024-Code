@@ -105,10 +105,10 @@ public final class Constants {
         public static final double kI = 0.00;
         public static final double kD = 0.00;
 
-        public static final double conversionFactor = 5192 / 360; // TODO: logically should be 1/360
+        public static final double conversionFactor = 5192 / 360;
 
-        public static final double upPosition = 0.245; // TODO: find the correct value
-        public static final double downPosition = 0.58; // TODO: find the correct value
+        public static final double upPosition = 0.245;
+        public static final double downPosition = 0.58; 
         public static final double positionTolerance = 0.11;
     }
 
@@ -154,7 +154,13 @@ public final class Constants {
         public static final int rollerMotorPort = 26;
         public static final double rollerSpeed = 0.25;
 
+        //TODO: find the correct values
         public static final boolean isReversed = true;
+        public static final double pivotDownPower = 0.15;
+        public static final double pivotUpPower = -0.2;
+        public static final double pivotUpPosition = 0.05;
+        public static final double pivotDownPosition = 3.214283;
+        public static final double pivotConversionFactor = (1/9) * (8/11); // gear ratio
     }
 
     public static final class LedConstants {
