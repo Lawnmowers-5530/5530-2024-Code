@@ -3,8 +3,9 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "Middle Auton",
-    "Amp Side Auton",
+    "Amp Side Auton - WEEK 5",
+    "Middle Auton - WEEK 5",
+    "Move Out Autons - WEEK 5",
     "Older PAths",
     "center note paths",
     "close shoot paths",
