@@ -70,6 +70,12 @@
           "data": {
             "name": "closeShoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle, Get Away"
+          }
         }
       ]
     }
