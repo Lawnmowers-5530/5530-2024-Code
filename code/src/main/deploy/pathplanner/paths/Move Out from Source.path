@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.44,
-        "y": 5.59
+        "x": 0.83,
+        "y": 4.3
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4340452880194021,
-        "y": 5.589722591070332
+        "x": 1.0573974619835367,
+        "y": 1.7507802214655446
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.33,
-        "y": 5.59
+        "x": 2.9337269587943684,
+        "y": 0.7108880647180038
       },
       "prevControl": {
-        "x": 2.339697206084804,
-        "y": 5.599460783737701
+        "x": 1.9337269587943684,
+        "y": 0.7108880647180038
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,25 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "intake",
-      "waypointRelativePos": 0.2,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 1.5,
@@ -61,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Middle Auton - WEEK 5",
+  "folder": "Move Out Autons - WEEK 5",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 120.45832170246494,
     "velocity": 0
   },
   "useDefaultConstraints": true

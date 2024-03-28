@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import io.github.oblarg.oblog.Loggable;
@@ -101,6 +103,7 @@ public class RobotContainer implements Loggable {
     createCommands();
 
     NamedCommands.registerCommand("intake", combinator.autoIntake());
+    //NamedCommands.registerCommand("intake", new InstantCommand ( () -> {CommandScheduler.getInstance().schedule(combinator.autoIntake());}));
     NamedCommands.registerCommand("closeShoot", speakerLauncher);
     NamedCommands.registerCommand("farShoot", speakerFarLauncher);
     NamedCommands.registerCommand("stop", stopShooterComponents);
@@ -117,7 +120,9 @@ public class RobotContainer implements Loggable {
     autoChooser.addOption("Middle Auto - WEEK 5", AutoBuilder.buildAuto("Middle Auto - WEEK 5"));
     autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
     autoChooser.addOption("Shoot and Leave Middle - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
+    autoChooser.addOption("Shoot and Leave Source - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
     autoChooser.addOption("intake Test", AutoBuilder.buildAuto("intake Test"));
+    autoChooser.addOption("simranintaketestjustintake", combinator.fullIntake());
     SmartDashboard.putData("Auton chooser", autoChooser);
   }
 
