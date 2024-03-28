@@ -162,10 +162,9 @@ public class CommandCombinator {
 	}
 
 	public Command ExternalIntakeOn() {
-		return new SequentialCommandGroup(
-			externalIntake.setPivotCommand(Position.DOWN)
-			.until(externalIntake::ready),		
-			externalIntake.externalIntakeWheelCommand()
+		return new SequentialCommandGroup(	
+		externalIntake.setPivotCommand(Position.DOWN).until(externalIntake::ready),
+		externalIntake.externalIntakeWheelCommand()
 		);
 	}
 
