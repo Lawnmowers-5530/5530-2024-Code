@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5,
-        "y": 5.55
+        "x": 7.8,
+        "y": 7.45
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5207316041655616,
-        "y": 5.55
+        "x": 8.8,
+        "y": 7.45
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3,
-        "y": 5.55
+        "x": 0.83,
+        "y": 6.8
       },
       "prevControl": {
-        "x": 2.250000000000001,
-        "y": 5.55
+        "x": 0.8378094962611075,
+        "y": 6.792190503738892
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,24 +29,36 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.8,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 180.0,
+        "maxAngularAcceleration": 180.0
+      }
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 4.6,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 180.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 60.1,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "far shoot paths",
+  "folder": "Amp Side Auton - WEEK 5",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
