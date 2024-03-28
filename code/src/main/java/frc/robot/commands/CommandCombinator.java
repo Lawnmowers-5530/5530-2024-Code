@@ -52,10 +52,11 @@ public class CommandCombinator {
 
 	public Command stopShooterComponents() {
 		return new ParallelCommandGroup(
+				ExternalIntakeOff(),
 				intake.stopIntakeWheelCommand(),
 				loader.stopLoaderCommand(),
-				launcher.stopLauncherCommand(),
-				ExternalIntakeOff());
+				launcher.stopLauncherCommand()
+				);
 	}
 
 	public Command sourceIntake() {
