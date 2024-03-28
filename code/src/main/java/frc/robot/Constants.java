@@ -159,7 +159,7 @@ public final class Constants {
         public static final double pivotDownPower = 0.15;
         public static final double pivotUpPower = -0.2;
         public static final double pivotUpPosition = 0.05;
-        public static final double pivotDownPosition = 3.214283;
+        public static final double pivotDownPosition = 3.214283; //3.214283
         public static final double pivotConversionFactor = (1/9) * (8/11); // gear ratio
     }
 
