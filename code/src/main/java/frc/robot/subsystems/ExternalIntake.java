@@ -98,9 +98,9 @@ public class ExternalIntake extends SubsystemBase implements Loggable {
         rollerMotor.set(speed);
     }
 
-    public boolean isRunning() {
-        return rollerMotor.get() != 0;
-    }
+    //public boolean isRunning() {
+    //    return rollerMotor.get() != 0;
+    //}
 
     public Command setPivotCommand(Position position) {
         return this.run(() -> {setPivotPosition(position);});
@@ -108,7 +108,7 @@ public class ExternalIntake extends SubsystemBase implements Loggable {
 
     public Command externalIntakeWheelCommand() {
         return this.run(() -> {
-            this.run(Constants.ExternalIntakeConstants.rollerSpeed);
+            this.run(0.35);//Constants.ExternalIntakeConstants.rollerSpeed
         });
     }
 

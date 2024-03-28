@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8085924743278065,
-        "y": 6.772669545339091
+        "x": 2.33,
+        "y": 5.59
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8085924743278081,
-        "y": 6.772669545339091
+        "x": 2.339697206084804,
+        "y": 5.57998439840296
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5237490474980953,
-        "y": 7.212453282049422
+        "x": 1.44,
+        "y": 5.59
       },
       "prevControl": {
-        "x": 1.5237490474980953,
-        "y": 7.212453282049422
+        "x": 1.4449281522050597,
+        "y": 5.588726683099867
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Older PAths",
+  "folder": "Middle Auton",
   "previewStartingState": {
-    "rotation": 60.4612177404419,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true
