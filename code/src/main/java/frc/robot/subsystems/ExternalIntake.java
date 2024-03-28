@@ -108,7 +108,7 @@ public class ExternalIntake extends SubsystemBase implements Loggable {
 
     public Command externalIntakeWheelCommand() {
         return this.run(() -> {
-            this.run(0.35);//Constants.ExternalIntakeConstants.rollerSpeed
+            this.run(Constants.ExternalIntakeConstants.rollerSpeed);//Constants.ExternalIntakeConstants.rollerSpeed
         });
     }
 
