@@ -84,8 +84,6 @@ public class RobotContainer implements Loggable {
   private Command ampAssistDown;
   private Command ampLauncherAssist;
 
- 
-  
   private CommandCombinator combinator;
 
   private BooleanSupplier groundIntakeRunningAmpAngle;
@@ -103,11 +101,11 @@ public class RobotContainer implements Loggable {
     createCommands();
 
     NamedCommands.registerCommand("intake", combinator.autoIntake());
-    //NamedCommands.registerCommand("intake", new InstantCommand ( () -> {CommandScheduler.getInstance().schedule(combinator.autoIntake());}));
+    // NamedCommands.registerCommand("intake", new InstantCommand ( () ->
+    // {CommandScheduler.getInstance().schedule(combinator.autoIntake());}));
     NamedCommands.registerCommand("closeShoot", speakerLauncher);
     NamedCommands.registerCommand("farShoot", speakerFarLauncher);
     NamedCommands.registerCommand("stop", stopShooterComponents);
-    
 
     createStateSuppliers();
 
@@ -116,9 +114,12 @@ public class RobotContainer implements Loggable {
     autoChooser = new SendableChooser<>();
     autoChooser.addOption("Shoot Only, Any Pos", AutoBuilder.buildAuto("Shoot Only, Any Pos"));
     autoChooser.addOption("Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Middle 4 Note - WEEK 5"));
-    
-    autoChooser.addOption("Amp 3 Note - WEEK 5", AutoBuilder.buildAuto("Amp 3 Note - WEEK 5"));
+
+    autoChooser.addOption("Amp 3 Note - WEEK 5", AutoBuilder.buildAuto("Amp 3 Note - ed EEK 5"));
     autoChooser.addOption("Source 3 Note - WEEK 5", AutoBuilder.buildAuto("Source 3 Note - WEEK 5"));
+
+    autoChooser.addOption("Amp 2 Note - WEEK 5", AutoBuilder.buildAuto("Amp 2 Note - WEEK 5"));
+    autoChooser.addOption("Source 2 Note - WEEK 5", AutoBuilder.buildAuto("Source 2 Note - WEEK 5"));
 
     autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
     autoChooser.addOption("Shoot and Leave Middle - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
@@ -128,16 +129,16 @@ public class RobotContainer implements Loggable {
   }
 
   private void createSubsystems() {
-    //distanceSensorMXP = new DistanceSensorMXP();
+    // distanceSensorMXP = new DistanceSensorMXP();
     ampAssist = new AmpAssist();
     leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable, "Competition"));
     ledManager = new LedManager(leds.getController());
     fisheye = new Camera("fisheye", 0, 320, 240, 300);
 
     intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
-   simranIntakeAssist = new SimranIntakeAssist( Constants.ExternalIntakeConstants.pivotMotorPort, 
-      Constants.ExternalIntakeConstants.rollerMotorPort,
-      Constants.ExternalIntakeConstants.isReversed);
+    simranIntakeAssist = new SimranIntakeAssist(Constants.ExternalIntakeConstants.pivotMotorPort,
+        Constants.ExternalIntakeConstants.rollerMotorPort,
+        Constants.ExternalIntakeConstants.isReversed);
     launcher = new LauncherV2();
     launcherAngle = new DumbLauncherAngle(
         Constants.LauncherAngleConstants.motorPort,
@@ -156,7 +157,8 @@ public class RobotContainer implements Loggable {
 
   private void createCommands() {
     // combine subsystem commands into sequential/parallel command groups
-    combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor, ampAssist, simranIntakeAssist);
+    combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor, ampAssist,
+        simranIntakeAssist);
 
     // drive swerve, slow mode with b
     swerveCmd = new RunCommand(
@@ -178,7 +180,9 @@ public class RobotContainer implements Loggable {
     zeroGyro = Pgyro.zeroGyroCommand();
 
     // manual climber operation, no limits
-    climberManual = climber.runRaw(() -> {return secondaryController.getRightTriggerAxis() - secondaryController.getLeftTriggerAxis();});
+    climberManual = climber.runRaw(() -> {
+      return secondaryController.getRightTriggerAxis() - secondaryController.getLeftTriggerAxis();
+    });
     // move climber up with limits
     climberUp = climber.moveUpCommand();
     // move climber down with limits
@@ -209,14 +213,11 @@ public class RobotContainer implements Loggable {
     groundIntake = combinator.groundIntake();
     fullIntake = combinator.fullIntake();
 
-    //amp assist up
+    // amp assist up
     ampAssistUp = ampAssist.up();
-    //amp Assist down
+    // amp Assist down
     ampAssistDown = ampAssist.down();
 
-
-    
-    
     // eject note
     // make eject a toggle button
     eject = combinator.eject();
@@ -227,7 +228,7 @@ public class RobotContainer implements Loggable {
   private void createStateSuppliers() {
     groundIntakeRunningAmpAngle = () -> intake.isRunning() && launcherAngle.isUp();
     readyToIntakeFromSource = () -> launcher.isRunningIntake() && !loader.isLoaded() && launcherAngle.isUp();
-    readyToShoot = () -> loader.isLoaded() && swerve.atTargetAngle() && false; //disabled not ready
+    readyToShoot = () -> loader.isLoaded() && swerve.atTargetAngle() && false; // disabled not ready
     noteLoaded = () -> loader.isLoaded();
     slowMode = () -> driverController.b().getAsBoolean();
   }
@@ -239,7 +240,7 @@ public class RobotContainer implements Loggable {
         readyToShoot,
         noteLoaded,
         slowMode));
-    //add zero gyro button
+    // add zero gyro button
     Shuffleboard.getTab("Settings").add("Zero Gyro", zeroGyro);
 
     swerve.setDefaultCommand(swerveCmd); // both joysticks
@@ -270,8 +271,8 @@ public class RobotContainer implements Loggable {
     secondaryController.rightBumper().whileTrue(climberDown);
     secondaryController.leftBumper().whileTrue(climberUp);
 
-    //secondaryController.povDown().onTrue(ampAngle);
-    //secondaryController.povUp().onTrue(speakerAngle);
+    // secondaryController.povDown().onTrue(ampAngle);
+    // secondaryController.povUp().onTrue(speakerAngle);
 
     secondaryController.povDown().onTrue(fullIntake);
     secondaryController.povUp().onTrue(simranIntakeAssist.upAndStop());
@@ -281,16 +282,13 @@ public class RobotContainer implements Loggable {
 
     CommandXboxController testController = new CommandXboxController(2);
 
-   
-    //testController.b().onTrue(externalIntakeDown);
-
+    // testController.b().onTrue(externalIntakeDown);
 
     // testController.povDown().onTrue(externalIntakeDown);
     // testController.povUp().onTrue(externalIntakeUp);
 
     // testController.povDown().onTrue(intakeAssist.downAndSpin());
     testController.povUp().onTrue(simranIntakeAssist.downAndEject());
-
 
   }
 
