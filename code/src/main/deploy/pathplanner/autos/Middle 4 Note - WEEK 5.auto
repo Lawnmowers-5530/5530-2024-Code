@@ -18,9 +18,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Middle, Subwoofer To Middle Note"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "NO EVENT MARKER Middle, Subwoofer To Middle Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -36,9 +49,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Middle, Subwoofer to Amp Note"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "NO EVENT MARKER Middle, Subwoofer to Amp Note"
+                }
+              }
+            ]
           }
         },
         {
@@ -54,9 +80,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Middle, Subwoofer to Stage Note"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "NO EVENT MARKER Middle, Subwoofer to Stage Note"
+                }
+              }
+            ]
           }
         },
         {
