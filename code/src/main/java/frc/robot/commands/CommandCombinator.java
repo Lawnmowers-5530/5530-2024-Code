@@ -110,7 +110,7 @@ public class CommandCombinator {
 				loader.runLoaderCommand().until(loader::isLoaded)
 					
 				)
-					.until(loader::isLoaded).withTimeout(3)
+					.until(loader::isLoaded).withTimeout(3.5)
 					.andThen(stopShooterComponents())
 			);
 	}
