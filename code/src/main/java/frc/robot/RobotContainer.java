@@ -249,7 +249,7 @@ public class RobotContainer implements Loggable {
 
     driverController.leftTrigger().onTrue(speakerAngle);
     driverController.rightTrigger().onTrue(ampAngle);
-    driverController.leftBumper().onTrue(ampLauncher);
+    driverController.leftBumper().onTrue(ampLauncherAssist);
     driverController.rightBumper().onTrue(speakerLauncher);
 
     driverController.start().onTrue(eject);
