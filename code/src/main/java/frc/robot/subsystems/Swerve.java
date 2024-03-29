@@ -13,6 +13,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -34,7 +35,7 @@ public class Swerve extends SubsystemBase implements Loggable {
 
   PIDController rotationPID;
 
-  SwerveDriveOdometry odometry;
+  SwerveDrivePoseEstimator odometry;
   @Log
   boolean isUpdating;
   private boolean isCoasting;
@@ -57,7 +58,7 @@ public class Swerve extends SubsystemBase implements Loggable {
         Constants.RotationConstants.kD);
     rotationPID.setTolerance(2);
     SwerveModulePosition[] modPos = getModulePositions();
-    odometry = new SwerveDriveOdometry(Constants.kinematics, Pgyro.getRot(), modPos);
+    odometry = new SwerveDrivePoseEstimator(Constants.kinematics, Pgyro.getRot(), modPos, new Pose2d());
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::resetPose,
@@ -151,7 +152,7 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public Pose2d getPose() {
-    return odometry.getPoseMeters();
+    return odometry.getEstimatedPosition();
   }
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -166,14 +167,6 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public void updateOdometry() {
-    if (StaticLimeLight.getValidTarget()) {
-      odometry.resetPosition(Pgyro.getRot(), getModulePositions(),
-          new Pose2d(StaticLimeLight.getPose2DBlue().getTranslation(), Pgyro.getRot()));
-      isUpdating = true;
-    } else {
-      odometry.update(Pgyro.getRot(), getModulePositions());
-      isUpdating = false;
-    }
   }
 
   // chassis speeds consumer
