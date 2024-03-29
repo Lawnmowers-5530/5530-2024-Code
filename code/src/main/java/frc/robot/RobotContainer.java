@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import io.github.oblarg.oblog.Loggable;
 import frc.lib.Vector2D;
-import frc.lib.VectorOperator;
 import frc.robot.commands.CommandCombinator;
 import frc.robot.subsystems.AmpAssist;
 import frc.robot.subsystems.Camera;

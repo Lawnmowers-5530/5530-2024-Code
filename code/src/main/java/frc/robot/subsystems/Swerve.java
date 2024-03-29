@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -12,53 +12,63 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.LimelightHelpers;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
 import frc.robot.Constants;
 import frc.robot.data.GlobalState;
-import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Log;
 
-public class Swerve extends SubsystemBase implements Loggable {
+public class Swerve extends SubsystemBase{
+
+  LimelightHelpers.PoseEstimate limelightMeasurement;
 
   PIDController rotationPID;
 
   SwerveDrivePoseEstimator odometry;
-  @Log
-  boolean isUpdating;
   private boolean isCoasting;
   private static final SwerveModule Mod_0 = Constants.Modules.Mod_0;
   private static final SwerveModule Mod_1 = Constants.Modules.Mod_1;
   private static final SwerveModule Mod_2 = Constants.Modules.Mod_2;
   private static final SwerveModule Mod_3 = Constants.Modules.Mod_3;
-  @Log
-  String poseStr = "";
 
   double rotationOutput;
 
-  @Log
-  String robotRelativeSpeeds = "";
-
   private SwerveModuleState[] states;
+
+  private BooleanSupplier sideSupplier = () -> {
+    // Boolean supplier that controls when the path will be mirrored for the red
+    // alliance
+    // This will flip the path being followed to the red side of the field.
+    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      return alliance.get() == DriverStation.Alliance.Red;
+    }
+    return false;
+  };
 
   public Swerve() {
     rotationPID = new PIDController(Constants.RotationConstants.kP, Constants.RotationConstants.kI,
         Constants.RotationConstants.kD);
     rotationPID.setTolerance(2);
+
     SwerveModulePosition[] modPos = getModulePositions();
+
     odometry = new SwerveDrivePoseEstimator(Constants.kinematics, Pgyro.getRot(), modPos, new Pose2d());
+    odometry.setVisionMeasurementStdDevs(VecBuilder.fill(1, 1, Rotation2d.fromDegrees(20).getRadians()));
+
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::resetPose,
@@ -67,54 +77,12 @@ public class Swerve extends SubsystemBase implements Loggable {
         new HolonomicPathFollowerConfig(
             Constants.PathPlannerConstants.translationConstants,
             Constants.PathPlannerConstants.rotationConstants,
-            4.6, //was 3.8
+            4.6, // was 3.8
             Constants.driveBaseRadius,
             new ReplanningConfig()),
-        () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red
-          // alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Red;
-            }
-            return false;
-        },
+        sideSupplier,
         this);
   }
-  /** 
-  public class ManualSideOverride implements Sendable {
-    public enum Side {
-      RED, BLUE;
-    }
-
-    private Side side;
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("Manual Side Chooser");
-        builder.addStringProperty("Side Input:", this::getSide, this::setSide);
-    }
-
-    public void setSide(String sideInput) {
-        if (sideInput == "Red" || sideInput == "red") {
-            this.side = Side.RED;
-        } else if (sideInput == "Blue" || sideInput == "blue") {
-            this.side = Side.BLUE;
-        }
-    }
-
-    public String getSide() {
-        switch (side) {
-            case RED:
-                return "Red";
-            case BLUE:
-                return "Blue";
-            default:
-                return "Blue";
-        }
-    }
-  }**/
 
   public void drive(Vector2D vector, double omegaRadSec, boolean fieldRelative) {
 
@@ -144,11 +112,8 @@ public class Swerve extends SubsystemBase implements Loggable {
       Mod_3.setIdleMode(IdleMode.kBrake);
       isCoasting = false;
     }
-    updateOdometry();
-    poseStr = getPose().toString();
-    robotRelativeSpeeds = this.getRobotRelativeSpeeds().toString();
 
-    SmartDashboard.putString("robot rel speeds", getRobotRelativeSpeeds().toString());
+    updateOdometry();
   }
 
   public Pose2d getPose() {
@@ -163,10 +128,20 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public SwerveModulePosition[] getModulePositions() {
-    return new SwerveModulePosition[] { Mod_0.getPos(), Mod_1.getPos(), Mod_2.getPos(), Mod_3.getPos() };
+    return new SwerveModulePosition[] { Mod_0.getPos(), Mod_1.getPos(), Mod_2.getPos(), Mod_3.getPos()};
   }
 
   public void updateOdometry() {
+    if(sideSupplier.getAsBoolean()){
+      limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiRed("limelight");
+    }else{
+      limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    }
+    if(limelightMeasurement.tagCount >= 2){
+    odometry.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
+    }
+    
+    odometry.update(Pgyro.getRot(), getModulePositions());
   }
 
   // chassis speeds consumer
@@ -195,8 +170,8 @@ public class Swerve extends SubsystemBase implements Loggable {
     this.drive(vector, speeds.omegaRadiansPerSecond, false);
   }
 
-  public void rotateToAngle(double x, double y, double angle) {
-    rotationOutput = rotationPID.calculate(Pgyro.getRot().getDegrees(), angle);
+  public void rotateToAngle(double x, double y, double angleRad) {
+    rotationOutput = rotationPID.calculate(Pgyro.getRot().getRadians(), angleRad);
     this.drive(new Vector2D(x, y, false), rotationOutput, false);
   }
 
@@ -220,11 +195,12 @@ public class Swerve extends SubsystemBase implements Loggable {
 
   public Command aim(DoubleSupplier controllerXSupplier, DoubleSupplier controllerYSupplier) {
     return this.run(
-      () -> {
-        double angle = Math.atan2(this.getPose().getTranslation().getX() - Constants.targetTranslation.getX(), this.getPose().getTranslation().getY() - Constants.targetTranslation.getY());
-        this.rotateToAngle(-controllerYSupplier.getAsDouble(), controllerXSupplier.getAsDouble(), angle + Math.PI/2);
-      }
-    ).until(this::atTargetAngle);
+        () -> {
+          double angle = Math.atan2(this.getPose().getTranslation().getX() - Constants.targetTranslation.getX(),
+              this.getPose().getTranslation().getY() - Constants.targetTranslation.getY());
+          this.rotateToAngle(-controllerYSupplier.getAsDouble(), controllerXSupplier.getAsDouble(),
+              angle + Math.PI / 2);
+        }).until(this::atTargetAngle);
   }
 
 }
