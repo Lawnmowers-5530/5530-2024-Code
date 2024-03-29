@@ -21,7 +21,6 @@ import frc.robot.subsystems.AmpAssist;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
-import frc.robot.subsystems.DistanceSensorMXP;
 import frc.robot.subsystems.DumbLauncherAngle;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherV2;
@@ -57,7 +56,6 @@ public class RobotContainer implements Loggable {
   private Camera fisheye;
   private LedManager ledManager;
   private AmpAssist ampAssist;
-  private DistanceSensorMXP distanceSensorMXP;
   private CommandXboxController driverController;
   private CommandXboxController secondaryController;
 
@@ -255,6 +253,7 @@ public class RobotContainer implements Loggable {
     driverController.start().onTrue(eject);
 
     driverController.povDown().onTrue(shooterFeed);
+    driverController.povLeft().onTrue(distanceSensor.reinit());
 
     secondaryController.y().onTrue(speakerLauncher);
 
