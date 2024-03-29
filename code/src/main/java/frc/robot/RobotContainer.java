@@ -110,17 +110,18 @@ public class RobotContainer implements Loggable {
     createStateSuppliers();
 
     configureBindings();
-
     autoChooser = new SendableChooser<>();
     autoChooser.addOption("Shoot Only, Any Pos", AutoBuilder.buildAuto("Shoot Only, Any Pos"));
     autoChooser.addOption("Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Middle 4 Note - WEEK 5"));
-
+    autoChooser.addOption("---", new InstantCommand());
+    autoChooser.addOption("Sped Up Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Sped Up Middle 4 Note - WEEK 5"));
+autoChooser.addOption("----", new InstantCommand());
     autoChooser.addOption("Amp 3 Note - WEEK 5", AutoBuilder.buildAuto("Amp 3 Note - WEEK 5"));
     autoChooser.addOption("Source 3 Note - WEEK 5", AutoBuilder.buildAuto("Source 3 Note - WEEK 5"));
-
+autoChooser.addOption("-----", new InstantCommand());
     autoChooser.addOption("Amp 2 Note - WEEK 5", AutoBuilder.buildAuto("Amp 2 Note - WEEK 5"));
     autoChooser.addOption("Source 2 Note - WEEK 5", AutoBuilder.buildAuto("Source 2 Note - WEEK 5"));
-
+autoChooser.addOption("--------", new InstantCommand());
     autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
     autoChooser.addOption("Shoot and Leave Middle - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
     autoChooser.addOption("Shoot and Leave Source - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
