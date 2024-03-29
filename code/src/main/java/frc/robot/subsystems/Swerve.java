@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 
+import java.util.function.DoubleSupplier;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -200,9 +202,9 @@ public class Swerve extends SubsystemBase implements Loggable {
     this.drive(vector, speeds.omegaRadiansPerSecond, false);
   }
 
-  public void rotateToAngle(double angle) {
+  public void rotateToAngle(double x, double y, double angle) {
     rotationOutput = rotationPID.calculate(Pgyro.getRot().getDegrees(), angle);
-    this.drive(new Vector2D(0, 0, false), rotationOutput, false);
+    this.drive(new Vector2D(x, y, false), rotationOutput, false);
   }
 
   public Command pathFind(Pose2d endPose) {
@@ -210,7 +212,7 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public boolean atTargetAngle() {
-    return false;//rotationPID.atSetpoint();
+    return rotationPID.atSetpoint();
   }
 
   public void disabledPeriodic() {
@@ -221,6 +223,15 @@ public class Swerve extends SubsystemBase implements Loggable {
       Mod_2.setIdleMode(IdleMode.kCoast);
       Mod_3.setIdleMode(IdleMode.kCoast);
     }
+  }
+
+  public Command aim(DoubleSupplier controllerXSupplier, DoubleSupplier controllerYSupplier) {
+    return this.run(
+      () -> {
+        double angle = Math.atan2(this.getPose().getTranslation().getX() - Constants.targetTranslation.getX(), this.getPose().getTranslation().getY() - Constants.targetTranslation.getY());
+        this.rotateToAngle(-controllerYSupplier.getAsDouble(), controllerXSupplier.getAsDouble(), angle + Math.PI/2);
+      }
+    ).until(this::atTargetAngle);
   }
 
 }

@@ -41,7 +41,7 @@ public class LedManager extends SubsystemBase {
     *@param slowMode A boolean supplier that returns true if the robot is in slow mode
     *@return A command that sets the pattern to be displayed based on the state of the robot
     */
-    public Command LedControllingCommand(BooleanSupplier groundIntakeRunningAmpAngle, BooleanSupplier readyToIntakeFromSource, BooleanSupplier readyToShoot, BooleanSupplier noteLoaded, BooleanSupplier slowMode) {
+    public Command LedControllingCommand(BooleanSupplier groundIntakeRunningAmpAngle, BooleanSupplier readyToIntakeFromSource, BooleanSupplier readyToShoot, BooleanSupplier noteLoaded) {
         return new RunCommand(
             () -> {
                 
@@ -56,10 +56,6 @@ public class LedManager extends SubsystemBase {
                 else if (noteLoaded.getAsBoolean())
                 {
                     ledcontroller.setPattern(Constants.LedConstants.noteLoadedPattern, Constants.LedConstants.noteLoadedPriority);
-                }
-                else if (slowMode.getAsBoolean())
-                {
-                    ledcontroller.setPattern(Constants.LedConstants.slowModePattern, Constants.LedConstants.slowModePriority);
                 }
                 else
                 {
