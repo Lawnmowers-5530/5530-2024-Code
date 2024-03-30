@@ -80,6 +80,8 @@ public class RobotContainer implements Loggable {
   private Command ampAssistDown;
   private Command ampLauncherAssist;
 
+  private Command manualIntakeStop;
+
   private CommandCombinator combinator;
 
   private BooleanSupplier groundIntakeRunningAmpAngle;
@@ -194,6 +196,8 @@ autoChooser.addOption("--------", new InstantCommand());
     shooterFeed = loader.feedShooterCommand().until(loader::isNotLoaded).andThen(loader.stopLoaderCommand());
     // stop all shooter components
     stopShooterComponents = combinator.stopShooterComponents();
+    // stop all shooter components, move note down to correct pos, stop all shooter components
+    manualIntakeStop = combinator.manualIntakeStop();
 
     // spin up launcher, shoot to speaker after 0.5 seconds
     speakerLauncher = combinator.speakerShot();
@@ -275,17 +279,7 @@ autoChooser.addOption("--------", new InstantCommand());
     secondaryController.povUp().onTrue(simranIntakeAssist.upAndStop());
 
     secondaryController.povLeft().onTrue(groundIntake);
-    secondaryController.povRight().onTrue(sourceIntake);
-
-    CommandXboxController testController = new CommandXboxController(2);
-
-    // testController.b().onTrue(externalIntakeDown);
-
-    // testController.povDown().onTrue(externalIntakeDown);
-    // testController.povUp().onTrue(externalIntakeUp);
-
-    // testController.povDown().onTrue(intakeAssist.downAndSpin());
-    testController.povUp().onTrue(simranIntakeAssist.downAndEject());
+    secondaryController.povRight().onTrue(manualIntakeStop);
 
   }
 
