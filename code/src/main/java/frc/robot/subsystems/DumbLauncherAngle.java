@@ -20,8 +20,6 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
     @Log
     double calculatedPower = 0;
     SparkAbsoluteEncoder encoder;
-    @Log
-    double ticks;
 
     @Log
     boolean isUp;
@@ -109,13 +107,18 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
         this.isDown = this.getEncoderMeasurement() > Constants.LauncherAngleConstants.downPosition - Constants.LauncherAngleConstants.positionTolerance;
         return this.isDown;
     }
+    @Log
+    public double getTicks() {
+        return encoder.getPosition();
+    }
 
     @Override 
     public void periodic() {
-        ticks = this.getEncoderMeasurement();
         updateState();
-        isUp();
-        isDown();
 
+        if (Constants.DEBUG_LOGGING) { //only update constantly when in debug mode
+            isUp();
+            isDown();
+        }
     }
 }

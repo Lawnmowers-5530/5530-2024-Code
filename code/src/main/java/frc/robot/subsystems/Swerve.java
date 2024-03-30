@@ -136,6 +136,17 @@ public class Swerve extends SubsystemBase implements Loggable {
       isCoasting = false;
     }
     updateOdometry();
+    robotRelativeSpeeds = this.getRobotRelativeSpeeds().toString();
+  }
+
+  @Log
+  public String poseString() {
+    return getPose().toString();
+  }
+
+  @Log
+  public String robotRelativeSpeedString() {
+    return getRobotRelativeSpeeds().toString();
   }
 
   public Pose2d getPose() {

@@ -19,7 +19,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    Logger.configureLoggingAndConfig(m_robotContainer, false);
+    if (Constants.DEBUG_LOGGING) { //only start oblog if in debug mode
+      Logger.configureLoggingAndConfig(m_robotContainer, false);
+    }
   }
 
   @Override
