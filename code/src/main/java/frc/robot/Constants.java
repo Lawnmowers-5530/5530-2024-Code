@@ -49,6 +49,15 @@ public final class Constants {
         public static final double angleOffset = 0;
     }
 
+    public static final class SwerveModuleConstants {
+        public static final double conversionFactor = -1*(1/6.75)*Units.inchesToMeters(Math.PI*4);
+        public static final class SwerveAnglePIDConstants {
+            public static final double p = 0.0075;
+            public static final double i = 0.0025;
+            public static final double d = 0;
+        }
+    }
+
     public static Translation2d m0 = new Translation2d(Constants.trackWidth / 2, Constants.wheelBase / 2);
     public static Translation2d m1 = new Translation2d(Constants.trackWidth / 2, -Constants.wheelBase / 2);
     public static Translation2d m2 = new Translation2d(-Constants.trackWidth / 2, Constants.wheelBase / 2);
@@ -104,7 +113,6 @@ public final class Constants {
         public static final double power = 0.2;
         public static final double atPositionMotorPowerMultiplier = 0.2;
     }
-
     public static final class CameraConstants {
         public static final String name = "fisheye";
         public static final int port = 0;
@@ -132,7 +140,7 @@ public final class Constants {
         public static final double conversionFactor = 5192 / 360;
 
         public static final double upPosition = 0.245;
-        public static final double downPosition = 0.58; 
+        public static final double downPosition = 0.58;
         public static final double positionTolerance = 0.11;
     }
 
@@ -159,7 +167,9 @@ public final class Constants {
 
     public static final class PathPlannerConstants {
         public static final PIDConstants translationConstants = new PIDConstants(4, 0, 0.0);
-        public static final PIDConstants rotationConstants = new PIDConstants(3.5, 0.0, 0.0);// d was 0.2 and p was 6 OTHER 2.4 p 0.05 d not working tho
+        public static final PIDConstants rotationConstants = new PIDConstants(3.5, 0.0, 0.0);// d was 0.2 and p was 6
+                                                                                             // OTHER 2.4 p 0.05 d not
+                                                                                             // working tho
 
         public static final PathConstraints constraints = new PathConstraints(
                 3, 1.5, // linear
@@ -169,11 +179,11 @@ public final class Constants {
 
     public static final class AmpAssistConstants {
         public static int servoPort = 1;
-        public static double up = 1.0; //0.92
+        public static double up = 1.0; // 0.92
         public static double down = 0;
     }
 
-    public static final class ExternalIntakeConstants{
+    public static final class ExternalIntakeConstants {
         public static final int pivotMotorPort = 25;
         public static final int rollerMotorPort = 26;
         public static final double rollerSpeed = 0.35;
@@ -182,8 +192,8 @@ public final class Constants {
         public static final double pivotDownPower = 0.15;
         public static final double pivotUpPower = -0.2;
         public static final double pivotUpPosition = 0.05;
-        public static final double pivotDownPosition = 3.214283; //3.214283
-        public static final double pivotConversionFactor = (1/9) * (8/11); // gear ratio
+        public static final double pivotDownPosition = 3.214283; // 3.214283
+        public static final double pivotConversionFactor = (1 / 9) * (8 / 11); // gear ratio
     }
 
     public static final class LedConstants {
