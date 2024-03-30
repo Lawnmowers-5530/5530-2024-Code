@@ -1,0 +1,31 @@
+{
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "LauncherV2": {
+          "open": true,
+          "setVelocity": {
+            "open": true
+          }
+        },
+        "open": true
+      },
+      "SmartDashboard": {
+        "open": true
+      }
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/LauncherV2/feed": "Command",
+      "/Shuffleboard/LauncherV2/intake": "Command",
+      "/Shuffleboard/Settings/Zero Gyro": "Command",
+      "/SmartDashboard/Auton chooser": "String Chooser"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)"
+  }
+}

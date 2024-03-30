@@ -9,11 +9,9 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;import io.github.oblarg.oblog.annotations.Log;
 
-//TODO: RETUNE THIS
-public class LauncherV2 extends Launcher implements Loggable {
+public class LauncherV2 extends Launcher{
     RelativeEncoder leftEncoder;
     RelativeEncoder rightEncoder;
     RelativeEncoder leftEncoder2;

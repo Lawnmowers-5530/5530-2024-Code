@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -13,12 +12,10 @@ import frc.robot.subsystems.AmpAssist;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
 import frc.robot.subsystems.DumbLauncherAngle;
-import frc.robot.subsystems.ExternalIntake;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherV2;
 import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.SimranIntakeAssist;
-import frc.robot.subsystems.ExternalIntake.Position;
 
 //credit skyline stole this idea from them
 //listen I cant just steal the idea and not name it slightly differently that wouldnt be in the ripoff spirit
