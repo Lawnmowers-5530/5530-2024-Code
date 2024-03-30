@@ -16,7 +16,6 @@ import frc.robot.subsystems.ExternalIntake;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherV2;
 import frc.robot.subsystems.LoaderV2;
-import frc.robot.subsystems.SimranIntakeAssist;
 import frc.robot.subsystems.ExternalIntake.Position;
 
 //credit skyline stole this idea from them
@@ -29,10 +28,10 @@ public class CommandCombinator {
 	DistanceSensor distanceSensor;
 	DumbLauncherAngle launcherAngle;
 	AmpAssist ampAssist;
-	SimranIntakeAssist simranIntakeAssist;
+	ExternalIntake externalIntake;
 
 	public CommandCombinator(Climber climber, Intake intake, LauncherV2 launcher, LoaderV2 loader,
-			DumbLauncherAngle launcherAngle, DistanceSensor distanceSensor, AmpAssist ampAssist, SimranIntakeAssist simranIntakeAssist) {
+			DumbLauncherAngle launcherAngle, DistanceSensor distanceSensor, AmpAssist ampAssist, ExternalIntake externalIntake) {
 		this.climber = climber;
 		this.intake = intake;
 		this.launcher = launcher;
@@ -40,7 +39,7 @@ public class CommandCombinator {
 		this.distanceSensor = distanceSensor;
 		this.launcherAngle = launcherAngle;
 		this.ampAssist = ampAssist;
-		this.simranIntakeAssist = simranIntakeAssist;
+		this.externalIntake = externalIntake;
 		
 	}
 
@@ -48,17 +47,15 @@ public class CommandCombinator {
 		return new ParallelCommandGroup(
 				intake.ejectCommand(),
 				loader.ejectCommand(),
-				simranIntakeAssist.downAndEject()
-				);
+				externalIntake.ejectCommand());
 	}
 
 	public Command stopShooterComponents() {
 		return new ParallelCommandGroup(
-				
+				ExternalIntakeOff(),
 				intake.stopIntakeWheelCommand(),
 				loader.stopLoaderCommand(),
-				launcher.stopLauncherCommand(), 
-				simranIntakeAssist.upAndStop()
+				launcher.stopLauncherCommand()
 				);
 	}
 
@@ -92,8 +89,7 @@ public class CommandCombinator {
 				new ParallelCommandGroup(
 					intake.intakeWheelCommand(),
 					loader.runLoaderCommand(),
-					simranIntakeAssist.downAndSpin()
-					
+					ExternalIntakeOn()
 				)
 					.until(loader::isLoaded)
 					.andThen(stopShooterComponents())
@@ -165,18 +161,18 @@ public class CommandCombinator {
 				}, new Subsystem[] {});
 	}
 
-	// public Command ExternalIntakeOn() {
-	// 	return new SequentialCommandGroup(	
-	// 	externalIntake.setPivotCommand(Position.DOWN).until(externalIntake::ready),
-	// 	externalIntake.externalIntakeWheelCommand()
-	// 	);
-	// }
+	public Command ExternalIntakeOn() {
+		return new SequentialCommandGroup(	
+		externalIntake.setPivotCommand(Position.DOWN).until(externalIntake::ready),
+		externalIntake.externalIntakeWheelCommand()
+		);
+	}
 
-	// public Command ExternalIntakeOff() {
-	// 	return new SequentialCommandGroup(
-	// 		externalIntake.stopExternalIntakeWheelCommand(),
-	// 		externalIntake.setPivotCommand(Position.UP)
-	// 			.until(externalIntake::ready)
-	// 	);
-	// }
+	public Command ExternalIntakeOff() {
+		return new SequentialCommandGroup(
+			externalIntake.stopExternalIntakeWheelCommand(),
+			externalIntake.setPivotCommand(Position.UP)
+				.until(externalIntake::ready)
+		);
+	}
 }
