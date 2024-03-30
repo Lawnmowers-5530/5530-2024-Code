@@ -34,6 +34,7 @@ import frc.robot.subsystems.Swerve;
 import java.util.function.BooleanSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerTrajectory.State;
 
 public class RobotContainer implements Loggable {
   private SendableChooser<Command> autoChooser;
@@ -87,21 +88,30 @@ public class RobotContainer implements Loggable {
 
   private Commands commands;
   private CommandCombinator combinator;
-
-  private BooleanSupplier groundIntakeRunningAmpAngle;
-  private BooleanSupplier readyToIntakeFromSource;
-  private BooleanSupplier readyToShoot;
-  private BooleanSupplier noteLoaded;
-  private BooleanSupplier slowMode;
+  public class StateSuppliers {
+    public BooleanSupplier groundIntakeRunningAmpAngle;
+    public BooleanSupplier readyToIntakeFromSource;
+    public BooleanSupplier readyToShoot;
+    public BooleanSupplier noteLoaded;
+    public BooleanSupplier slowMode;
+  }
+  private StateSuppliers stateSuppliers;
 
   public RobotContainer() {
-    this.controllers.driverController = new CommandXboxController(0);
-    this.controllers.secondaryController = new CommandXboxController(1);
+    /**
+     * initalize controllers here
+     */
+    {
+      this.controllers = new Controllers();
+      this.controllers.driverController = new CommandXboxController(0);
+      this.controllers.secondaryController = new CommandXboxController(1);
+    }
 
     /**
      * initalize subsystems here
      */
     {
+      this.subsystems = new Subsystems();
       // distanceSensorMXP = new DistanceSensorMXP();
       this.subsystems.ampAssist = new AmpAssist();
       this.subsystems.leds = new LedController_MultiAccess(new LedController());
@@ -123,6 +133,7 @@ public class RobotContainer implements Loggable {
      * initalize commands here
      */
     {
+      this.commands = new Commands();
       // combine subsystem commands into sequential/parallel command groups
       combinator = new CommandCombinator(this.subsystems);
       // drive swerve, slow mode with b
@@ -197,13 +208,14 @@ public class RobotContainer implements Loggable {
      * initalize state suppliers here
      */
     {
-      groundIntakeRunningAmpAngle = () -> this.subsystems.intake.isRunning() && this.subsystems.launcherAngle.isUp();
-      readyToIntakeFromSource = () -> this.subsystems.launcher.isRunningIntake()
+      this.stateSuppliers = new StateSuppliers();
+      this.stateSuppliers.groundIntakeRunningAmpAngle = () -> this.subsystems.intake.isRunning() && this.subsystems.launcherAngle.isUp();
+      this.stateSuppliers.readyToIntakeFromSource = () -> this.subsystems.launcher.isRunningIntake()
           && !this.subsystems.distanceSensor.isNotePresent() && this.subsystems.launcherAngle.isUp();
-      readyToShoot = () -> this.subsystems.distanceSensor.isNotePresent() && this.subsystems.swerve.atTargetAngle()
+      this.stateSuppliers.readyToShoot = () -> this.subsystems.distanceSensor.isNotePresent() && this.subsystems.swerve.atTargetAngle()
           && false; // disabled not ready
-      noteLoaded = () -> this.subsystems.distanceSensor.isNotePresent();
-      slowMode = () -> this.controllers.driverController.b().getAsBoolean();
+      this.stateSuppliers.noteLoaded = () -> this.subsystems.distanceSensor.isNotePresent();
+      this.stateSuppliers.slowMode = () -> this.controllers.driverController.b().getAsBoolean();
     }
 
     /**
@@ -211,12 +223,7 @@ public class RobotContainer implements Loggable {
      */
 
     {
-      this.subsystems.ledManager.setDefaultCommand(this.subsystems.ledManager.LedControllingCommand(
-          groundIntakeRunningAmpAngle,
-          readyToIntakeFromSource,
-          readyToShoot,
-          noteLoaded,
-          slowMode));
+      this.subsystems.ledManager.setDefaultCommand(this.subsystems.ledManager.LedControllingCommand(this.stateSuppliers));
 
       // add zero gyro button
       Shuffleboard.getTab("Settings").add("Zero Gyro", this.commands.zeroGyro);

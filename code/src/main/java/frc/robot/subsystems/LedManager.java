@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
 
 public class LedManager extends SubsystemBase {
@@ -41,23 +42,23 @@ public class LedManager extends SubsystemBase {
     *@param slowMode A boolean supplier that returns true if the robot is in slow mode
     *@return A command that sets the pattern to be displayed based on the state of the robot
     */
-    public Command LedControllingCommand(BooleanSupplier groundIntakeRunningAmpAngle, BooleanSupplier readyToIntakeFromSource, BooleanSupplier readyToShoot, BooleanSupplier noteLoaded, BooleanSupplier slowMode) {
+    public Command LedControllingCommand(RobotContainer.StateSuppliers stateSuppliers) {
         return new RunCommand(
             () -> {
                 
-                if (groundIntakeRunningAmpAngle.getAsBoolean())
+                if (stateSuppliers.groundIntakeRunningAmpAngle.getAsBoolean())
                 {
                     ledcontroller.setPattern(Constants.LedConstants.groundIntakeAndAmpAnglePattern, Constants.LedConstants.groundIntakeAndAmpAnglePriority);
                 }
-                else if (readyToIntakeFromSource.getAsBoolean())
+                else if (stateSuppliers.readyToIntakeFromSource.getAsBoolean())
                 {
                     ledcontroller.setPattern(Constants.LedConstants.intakeFromSourceReadyPattern, Constants.LedConstants.intakeFromSourceReadyPriority);
                 }
-                else if (noteLoaded.getAsBoolean())
+                else if (stateSuppliers.noteLoaded.getAsBoolean())
                 {
                     ledcontroller.setPattern(Constants.LedConstants.noteLoadedPattern, Constants.LedConstants.noteLoadedPriority);
                 }
-                else if (slowMode.getAsBoolean())
+                else if (stateSuppliers.slowMode.getAsBoolean())
                 {
                     ledcontroller.setPattern(Constants.LedConstants.slowModePattern, Constants.LedConstants.slowModePriority);
                 }
