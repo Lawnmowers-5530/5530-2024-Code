@@ -279,7 +279,7 @@ public class RobotContainer implements Loggable {
     //secondaryController.povUp().onTrue(speakerAngle);
 
     secondaryController.povDown().onTrue(fullIntake);
-    secondaryController.povUp().onTrue(externalIntakeUp);
+    secondaryController.povUp().onTrue(externalIntakeOff);
 
     secondaryController.povLeft().onTrue(groundIntake);
     secondaryController.povRight().onTrue(sourceIntake);
