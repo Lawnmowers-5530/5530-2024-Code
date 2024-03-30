@@ -7,32 +7,17 @@ import static frc.robot.Constants.LoaderConstants.*;
 import static frc.robot.Constants.*;
 
 public class LoaderV2 extends Loader {
-    DistanceSensor distanceSensor;
     GlobalState state;
 
     public LoaderV2() {
         super();
     }
-    
-    @Deprecated
-    public boolean isLoaded() {
-        return distanceSensor.isNotePresent();
-    }
-
-    @Deprecated
-    public boolean isNotLoaded() {
-        return !isLoaded();
-    }
 
     public Command runLoaderCommand() {
         return new RunCommand(
             () -> {
-                if (!isLoaded()) {
-                    this.run(loaderSpeed);
-                } else {
-                    this.run(0);
-                }
-            });
+                this.run(loaderSpeed);
+            }, this);
     }
 
     public Command feedShooterCommand() {
