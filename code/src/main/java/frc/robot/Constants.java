@@ -41,7 +41,7 @@ public final class Constants {
         public static final double angleOffset = 0;
     }
 
-    public static final class Mod2 extends Constants { // RL
+    public static final class Mod2 { // RL
         public static final int driveMotor = 11;
         public static final int turnMotor = 12;
         public static final int canCoder = 16;
@@ -154,7 +154,6 @@ public final class Constants {
         public static final int rollerMotorPort = 26;
         public static final double rollerSpeed = 0.35;
 
-        //TODO: find the correct values
         public static final boolean isReversed = true;
         public static final double pivotDownPower = 0.15;
         public static final double pivotUpPower = -0.2;

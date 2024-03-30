@@ -58,32 +58,28 @@ public class RobotContainer implements Loggable {
 
   }
   private Subsystems subsystems;
-
-  private Command swerveCmd;
-  private Command shooterFeed;
-  private Command stopShooterComponents;
-  private Command eject;
-
-  private Command climberManual;
-  private Command climberUp;
-  private Command climberDown;
-
-  private Command speakerAngle;
-  private Command ampAngle;
-  private Command speakerLauncher;
-  private Command speakerFarLauncher;
-  private Command ampLauncher;
-  private Command zeroGyro;
-  private Command sourceIntake;
-  private Command groundIntake;
-  private Command fullIntake;
-
-  private Command ampAssistUp;
-  private Command ampAssistDown;
-  private Command ampLauncherAssist;
-
- 
-  
+  public class Commands {
+    public Command swerveCmd;
+    public Command shooterFeed;
+    public Command stopShooterComponents;
+    public Command eject;
+    public Command climberManual;
+    public Command climberUp;
+    public Command climberDown;
+    public Command speakerAngle;
+    public Command ampAngle;
+    public Command speakerLauncher;
+    public Command speakerFarLauncher;
+    public Command ampLauncher;
+    public Command zeroGyro;
+    public Command sourceIntake;
+    public Command groundIntake;
+    public Command fullIntake;
+    public Command ampAssistUp;
+    public Command ampAssistDown;
+    public Command ampLauncherAssist;
+  }
+  private Commands commands;
   private CommandCombinator combinator;
 
   private BooleanSupplier groundIntakeRunningAmpAngle;
@@ -102,9 +98,9 @@ public class RobotContainer implements Loggable {
 
     NamedCommands.registerCommand("intake", combinator.autoIntake());
     //NamedCommands.registerCommand("intake", new InstantCommand ( () -> {CommandScheduler.getInstance().schedule(combinator.autoIntake());}));
-    NamedCommands.registerCommand("closeShoot", speakerLauncher);
-    NamedCommands.registerCommand("farShoot", speakerFarLauncher);
-    NamedCommands.registerCommand("stop", stopShooterComponents);
+    NamedCommands.registerCommand("closeShoot", this.commands.speakerLauncher);
+    NamedCommands.registerCommand("farShoot", this.commands.speakerFarLauncher);
+    NamedCommands.registerCommand("stop", this.commands.stopShooterComponents);
     
 
     createStateSuppliers();
@@ -147,9 +143,8 @@ public class RobotContainer implements Loggable {
   private void createCommands() {
     // combine subsystem commands into sequential/parallel command groups
     combinator = new CommandCombinator(this.subsystems);
-
     // drive swerve, slow mode with b
-    swerveCmd = new RunCommand(
+    this.commands.swerveCmd = new RunCommand(
         () -> {
           double y = MathUtil.applyDeadband(this.controllers.driverController.getLeftY(), 0.06);
           double x = MathUtil.applyDeadband(this.controllers.driverController.getLeftX(), 0.06);
@@ -165,53 +160,54 @@ public class RobotContainer implements Loggable {
         }, this.subsystems.swerve);
 
     // set gyro yaw to 0
-    zeroGyro = Pgyro.zeroGyroCommand();
+    this.commands.zeroGyro = Pgyro.zeroGyroCommand();
 
     // manual climber operation, no limits
-    climberManual = this.subsystems.climber.runRaw(
+    this.commands.climberManual = this.subsystems.climber.runRaw(
       () -> {
         return this.controllers.secondaryController.getRightTriggerAxis() - this.controllers.secondaryController.getLeftTriggerAxis();
       }
     );
     // move climber up with limits
-    climberUp = this.subsystems.climber.moveUpCommand();
+    this.commands.climberUp = this.subsystems.climber.moveUpCommand();
     // move climber down with limits
-    climberDown = this.subsystems.climber.moveDownCommand();
+    this.commands.climberDown = this.subsystems.climber.moveDownCommand();
 
     // backup angle to amp/speaker close shot
-    ampAngle = this.subsystems.launcherAngle.ampAngleCommand();
+    this.commands.ampAngle = this.subsystems.launcherAngle.ampAngleCommand();
     // backup angle to intake/speaker far shot
-    speakerAngle = this.subsystems.launcherAngle.speakerAngleCommand();
+    this.commands.speakerAngle = this.subsystems.launcherAngle.speakerAngleCommand();
 
     // backup shooter feed command
-    shooterFeed = this.subsystems.loader.feedShooterCommand().until(this.subsystems.loader::isNotLoaded).andThen(this.subsystems.loader.stopLoaderCommand());
+    this.commands.shooterFeed = this.subsystems.loader.feedShooterCommand().until(this.subsystems.loader::isNotLoaded).andThen(this.subsystems.loader.stopLoaderCommand());
     // stop all shooter components
-    stopShooterComponents = combinator.stopShooterComponents();
+    this.commands.stopShooterComponents = combinator.stopShooterComponents();
 
     // spin up launcher, shoot to speaker after 0.5 seconds
-    speakerLauncher = combinator.speakerShot();
+    this.commands.speakerLauncher = combinator.speakerShot();
     // spin up launcher, shoot to speaker from intake angle after 0.5 seconds
-    speakerFarLauncher = combinator.speakerFarShot();
+    this.commands.speakerFarLauncher = combinator.speakerFarShot();
     // spin up launcher, shoot to amp after 0.5 seconds
-    ampLauncher = combinator.ampShot();
+    this.commands.ampLauncher = combinator.ampShot();
 
-    ampLauncherAssist = combinator.ampShotAssist();
+    this.commands.ampLauncherAssist = combinator.ampShotAssist();
 
     // intake note from source, auto stop
-    sourceIntake = combinator.sourceIntake();
+    this.commands.sourceIntake = combinator.sourceIntake();
     // intake note from ground, auto stop
-    groundIntake = combinator.groundIntake();
-    fullIntake = combinator.fullIntake();
+    this.commands.groundIntake = combinator.groundIntake();
+    // intake note from source and ground, auto stop
+    this.commands.fullIntake = combinator.fullIntake();
 
-    //amp assist up
-    ampAssistUp = this.subsystems.ampAssist.up();
-    ampAssistDown = this.subsystems.ampAssist.down();
+    // amp assist up and down
+    this.commands.ampAssistUp = this.subsystems.ampAssist.up();
+    this.commands.ampAssistDown = this.subsystems.ampAssist.down();
 
     // eject note
-    // make eject a toggle button
-    eject = combinator.eject();
+    this.commands.eject = combinator.eject();
 
-    speakerFarLauncher = combinator.speakerFarShot();
+    // spin up launcher, shoot to speaker from intake angle after 0.5 seconds
+    this.commands.speakerFarLauncher = combinator.speakerFarShot();
   }
 
   private void createStateSuppliers() {
@@ -229,44 +225,42 @@ public class RobotContainer implements Loggable {
         readyToShoot,
         noteLoaded,
         slowMode));
+
     //add zero gyro button
-    Shuffleboard.getTab("Settings").add("Zero Gyro", zeroGyro);
+    Shuffleboard.getTab("Settings").add("Zero Gyro", this.commands.zeroGyro);
 
-    this.subsystems.swerve.setDefaultCommand(swerveCmd); // both joysticks
-    this.subsystems.climber.setDefaultCommand(climberManual); // right trigger and left trigger
+    this.subsystems.swerve.setDefaultCommand(this.commands.swerveCmd); // both joysticks
+    this.subsystems.climber.setDefaultCommand(this.commands.climberManual); // right trigger and left trigger
 
-    this.controllers.driverController.x().onTrue(zeroGyro);
+    this.controllers.driverController.x().onTrue(this.commands.zeroGyro);
 
-    this.controllers.driverController.y().onTrue(sourceIntake);
-    this.controllers.driverController.a().onTrue(groundIntake);
+    this.controllers.driverController.y().onTrue(this.commands.sourceIntake);
+    this.controllers.driverController.a().onTrue(this.commands.groundIntake);
 
-    this.controllers.driverController.leftTrigger().onTrue(speakerAngle);
-    this.controllers.driverController.rightTrigger().onTrue(ampAngle);
-    this.controllers.driverController.leftBumper().onTrue(ampLauncherAssist);
-    this.controllers.driverController.rightBumper().onTrue(speakerLauncher);
+    this.controllers.driverController.leftTrigger().onTrue(this.commands.speakerAngle);
+    this.controllers.driverController.rightTrigger().onTrue(this.commands.ampAngle);
+    this.controllers.driverController.leftBumper().onTrue(this.commands.ampLauncherAssist);
+    this.controllers.driverController.rightBumper().onTrue(this.commands.speakerLauncher);
 
-    this.controllers.driverController.start().onTrue(eject);
+    this.controllers.driverController.start().onTrue(this.commands.eject);
 
-    this.controllers.driverController.povDown().onTrue(shooterFeed);
+    this.controllers.driverController.povDown().onTrue(this.commands.shooterFeed);
 
-    this.controllers.secondaryController.y().onTrue(speakerLauncher);
+    this.controllers.secondaryController.y().onTrue(this.commands.speakerLauncher);
 
-    this.controllers.secondaryController.b().onTrue(ampLauncherAssist);
+    this.controllers.secondaryController.b().onTrue(this.commands.ampLauncherAssist);
 
-    this.controllers.secondaryController.start().onTrue(eject);
-    this.controllers.secondaryController.x().onTrue(stopShooterComponents);
-    this.controllers.secondaryController.a().onTrue(speakerFarLauncher);
+    this.controllers.secondaryController.start().onTrue(this.commands.eject);
+    this.controllers.secondaryController.x().onTrue(this.commands.stopShooterComponents);
+    this.controllers.secondaryController.a().onTrue(this.commands.speakerFarLauncher);
 
-    this.controllers.secondaryController.rightBumper().whileTrue(climberDown);
-    this.controllers.secondaryController.leftBumper().whileTrue(climberUp);
+    this.controllers.secondaryController.rightBumper().whileTrue(this.commands.climberDown);
+    this.controllers.secondaryController.leftBumper().whileTrue(this.commands.climberUp);
 
-    //secondaryController.povDown().onTrue(ampAngle);
-    //secondaryController.povUp().onTrue(speakerAngle);
-
-    this.controllers.secondaryController.povDown().onTrue(fullIntake);
+    this.controllers.secondaryController.povDown().onTrue(this.commands.fullIntake);
     this.controllers.secondaryController.povUp().onTrue(this.subsystems.simranIntakeAssist.upAndStop());
 
-    this.controllers.secondaryController.povLeft().onTrue(groundIntake);
+    this.controllers.secondaryController.povLeft().onTrue(this.commands.groundIntake);
   }
 
   public Command getAutonomousCommand() {
