@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7352951848760846,
+      "y": 6.728691171668058
+    },
+    "rotation": 60.395549253995014
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "closeShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left subwoofer to left note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left note to left subwoofer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "closeShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left note and run away"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

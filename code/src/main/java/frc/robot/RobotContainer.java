@@ -114,12 +114,15 @@ public class RobotContainer implements Loggable {
     configureBindings();
 
     autoChooser = new SendableChooser<>();
-    autoChooser.addOption("Shoot Only, Any Pos", AutoBuilder.buildAuto("Shoot Only, Any Pos"));
-    autoChooser.addOption("Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Middle 4 Note - WEEK 5"));
+    //autoChooser.addOption("shoot only any pos", AutoBuilder.buildAuto("shoot only any pos"));
+    autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
+    autoChooser.addOption("match 41 auto", AutoBuilder.buildAuto("match 41 auto"));
+    autoChooser.addOption("Middle Auto - WEEK 5", AutoBuilder.buildAuto("Middle Auto - WEEK 5"));
     autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
     autoChooser.addOption("Shoot and Leave Middle - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
     autoChooser.addOption("Shoot and Leave Source - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
-    // autoChooser.addOption("simranintaketestjustintake", combinator.fullIntake());
+    autoChooser.addOption("intake Test", AutoBuilder.buildAuto("intake Test"));
+    autoChooser.addOption("simranintaketestjustintake", combinator.fullIntake());
     SmartDashboard.putData("Auton chooser", autoChooser);
   }
 

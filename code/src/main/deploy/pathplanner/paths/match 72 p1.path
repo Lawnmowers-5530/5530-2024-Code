@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.83,
-        "y": 4.4
+        "x": 0.8085924743278065,
+        "y": 6.772669545339091
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8221905037388922,
-        "y": 4.399999999999999
+        "x": 1.8085924743278081,
+        "y": 6.772669545339091
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.43,
-        "y": 4.17
+        "x": 2.5237490474980953,
+        "y": 7.212453282049422
       },
       "prevControl": {
-        "x": 1.4300000000000002,
-        "y": 4.17
+        "x": 1.5237490474980953,
+        "y": 7.212453282049422
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,21 +32,21 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 180.0
   },
   "goalEndState": {
     "velocity": 0,
     "rotation": 0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Side Auton - WEEK 5",
+  "folder": "Older PAths",
   "previewStartingState": {
-    "rotation": 122.03875804683588,
+    "rotation": 60.4612177404419,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
