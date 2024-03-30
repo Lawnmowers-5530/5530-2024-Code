@@ -63,7 +63,7 @@ public class CommandCombinator {
 		return this.subsystems.launcherAngle.ampAngleCommand()
 			.andThen(
 				launcherIntake()
-				.until(this.subsystems.loader::isLoaded)
+				.until(this.subsystems.distanceSensor::isNotePresent)
 
 			)
 			.andThen(stopShooterComponents());
@@ -76,7 +76,7 @@ public class CommandCombinator {
 					this.subsystems.intake.intakeWheelCommand(),
 					this.subsystems.loader.runLoaderCommand()
 				)
-					.until(this.subsystems.loader::isLoaded)
+					.until(this.subsystems.distanceSensor::isNotePresent)
 					.andThen(stopShooterComponents())
 			);
 	}
@@ -86,10 +86,10 @@ public class CommandCombinator {
 			.andThen(
 				new ParallelCommandGroup(	
 					this.subsystems.intake.intakeWheelCommand(),	
-					this.subsystems.simranIntakeAssist.downAndSpin().until(this.subsystems.loader::isLoaded),
-					this.subsystems.loader.runLoaderCommand().until(this.subsystems.loader::isLoaded)
+					this.subsystems.simranIntakeAssist.downAndSpin().until(this.subsystems.distanceSensor::isNotePresent),
+					this.subsystems.loader.runLoaderCommand().until(this.subsystems.distanceSensor::isNotePresent)
 				)
-					.until(this.subsystems.loader::isLoaded)
+					.until(this.subsystems.distanceSensor::isNotePresent)
 					.andThen(stopShooterComponents())
 			);
 	}
@@ -100,10 +100,10 @@ public class CommandCombinator {
 				new ParallelCommandGroup(	
 				this.subsystems.intake.intakeWheelCommand(),	
 				this.subsystems.simranIntakeAssist.downAndSpin().withTimeout(1),
-				this.subsystems.loader.runLoaderCommand().until(this.subsystems.loader::isLoaded)
+				this.subsystems.loader.runLoaderCommand().until(this.subsystems.distanceSensor::isNotePresent)
 					
 				)
-					.until(this.subsystems.loader::isLoaded).withTimeout(3)
+					.until(this.subsystems.distanceSensor::isNotePresent).withTimeout(3)
 					.andThen(stopShooterComponents())
 			);
 	}
@@ -114,7 +114,7 @@ public class CommandCombinator {
 				new ParallelDeadlineGroup(
 					new SequentialCommandGroup(
 						new WaitCommand(0.75),
-						this.subsystems.loader.feedShooterCommand().until(this.subsystems.loader::isNotLoaded)
+						this.subsystems.loader.feedShooterCommand().until(this.subsystems.distanceSensor::isNoteNotPresent)
 					),
 					this.subsystems.launcher.speakerLauncherCommand()
 				)
@@ -128,7 +128,7 @@ public class CommandCombinator {
 				new ParallelDeadlineGroup(
 					new SequentialCommandGroup(
 						new WaitCommand(0.75),
-						this.subsystems.loader.feedShooterCommand().until(this.subsystems.loader::isNotLoaded)
+						this.subsystems.loader.feedShooterCommand().until(this.subsystems.distanceSensor::isNoteNotPresent)
 					),
 				this.subsystems.launcher.speakerLauncherCommand()
 				)
@@ -143,7 +143,7 @@ public class CommandCombinator {
 				new ParallelDeadlineGroup(
 					new SequentialCommandGroup(
 						new WaitCommand(0.75),
-						this.subsystems.loader.feedShooterCommand().until(this.subsystems.loader::isNotLoaded)
+						this.subsystems.loader.feedShooterCommand().until(this.subsystems.distanceSensor::isNoteNotPresent)
 					),
 					this.subsystems.launcher.ampLauncherCommand()
 				)
@@ -161,7 +161,7 @@ public class CommandCombinator {
 			new ParallelDeadlineGroup(
 				new SequentialCommandGroup(
 					new WaitCommand(0.75),
-					this.subsystems.loader.feedShooterCommand().until(this.subsystems.loader::isNotLoaded)
+					this.subsystems.loader.feedShooterCommand().until(this.subsystems.distanceSensor::isNoteNotPresent)
 				),
 				this.subsystems.launcher.ampLauncherCommand()
 			)

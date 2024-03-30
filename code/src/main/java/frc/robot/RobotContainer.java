@@ -29,7 +29,8 @@ import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.SimranIntakeAssist;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.LedController.StripType;
+
+import static frc.robot.Constants.LoaderConstants.loaderCutoffDistance;
 
 import java.util.function.BooleanSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -177,7 +178,7 @@ public class RobotContainer implements Loggable {
     this.commands.speakerAngle = this.subsystems.launcherAngle.speakerAngleCommand();
 
     // backup shooter feed command
-    this.commands.shooterFeed = this.subsystems.loader.feedShooterCommand().until(this.subsystems.loader::isNotLoaded).andThen(this.subsystems.loader.stopLoaderCommand());
+    this.commands.shooterFeed = this.subsystems.loader.feedShooterCommand().until(this.subsystems.distanceSensor::isNotePresent).andThen(this.subsystems.loader.stopLoaderCommand());
     // stop all shooter components
     this.commands.stopShooterComponents = combinator.stopShooterComponents();
 
@@ -210,9 +211,9 @@ public class RobotContainer implements Loggable {
 
   private void createStateSuppliers() {
     groundIntakeRunningAmpAngle = () -> this.subsystems.intake.isRunning() && this.subsystems.launcherAngle.isUp();
-    readyToIntakeFromSource = () -> this.subsystems.launcher.isRunningIntake() && !this.subsystems.loader.isLoaded() && this.subsystems.launcherAngle.isUp();
-    readyToShoot = () -> this.subsystems.loader.isLoaded() && this.subsystems.swerve.atTargetAngle() && false; //disabled not ready
-    noteLoaded = () -> this.subsystems.loader.isLoaded();
+    readyToIntakeFromSource = () -> this.subsystems.launcher.isRunningIntake() && !this.subsystems.distanceSensor.isNotePresent() && this.subsystems.launcherAngle.isUp();
+    readyToShoot = () -> this.subsystems.distanceSensor.isNotePresent() && this.subsystems.swerve.atTargetAngle() && false; //disabled not ready
+    noteLoaded = () -> this.subsystems.distanceSensor.isNotePresent();
     slowMode = () -> this.controllers.driverController.b().getAsBoolean();
   }
 
