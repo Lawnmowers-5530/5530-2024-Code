@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Older PAths",
+  "folder": null,
   "previewStartingState": {
     "rotation": 60.4612177404419,
     "velocity": 0

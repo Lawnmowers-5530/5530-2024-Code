@@ -3,13 +3,11 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "Middle Auton",
-    "Older PAths",
+    "red",
     "center note paths",
     "close shoot paths",
     "far shoot paths",
     "move out paths",
-    "red",
     "subwoofer to note paths"
   ],
   "autoFolders": [],
