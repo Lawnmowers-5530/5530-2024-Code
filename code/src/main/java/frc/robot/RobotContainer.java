@@ -36,23 +36,29 @@ import java.util.function.BooleanSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-public class RobotContainer implements Loggable {
+public class RobotContainer implements Loggable {    
   private SendableChooser<Command> autoChooser;
+  public class Controllers {
+    public CommandXboxController driverController;
+    public CommandXboxController secondaryController;
+  }
+  private Controllers controllers;
+  public class Subsystems {
+    public Swerve swerve;
+    public DistanceSensor distanceSensor;
+    public DumbLauncherAngle launcherAngle;
+    public LoaderV2 loader;
+    public LauncherV2 launcher;
+    public Climber climber;
+    public Intake intake;
+    public SimranIntakeAssist simranIntakeAssist;
+    public LedController_MultiAccess leds;
+    public Camera fisheye;
+    public LedManager ledManager;
+    public AmpAssist ampAssist;
 
-  private Swerve swerve;
-  private DistanceSensor distanceSensor;
-  private DumbLauncherAngle launcherAngle;
-  private LoaderV2 loader;
-  private LauncherV2 launcher;
-  private Climber climber;
-  private Intake intake;
-  private SimranIntakeAssist simranIntakeAssist;
-  private LedController_MultiAccess leds;
-  private Camera fisheye;
-  private LedManager ledManager;
-  private AmpAssist ampAssist;
-  private CommandXboxController driverController;
-  private CommandXboxController secondaryController;
+  }
+  private Subsystems subsystems;
 
   private Command swerveCmd;
   private Command shooterFeed;
@@ -88,8 +94,8 @@ public class RobotContainer implements Loggable {
   private BooleanSupplier slowMode;
 
   public RobotContainer() {
-    driverController = new CommandXboxController(0);
-    secondaryController = new CommandXboxController(1);
+    this.controllers.driverController = new CommandXboxController(0);
+    this.controllers.secondaryController = new CommandXboxController(1);
 
     createSubsystems();
 
@@ -125,72 +131,66 @@ autoChooser.addOption("--------", new InstantCommand());
   }
 
   private void createSubsystems() {
-    // distanceSensorMXP = new DistanceSensorMXP();
-    ampAssist = new AmpAssist();
-    leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable, "Competition"));
-    ledManager = new LedManager(leds.getController());
-    fisheye = new Camera("fisheye", 0, 320, 240, 300);
-
-    intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
-    simranIntakeAssist = new SimranIntakeAssist(Constants.ExternalIntakeConstants.pivotMotorPort,
-        Constants.ExternalIntakeConstants.rollerMotorPort,
-        Constants.ExternalIntakeConstants.isReversed);
-    launcher = new LauncherV2();
-    launcherAngle = new DumbLauncherAngle(
-        Constants.LauncherAngleConstants.motorPort,
-        Constants.LauncherAngleConstants.isReversed);
-    distanceSensor = new DistanceSensor();
-    loader = new LoaderV2(
-        Constants.LoaderConstants.leftMotorPort,
-        Constants.LoaderConstants.rightMotorPort,
-        Constants.LoaderConstants.isReversed, distanceSensor);
-    climber = new Climber();
-
-    swerve = new Swerve();
+    //distanceSensorMXP = new DistanceSensorMXP();
+    this.subsystems.ampAssist = new AmpAssist();
+    this.subsystems.leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable, "Competition"));
+    this.subsystems.ledManager = new LedManager(subsystems.leds.getController());
+    this.subsystems.fisheye = new Camera("fisheye", 0, 320, 240, 300);
+    this.subsystems.intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
+    this.subsystems.simranIntakeAssist = new SimranIntakeAssist( Constants.ExternalIntakeConstants.pivotMotorPort, 
+      Constants.ExternalIntakeConstants.rollerMotorPort,
+      Constants.ExternalIntakeConstants.isReversed);
+    this.subsystems.launcher = new LauncherV2();
+    this.subsystems.launcherAngle = new DumbLauncherAngle(Constants.LauncherAngleConstants.motorPort, Constants.LauncherAngleConstants.isReversed);
+    this.subsystems.distanceSensor = new DistanceSensor();
+    this.subsystems.loader = new LoaderV2(Constants.LoaderConstants.leftMotorPort, Constants.LoaderConstants.rightMotorPort, Constants.LoaderConstants.isReversed, subsystems.distanceSensor);
+    this.subsystems.climber = new Climber();
+    this.subsystems.swerve = new Swerve();
 
     // the death zone
   }
 
   private void createCommands() {
     // combine subsystem commands into sequential/parallel command groups
-    combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor, ampAssist,
-        simranIntakeAssist);
+    combinator = new CommandCombinator(this.subsystems);
 
     // drive swerve, slow mode with b
     swerveCmd = new RunCommand(
         () -> {
-          double y = MathUtil.applyDeadband(driverController.getLeftY(), 0.06);
-          double x = MathUtil.applyDeadband(driverController.getLeftX(), 0.06);
-          double w = MathUtil.applyDeadband(driverController.getRightX(), 0.06);
+          double y = MathUtil.applyDeadband(this.controllers.driverController.getLeftY(), 0.06);
+          double x = MathUtil.applyDeadband(this.controllers.driverController.getLeftX(), 0.06);
+          double w = MathUtil.applyDeadband(this.controllers.driverController.getRightX(), 0.06);
 
           Vector2D vector = new Vector2D(y, x, false);
-          swerve.drive(vector, -w, true);
+          this.subsystems.swerve.drive(vector, -w, true);
 
-          if (driverController.b().getAsBoolean()) {
-            swerve.drive(VectorOperator.scalarMultiply(vector, 0.5), -w / 2, true);
+          if (this.controllers.driverController.b().getAsBoolean()) {
+            this.subsystems.swerve.drive(VectorOperator.scalarMultiply(vector, 0.5), -w / 2, true);
           }
 
-        }, swerve);
+        }, this.subsystems.swerve);
 
     // set gyro yaw to 0
     zeroGyro = Pgyro.zeroGyroCommand();
 
     // manual climber operation, no limits
-    climberManual = climber.runRaw(() -> {
-      return secondaryController.getRightTriggerAxis() - secondaryController.getLeftTriggerAxis();
-    });
+    climberManual = this.subsystems.climber.runRaw(
+      () -> {
+        return this.controllers.secondaryController.getRightTriggerAxis() - this.controllers.secondaryController.getLeftTriggerAxis();
+      }
+    );
     // move climber up with limits
-    climberUp = climber.moveUpCommand();
+    climberUp = this.subsystems.climber.moveUpCommand();
     // move climber down with limits
-    climberDown = climber.moveDownCommand();
+    climberDown = this.subsystems.climber.moveDownCommand();
 
     // backup angle to amp/speaker close shot
-    ampAngle = launcherAngle.ampAngleCommand();
+    ampAngle = this.subsystems.launcherAngle.ampAngleCommand();
     // backup angle to intake/speaker far shot
-    speakerAngle = launcherAngle.speakerAngleCommand();
+    speakerAngle = this.subsystems.launcherAngle.speakerAngleCommand();
 
     // backup shooter feed command
-    shooterFeed = loader.feedShooterCommand().until(loader::isNotLoaded).andThen(loader.stopLoaderCommand());
+    shooterFeed = this.subsystems.loader.feedShooterCommand().until(this.subsystems.loader::isNotLoaded).andThen(this.subsystems.loader.stopLoaderCommand());
     // stop all shooter components
     stopShooterComponents = combinator.stopShooterComponents();
     // stop all shooter components, move note down to correct pos, stop all shooter components
@@ -211,10 +211,9 @@ autoChooser.addOption("--------", new InstantCommand());
     groundIntake = combinator.groundIntake();
     fullIntake = combinator.fullIntake();
 
-    // amp assist up
-    ampAssistUp = ampAssist.up();
-    // amp Assist down
-    ampAssistDown = ampAssist.down();
+    //amp assist up
+    ampAssistUp = this.subsystems.ampAssist.up();
+    ampAssistDown = this.subsystems.ampAssist.down();
 
     // eject note
     // make eject a toggle button
@@ -224,15 +223,15 @@ autoChooser.addOption("--------", new InstantCommand());
   }
 
   private void createStateSuppliers() {
-    groundIntakeRunningAmpAngle = () -> intake.isRunning() && launcherAngle.isUp();
-    readyToIntakeFromSource = () -> launcher.isRunningIntake() && !loader.isLoaded() && launcherAngle.isUp();
-    readyToShoot = () -> loader.isLoaded() && swerve.atTargetAngle() && false; // disabled not ready
-    noteLoaded = () -> loader.isLoaded();
-    slowMode = () -> driverController.b().getAsBoolean();
+    groundIntakeRunningAmpAngle = () -> this.subsystems.intake.isRunning() && this.subsystems.launcherAngle.isUp();
+    readyToIntakeFromSource = () -> this.subsystems.launcher.isRunningIntake() && !this.subsystems.loader.isLoaded() && this.subsystems.launcherAngle.isUp();
+    readyToShoot = () -> this.subsystems.loader.isLoaded() && this.subsystems.swerve.atTargetAngle() && false; //disabled not ready
+    noteLoaded = () -> this.subsystems.loader.isLoaded();
+    slowMode = () -> this.controllers.driverController.b().getAsBoolean();
   }
 
   private void configureBindings() {
-    ledManager.setDefaultCommand(ledManager.LedControllingCommand(
+    this.subsystems.ledManager.setDefaultCommand(this.subsystems.ledManager.LedControllingCommand(
         groundIntakeRunningAmpAngle,
         readyToIntakeFromSource,
         readyToShoot,
@@ -241,43 +240,41 @@ autoChooser.addOption("--------", new InstantCommand());
     // add zero gyro button
     Shuffleboard.getTab("Settings").add("Zero Gyro", zeroGyro);
 
-    swerve.setDefaultCommand(swerveCmd); // both joysticks
-    climber.setDefaultCommand(climberManual); // right trigger and left trigger
+    this.subsystems.swerve.setDefaultCommand(swerveCmd); // both joysticks
+    this.subsystems.climber.setDefaultCommand(climberManual); // right trigger and left trigger
 
-    driverController.x().onTrue(zeroGyro);
+    this.controllers.driverController.x().onTrue(zeroGyro);
 
-    driverController.y().onTrue(sourceIntake);
-    driverController.a().onTrue(groundIntake);
+    this.controllers.driverController.y().onTrue(sourceIntake);
+    this.controllers.driverController.a().onTrue(groundIntake);
 
-    driverController.leftTrigger().onTrue(speakerAngle);
-    driverController.rightTrigger().onTrue(ampAngle);
-    driverController.leftBumper().onTrue(ampLauncherAssist);
-    driverController.rightBumper().onTrue(speakerLauncher);
+    this.controllers.driverController.leftTrigger().onTrue(speakerAngle);
+    this.controllers.driverController.rightTrigger().onTrue(ampAngle);
+    this.controllers.driverController.leftBumper().onTrue(ampLauncherAssist);
+    this.controllers.driverController.rightBumper().onTrue(speakerLauncher);
 
-    driverController.start().onTrue(eject);
+    this.controllers.driverController.start().onTrue(eject);
 
-    driverController.povDown().onTrue(shooterFeed);
+    this.controllers.driverController.povDown().onTrue(shooterFeed);
 
-    secondaryController.y().onTrue(speakerLauncher);
+    this.controllers.secondaryController.y().onTrue(speakerLauncher);
 
-    secondaryController.b().onTrue(ampLauncherAssist);
+    this.controllers.secondaryController.b().onTrue(ampLauncherAssist);
 
-    secondaryController.start().onTrue(eject);
-    secondaryController.x().onTrue(stopShooterComponents);
-    secondaryController.a().onTrue(speakerFarLauncher);
+    this.controllers.secondaryController.start().onTrue(eject);
+    this.controllers.secondaryController.x().onTrue(stopShooterComponents);
+    this.controllers.secondaryController.a().onTrue(speakerFarLauncher);
 
-    secondaryController.rightBumper().whileTrue(climberDown);
-    secondaryController.leftBumper().whileTrue(climberUp);
+    this.controllers.secondaryController.rightBumper().whileTrue(climberDown);
+    this.controllers.secondaryController.leftBumper().whileTrue(climberUp);
 
     // secondaryController.povDown().onTrue(ampAngle);
     // secondaryController.povUp().onTrue(speakerAngle);
 
-    secondaryController.povDown().onTrue(fullIntake);
-    secondaryController.povUp().onTrue(simranIntakeAssist.upAndStop());
+    this.controllers.secondaryController.povDown().onTrue(fullIntake);
+    this.controllers.secondaryController.povUp().onTrue(this.subsystems.simranIntakeAssist.upAndStop());
 
-    secondaryController.povLeft().onTrue(groundIntake);
-    secondaryController.povRight().onTrue(manualIntakeStop);
-
+    this.controllers.secondaryController.povLeft().onTrue(groundIntake);
   }
 
   public Command getAutonomousCommand() {
@@ -285,7 +282,7 @@ autoChooser.addOption("--------", new InstantCommand());
   }
 
   public void disabledPeriodic() {
-    swerve.disabledPeriodic();
+    this.subsystems.swerve.disabledPeriodic();
 
   }
 }
