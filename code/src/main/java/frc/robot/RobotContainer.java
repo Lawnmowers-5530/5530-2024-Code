@@ -284,15 +284,13 @@ public class RobotContainer implements Loggable {
     secondaryController.povLeft().onTrue(groundIntake);
     secondaryController.povRight().onTrue(sourceIntake);
 
-    CommandXboxController testController = new CommandXboxController(2);
+    CommandXboxController testController = new CommandXboxController(5);
 
     testController.a().onTrue(externalIntakeUp);
-    testController.b().onTrue(externalIntakeOn);
-    //testController.b().onTrue(externalIntakeDown);
+    testController.b().onTrue(externalIntakeDown);
 
-
-    testController.povDown().onTrue(ampAssistDown);
-    testController.povUp().onTrue(ampAssistUp);
+    testController.x().onTrue(externalIntakeOn);
+    testController.y().onTrue(externalIntakeOff);
 
   }
 
