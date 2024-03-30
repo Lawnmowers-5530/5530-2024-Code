@@ -117,7 +117,7 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
     public void periodic() {
         updateState();
 
-        if (DEBUG_LOGGING) { //only update constantly when in debug mode
+        if (debugLogging) { //only update constantly when in debug mode
             isUp();
             isDown();
         }

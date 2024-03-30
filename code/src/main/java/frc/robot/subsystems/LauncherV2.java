@@ -44,7 +44,7 @@ public class LauncherV2 extends Launcher{
         rightPIDController.setI(kI);
         rightPIDController.setD(kD);
         rightPIDController.setFF(kF);
-        if (DEBUG_LOGGING) {
+        if (debugLogging) {
             logEncoder();
         }
     }

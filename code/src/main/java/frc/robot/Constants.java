@@ -13,7 +13,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PIDConstants;
 
 public final class Constants {
-    public static final boolean DEBUG_LOGGING = true;
+    public static final boolean debugLogging = true;
 
     public static final double trackWidth = Units.inchesToMeters(24);
     public static final double wheelBase = Units.inchesToMeters(24);
@@ -86,7 +86,6 @@ public final class Constants {
         public static final boolean isReversed = true;
         public static final double loaderSpeed = 0.20;
         public static final double loaderCutoffDistance = 180;
-        public static final int NOTE_LOADED_PRIORITY = 15;
     }
 
     public static final class LauncherConstants {
@@ -101,7 +100,7 @@ public final class Constants {
         public static final double loaderShotSpeed = 0.35;
 
         public static final double launcherLowRevs = 600; // 800 // low speed for the launcher
-        public static final double LAUNCHER_MED_REVS = 3000; // medium speed for the launcher
+        public static final double launcherMedRevs = 3000; // medium speed for the launcher
         public static final double launcherHighRevs = 4500; // high speed for the launcher
 
         public static final double launcherSpeedDiffPercent = 0.4;// was 0.2
@@ -225,9 +224,9 @@ public final class Constants {
     public static final Translation2d targetTranslation = new Translation2d(0, 5);
 
     public static final class Patterns {
-        public static final PatternType NOTE_LOADED = SolidColorType.Blue;
-        public static final PatternType NO_NOTE_ARM_READY = SolidColorType.Red;
-        public static final PatternType NOTE_LOADED_IN_ZONE = SolidColorType.Green;
-        public static final PatternType NO_NOTE_ARM_NOT_READY = FixedPalletePatternType.StrobeRed;
+        public static final PatternType noteLoaded = SolidColorType.Blue;
+        public static final PatternType noNoteArmReady = SolidColorType.Red;
+        public static final PatternType noteLoadedInZone = SolidColorType.Green;
+        public static final PatternType noNoteArmNotReady = FixedPalletePatternType.StrobeRed;
     }
 }
