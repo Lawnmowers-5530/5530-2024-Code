@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,8 +20,6 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
     @Log
     double calculatedPower = 0;
     SparkAbsoluteEncoder encoder;
-    @Log
-    double ticks;
 
     @Log
     boolean isUp;
@@ -110,13 +107,18 @@ public class DumbLauncherAngle extends SubsystemBase implements Loggable {
         this.isDown = this.getEncoderMeasurement() > Constants.LauncherAngleConstants.downPosition - Constants.LauncherAngleConstants.positionTolerance;
         return this.isDown;
     }
+    @Log
+    public double getTicks() {
+        return encoder.getPosition();
+    }
 
     @Override 
     public void periodic() {
-        ticks = this.getEncoderMeasurement();
         updateState();
-        isUp();
-        isDown();
 
+        if (Constants.DEBUG_LOGGING) { //only update constantly when in debug mode
+            isUp();
+            isDown();
+        }
     }
 }

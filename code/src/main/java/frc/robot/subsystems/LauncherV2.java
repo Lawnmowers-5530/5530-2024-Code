@@ -6,10 +6,10 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -18,6 +18,10 @@ public class LauncherV2 extends Launcher{
     RelativeEncoder rightEncoder;
     RelativeEncoder leftEncoder2;
     RelativeEncoder rightEncoder2;
+    @Log
+    double leftVelocityTarget = 0;
+    @Log
+    double rightVelocityTarget = 0;
     SparkPIDController leftPIDController;
     SparkPIDController rightPIDController;
 
@@ -39,16 +43,17 @@ public class LauncherV2 extends Launcher{
         rightPIDController.setI(Constants.LauncherConstants.kI);
         rightPIDController.setD(Constants.LauncherConstants.kD);
         rightPIDController.setFF(Constants.LauncherConstants.kF);
+        if (Constants.DEBUG_LOGGING) {
+            logEncoder();
+        }
     }
 
     @Config
     public void setVelocity(double left, double right) {
         leftPIDController.setReference(left, CANSparkBase.ControlType.kVelocity);
         rightPIDController.setReference(right, CANSparkBase.ControlType.kVelocity);
-        SmartDashboard.putNumber("Left Target", left);
-        SmartDashboard.putNumber("Right Target", right);
-        SmartDashboard.putNumber("left velocity", leftEncoder.getVelocity());
-        SmartDashboard.putNumber("right velocity", rightEncoder.getVelocity());
+        this.leftVelocityTarget = left;
+        this.rightVelocityTarget = right;
     }
 
     @Log
@@ -64,10 +69,10 @@ public class LauncherV2 extends Launcher{
     }
 
     public void logEncoder() {
-        SmartDashboard.putNumber("Left Encoder", leftEncoder.getPosition());
-        SmartDashboard.putNumber("Right Encoder", rightEncoder.getPosition());
-        SmartDashboard.putNumber("Left Encoder 2", leftEncoder2.getPosition());
-        SmartDashboard.putNumber("Right Encoder 2", rightEncoder2.getPosition());
+        Shuffleboard.getTab("LauncherV2").addNumber("Left Encoder", () -> leftEncoder.getPosition());
+        Shuffleboard.getTab("LauncherV2").addNumber("Right Encoder", () -> rightEncoder.getPosition());
+        Shuffleboard.getTab("LauncherV2").addNumber("Left Encoder 2", () -> leftEncoder2.getPosition());
+        Shuffleboard.getTab("LauncherV2").addNumber("Right Encoder 2", () -> rightEncoder2.getPosition());
     }
 
     public Command stopLauncherCommand() {

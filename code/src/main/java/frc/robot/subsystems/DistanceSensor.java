@@ -9,8 +9,6 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class DistanceSensor extends SubsystemBase implements Loggable{
-    @Log
-    double pos;
     Rev2mDistanceSensor sensor;
 
     public DistanceSensor() {
@@ -19,7 +17,7 @@ public class DistanceSensor extends SubsystemBase implements Loggable{
         Shuffleboard.getTab("DistanceSensor").addNumber("distance", this::getDistance);
         this.setEnabled(true);
     }
-
+    @Log
     public double getDistance() { // returns distance in mm
         return sensor.getRange();
     }
@@ -40,10 +38,5 @@ public class DistanceSensor extends SubsystemBase implements Loggable{
         } else {
             return false;
         }
-    }
-
-    @Override
-    public void periodic(){
-        pos = this.sensor.getRange();
     }
 }

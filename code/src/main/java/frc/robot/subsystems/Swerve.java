@@ -142,10 +142,17 @@ public class Swerve extends SubsystemBase implements Loggable {
       isCoasting = false;
     }
     updateOdometry();
-    poseStr = getPose().toString();
     robotRelativeSpeeds = this.getRobotRelativeSpeeds().toString();
+  }
 
-    SmartDashboard.putString("robot rel speeds", getRobotRelativeSpeeds().toString());
+  @Log
+  public String poseString() {
+    return getPose().toString();
+  }
+
+  @Log
+  public String robotRelativeSpeedString() {
+    return getRobotRelativeSpeeds().toString();
   }
 
   public Pose2d getPose() {
