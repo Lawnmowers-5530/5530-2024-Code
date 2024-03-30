@@ -52,7 +52,7 @@ public class CommandCombinator {
 				this.subsystems.loader.run(0);
 				this.subsystems.launcher.setSpeed(0, 0);
 			} else {
-				this.subsystems.loader.run(speed-0.075);
+				this.subsystems.loader.run(-speed-0.075);
 				this.subsystems.launcher.setSpeed(speed, speed);
 			}
 		}, this.subsystems.distanceSensor, this.subsystems.loader, this.subsystems.launcher);

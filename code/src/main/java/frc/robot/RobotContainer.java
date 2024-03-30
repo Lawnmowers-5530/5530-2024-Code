@@ -33,7 +33,6 @@ import frc.robot.subsystems.Swerve;
 import java.util.function.BooleanSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathPlannerTrajectory.State;
 
 public class RobotContainer implements Loggable {
   private SendableChooser<Command> autoChooser;
