@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.LedController;
 import frc.robot.subsystems.SwerveModule;
 import frc.robot.subsystems.LedController.FixedPalletePatternType;
 import frc.robot.subsystems.LedController.PatternType;
@@ -90,11 +91,34 @@ public final class Constants {
 
         public static final double loaderShotSpeed = 0.35;
 
-        public static final double LAUNCHER_LOW_REVS = 600; // 800 // low speed for the launcher
+        public static final double launcherLowRevs = 600; // 800 // low speed for the launcher
         public static final double LAUNCHER_MED_REVS = 3000; // medium speed for the launcher
-        public static final double LAUNCHER_HIGH_REVS = 4500; // high speed for the launcher
+        public static final double launcherHighRevs = 4500; // high speed for the launcher
 
-        public static final double LAUNCHER_SPEED_DIFF_PERCENT = 0.4;// was 0.2
+        public static final double launcherSpeedDiffPercent = 0.4;// was 0.2
+
+        public static final int encoderCountsPerRev = 8192;
+    }
+
+    public static final class DumbLauncherAngleConstants {
+        public static final double power = 0.2;
+        public static final double atPositionMotorPowerMultiplier = 0.2;
+    }
+
+    public static final class CameraConstants {
+        public static final String name = "fisheye";
+        public static final int port = 0;
+        public static final int width = 320;
+        public static final int height = 240;
+        public static final int fps = 300;
+        public static final double exposure = 16;
+
+    }
+
+    public static final class LedControllerConstants {
+        public static final int ledPort = 0;
+        public static final LedController.StripType stripType = LedController.StripType.Adressable;
+        public static final String shuffleBoardTabName = "competition";
     }
 
     public static final class LauncherAngleConstants {

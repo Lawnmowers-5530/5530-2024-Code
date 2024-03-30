@@ -40,13 +40,8 @@ public class Swerve extends SubsystemBase implements Loggable {
   private static final SwerveModule Mod_1 = Constants.Modules.Mod_1;
   private static final SwerveModule Mod_2 = Constants.Modules.Mod_2;
   private static final SwerveModule Mod_3 = Constants.Modules.Mod_3;
-  @Log
-  String poseStr = "";
 
   double rotationOutput;
-
-  @Log
-  String robotRelativeSpeeds = "";
 
   private SwerveModuleState[] states;
 
@@ -142,7 +137,6 @@ public class Swerve extends SubsystemBase implements Loggable {
       isCoasting = false;
     }
     updateOdometry();
-    robotRelativeSpeeds = this.getRobotRelativeSpeeds().toString();
   }
 
   @Log

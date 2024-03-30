@@ -7,11 +7,13 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
+
+import static frc.robot.Constants.*;
+import static frc.robot.Constants.LauncherConstants.*;
+
 
 public class LauncherV2 extends Launcher{
     RelativeEncoder leftEncoder;
@@ -26,24 +28,23 @@ public class LauncherV2 extends Launcher{
     SparkPIDController rightPIDController;
 
     public LauncherV2() {
-        super(Constants.LauncherConstants.leftMotorPort, Constants.LauncherConstants.rightMotorPort,
-                Constants.LauncherConstants.isReversed);
+        super();
         leftEncoder = leftMotor.getEncoder();
         rightEncoder = rightMotor.getEncoder();
         leftPIDController = leftMotor.getPIDController();
         rightPIDController = rightMotor.getPIDController();
-        leftEncoder2 = leftMotor.getAlternateEncoder(8192);
-        rightEncoder2 = rightMotor.getAlternateEncoder(8192);
-        leftPIDController.setP(Constants.LauncherConstants.kP);
-        leftPIDController.setI(Constants.LauncherConstants.kI);
-        leftPIDController.setD(Constants.LauncherConstants.kD);
-        leftPIDController.setFF(Constants.LauncherConstants.kF);
+        leftEncoder2 = leftMotor.getAlternateEncoder(encoderCountsPerRev);
+        rightEncoder2 = rightMotor.getAlternateEncoder(encoderCountsPerRev);
+        leftPIDController.setP(kP);
+        leftPIDController.setI(kI);
+        leftPIDController.setD(kD);
+        leftPIDController.setFF(kF);
 
-        rightPIDController.setP(Constants.LauncherConstants.kP);
-        rightPIDController.setI(Constants.LauncherConstants.kI);
-        rightPIDController.setD(Constants.LauncherConstants.kD);
-        rightPIDController.setFF(Constants.LauncherConstants.kF);
-        if (Constants.DEBUG_LOGGING) {
+        rightPIDController.setP(kP);
+        rightPIDController.setI(kI);
+        rightPIDController.setD(kD);
+        rightPIDController.setFF(kF);
+        if (DEBUG_LOGGING) {
             logEncoder();
         }
     }
@@ -94,22 +95,22 @@ public class LauncherV2 extends Launcher{
     public Command ampLauncherCommand() {
         return this.runLauncherCommand(
             () -> {
-                    return Constants.LauncherConstants.LAUNCHER_LOW_REVS;
+                    return launcherLowRevs;
             },
             () -> {
-                    return Constants.LauncherConstants.LAUNCHER_LOW_REVS
-                                    / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+                    return launcherLowRevs
+                                    / (1 - launcherSpeedDiffPercent);
             });
     }
 
     public Command speakerLauncherCommand() {
         return this.runLauncherCommand(
             () -> {
-                    return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;
+                    return launcherHighRevs;
             },
             () -> {
-                    return Constants.LauncherConstants.LAUNCHER_HIGH_REVS
-                                    / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+                    return launcherHighRevs
+                                    / (1 - launcherSpeedDiffPercent);
             });
     }
 

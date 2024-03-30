@@ -16,7 +16,7 @@ import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
 import frc.robot.commands.CommandCombinator;
 import frc.robot.subsystems.AmpAssist;
-import frc.robot.subsystems.Camera;
+import frc.robot.subsystems.FisheyeCamera;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
 import frc.robot.subsystems.DumbLauncherAngle;
@@ -52,7 +52,7 @@ public class RobotContainer implements Loggable {
     public Intake intake;
     public SimranIntakeAssist simranIntakeAssist;
     public LedController_MultiAccess leds;
-    public Camera fisheye;
+    public FisheyeCamera fisheye;
     public LedManager ledManager;
     public AmpAssist ampAssist;
 
@@ -123,17 +123,15 @@ public class RobotContainer implements Loggable {
   private void createSubsystems() {
     //distanceSensorMXP = new DistanceSensorMXP();
     this.subsystems.ampAssist = new AmpAssist();
-    this.subsystems.leds = new LedController_MultiAccess(new LedController(0, StripType.Adressable, "Competition"));
+    this.subsystems.leds = new LedController_MultiAccess(new LedController());
     this.subsystems.ledManager = new LedManager(subsystems.leds.getController());
-    this.subsystems.fisheye = new Camera("fisheye", 0, 320, 240, 300);
-    this.subsystems.intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
-    this.subsystems.simranIntakeAssist = new SimranIntakeAssist( Constants.ExternalIntakeConstants.pivotMotorPort, 
-      Constants.ExternalIntakeConstants.rollerMotorPort,
-      Constants.ExternalIntakeConstants.isReversed);
+    this.subsystems.fisheye = new FisheyeCamera();
+    this.subsystems.intake = new Intake();
+    this.subsystems.simranIntakeAssist = new SimranIntakeAssist();
     this.subsystems.launcher = new LauncherV2();
-    this.subsystems.launcherAngle = new DumbLauncherAngle(Constants.LauncherAngleConstants.motorPort, Constants.LauncherAngleConstants.isReversed);
+    this.subsystems.launcherAngle = new DumbLauncherAngle();
     this.subsystems.distanceSensor = new DistanceSensor();
-    this.subsystems.loader = new LoaderV2(Constants.LoaderConstants.leftMotorPort, Constants.LoaderConstants.rightMotorPort, Constants.LoaderConstants.isReversed, subsystems.distanceSensor);
+    this.subsystems.loader = new LoaderV2();
     this.subsystems.climber = new Climber();
     this.subsystems.swerve = new Swerve();
 
