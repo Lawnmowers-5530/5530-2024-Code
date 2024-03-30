@@ -74,7 +74,7 @@ public class CommandCombinator {
 			.andThen(
 				new ParallelCommandGroup(
 					this.subsystems.intake.intakeWheelCommand(),
-					this.subsystems.loader.runLoaderCommand()
+					this.subsystems.loader.runLoaderCommand().until(this.subsystems.distanceSensor::isNotePresent)
 				)
 					.until(this.subsystems.distanceSensor::isNotePresent)
 					.andThen(stopShooterComponents())
