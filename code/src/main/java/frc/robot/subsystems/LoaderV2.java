@@ -13,10 +13,10 @@ public class LoaderV2 extends Loader {
     public LoaderV2() {
         super();
     }
-
+    
     @Deprecated
     public boolean isLoaded() {
-        return distanceSensor.checkBeamBreak(loaderCutoffDistance);
+        return distanceSensor.isNotePresent();
     }
 
     @Deprecated
