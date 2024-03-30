@@ -18,7 +18,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Vector2D;
@@ -40,13 +39,8 @@ public class Swerve extends SubsystemBase implements Loggable {
   private static final SwerveModule Mod_1 = Constants.Modules.Mod_1;
   private static final SwerveModule Mod_2 = Constants.Modules.Mod_2;
   private static final SwerveModule Mod_3 = Constants.Modules.Mod_3;
-  @Log
-  String poseStr = "";
 
   double rotationOutput;
-
-  @Log
-  String robotRelativeSpeeds = "";
 
   private SwerveModuleState[] states;
 
@@ -142,10 +136,6 @@ public class Swerve extends SubsystemBase implements Loggable {
       isCoasting = false;
     }
     updateOdometry();
-    poseStr = getPose().toString();
-    robotRelativeSpeeds = this.getRobotRelativeSpeeds().toString();
-
-    SmartDashboard.putString("robot rel speeds", getRobotRelativeSpeeds().toString());
   }
 
   public Pose2d getPose() {
@@ -195,7 +185,6 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public void autoDriveRobotRelative(ChassisSpeeds speeds) {
-    SmartDashboard.putString("drive goal", speeds.toString());
     Vector2D vector = new Vector2D(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, false);
     this.drive(vector, speeds.omegaRadiansPerSecond, false);
   }
