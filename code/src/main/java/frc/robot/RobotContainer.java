@@ -28,7 +28,6 @@ import frc.robot.subsystems.LedController_MultiAccess;
 import frc.robot.subsystems.LedManager;
 import frc.robot.subsystems.LoaderV2;
 import frc.robot.subsystems.Pgyro;
-import frc.robot.subsystems.SimranIntakeAssist;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.ExternalIntake.Position;
 import frc.robot.subsystems.ExternalIntake;
@@ -50,7 +49,7 @@ public class RobotContainer implements Loggable {
   private LauncherV2 launcher;
   private Climber climber;
   private Intake intake;
-  private SimranIntakeAssist simranIntakeAssist;
+  private ExternalIntake externalIntake;
   private LedController_MultiAccess leds;
   private Camera fisheye;
   private LedManager ledManager;
@@ -82,7 +81,12 @@ public class RobotContainer implements Loggable {
   private Command ampAssistDown;
   private Command ampLauncherAssist;
 
- 
+  private Command rollerOn;
+  private Command rollerOff;
+  private Command externalIntakeUp;
+  private Command externalIntakeDown;
+  private Command externalIntakeOn;
+  private Command externalIntakeOff;
   
   private CommandCombinator combinator;
 
@@ -104,7 +108,8 @@ public class RobotContainer implements Loggable {
     NamedCommands.registerCommand("closeShoot", speakerLauncher);
     NamedCommands.registerCommand("farShoot", speakerFarLauncher);
     NamedCommands.registerCommand("stop", stopShooterComponents);
-    
+    NamedCommands.registerCommand("externalIntakeOn", externalIntakeOn);
+    NamedCommands.registerCommand("externalIntakeOff", externalIntakeOff);
 
     createStateSuppliers();
 
@@ -112,6 +117,7 @@ public class RobotContainer implements Loggable {
 
     autoChooser = new SendableChooser<>();
     //autoChooser.addOption("shoot only any pos", AutoBuilder.buildAuto("shoot only any pos"));
+    autoChooser.addOption("tuner", AutoBuilder.buildAuto("tuner"));
     autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
     autoChooser.addOption("match 41 auto", AutoBuilder.buildAuto("match 41 auto"));
     autoChooser.addOption("Middle Auto", AutoBuilder.buildAuto("Middle Auto"));
@@ -126,7 +132,8 @@ public class RobotContainer implements Loggable {
     fisheye = new Camera("fisheye", 0, 320, 240, 300);
 
     intake = new Intake(Constants.IntakeConstants.motorPort, Constants.IntakeConstants.isReversed);
-   simranIntakeAssist = new SimranIntakeAssist( Constants.ExternalIntakeConstants.pivotMotorPort, 
+    externalIntake = new ExternalIntake(
+      Constants.ExternalIntakeConstants.pivotMotorPort, 
       Constants.ExternalIntakeConstants.rollerMotorPort,
       Constants.ExternalIntakeConstants.isReversed);
     launcher = new LauncherV2();
@@ -147,7 +154,7 @@ public class RobotContainer implements Loggable {
 
   private void createCommands() {
     // combine subsystem commands into sequential/parallel command groups
-    combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor, ampAssist, simranIntakeAssist);
+    combinator = new CommandCombinator(climber, intake, launcher, loader, launcherAngle, distanceSensor, ampAssist, externalIntake);
 
     // drive swerve, slow mode with b
     swerveCmd = new RunCommand(
@@ -205,8 +212,16 @@ public class RobotContainer implements Loggable {
     //amp Assist down
     ampAssistDown = ampAssist.down();
 
+    //external intake roller on
+    rollerOn = externalIntake.externalIntakeWheelCommand();
+    //external intake roller off
+    rollerOff = externalIntake.stopExternalIntakeWheelCommand();
 
-    
+    externalIntakeUp = externalIntake.setPivotCommand(Position.UP);
+    externalIntakeDown = externalIntake.setPivotCommand(Position.DOWN);
+
+    externalIntakeOn = combinator.ExternalIntakeOn();
+    externalIntakeOff = combinator.ExternalIntakeOff();
     
     // eject note
     // make eject a toggle button
@@ -265,23 +280,20 @@ public class RobotContainer implements Loggable {
     //secondaryController.povUp().onTrue(speakerAngle);
 
     secondaryController.povDown().onTrue(fullIntake);
-    secondaryController.povUp().onTrue(simranIntakeAssist.upAndStop());
+    secondaryController.povUp().onTrue(externalIntakeUp);
 
     secondaryController.povLeft().onTrue(groundIntake);
     secondaryController.povRight().onTrue(sourceIntake);
 
     CommandXboxController testController = new CommandXboxController(2);
 
-   
+    testController.a().onTrue(externalIntakeUp);
+    testController.b().onTrue(externalIntakeOn);
     //testController.b().onTrue(externalIntakeDown);
 
 
-    // testController.povDown().onTrue(externalIntakeDown);
-    // testController.povUp().onTrue(externalIntakeUp);
-
-    // testController.povDown().onTrue(intakeAssist.downAndSpin());
-    testController.povUp().onTrue(simranIntakeAssist.downAndEject());
-
+    testController.povDown().onTrue(ampAssistDown);
+    testController.povUp().onTrue(ampAssistUp);
 
   }
 
