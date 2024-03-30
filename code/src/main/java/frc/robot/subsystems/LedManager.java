@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import static frc.robot.Constants.LedConstants.*;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.LedController_MultiAccess.LedControllerProxy;
 
@@ -46,23 +47,23 @@ public class LedManager extends SubsystemBase {
                 
                 if (stateSuppliers.groundIntakeRunningAmpAngle.getAsBoolean())
                 {
-                    ledcontroller.setPattern(Constants.LedConstants.groundIntakeAndAmpAnglePattern, Constants.LedConstants.groundIntakeAndAmpAnglePriority);
+                    ledcontroller.setPattern(groundIntakeAndAmpAnglePattern, groundIntakeAndAmpAnglePriority);
                 }
                 else if (stateSuppliers.readyToIntakeFromSource.getAsBoolean())
                 {
-                    ledcontroller.setPattern(Constants.LedConstants.intakeFromSourceReadyPattern, Constants.LedConstants.intakeFromSourceReadyPriority);
+                    ledcontroller.setPattern(intakeFromSourceReadyPattern, intakeFromSourceReadyPriority);
                 }
                 else if (stateSuppliers.noteLoaded.getAsBoolean())
                 {
-                    ledcontroller.setPattern(Constants.LedConstants.noteLoadedPattern, Constants.LedConstants.noteLoadedPriority);
+                    ledcontroller.setPattern(noteLoadedPattern, noteLoadedPriority);
                 }
                 else if (stateSuppliers.slowMode.getAsBoolean())
                 {
-                    ledcontroller.setPattern(Constants.LedConstants.slowModePattern, Constants.LedConstants.slowModePriority);
+                    ledcontroller.setPattern(slowModePattern, slowModePriority);
                 }
                 else
                 {
-                    ledcontroller.setPattern(Constants.LedConstants.defaultPattern, Constants.LedConstants.defaultPriority);
+                    ledcontroller.setPattern(defaultPattern, defaultPriority);
                 }
             }, this);
     }
