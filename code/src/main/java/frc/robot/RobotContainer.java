@@ -100,7 +100,7 @@ public class RobotContainer implements Loggable {
 
     createCommands();
 
-    NamedCommands.registerCommand("intake", combinator.autoIntake());
+    NamedCommands.registerCommand("intake", fullIntake);
     NamedCommands.registerCommand("closeShoot", speakerLauncher);
     NamedCommands.registerCommand("farShoot", speakerFarLauncher);
     NamedCommands.registerCommand("stop", stopShooterComponents);
@@ -114,10 +114,7 @@ public class RobotContainer implements Loggable {
     //autoChooser.addOption("shoot only any pos", AutoBuilder.buildAuto("shoot only any pos"));
     autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
     autoChooser.addOption("match 41 auto", AutoBuilder.buildAuto("match 41 auto"));
-    autoChooser.addOption("Middle Auto - WEEK 5", AutoBuilder.buildAuto("Middle Auto - WEEK 5"));
-    autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
-    autoChooser.addOption("Shoot and Leave Middle - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
-    autoChooser.addOption("intake Test", AutoBuilder.buildAuto("intake Test"));
+    autoChooser.addOption("Middle Auto", AutoBuilder.buildAuto("Middle Auto"));
     SmartDashboard.putData("Auton chooser", autoChooser);
   }
 

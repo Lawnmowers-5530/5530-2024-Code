@@ -32,10 +32,10 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Intake",
+      "name": "New Event Marker",
       "waypointRelativePos": 0.05,
       "command": {
-        "type": "deadline",
+        "type": "sequential",
         "data": {
           "commands": [
             {
@@ -61,7 +61,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Middle Auton - WEEK 5",
+  "folder": "Middle Auton",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

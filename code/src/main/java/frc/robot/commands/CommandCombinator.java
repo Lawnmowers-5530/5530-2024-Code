@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -90,24 +89,10 @@ public class CommandCombinator {
 	public Command fullIntake() {
 		return launcherAngle.speakerAngleCommand()
 			.andThen(
-				new ParallelCommandGroup(	
-				intake.intakeWheelCommand(),	
-				simranIntakeAssist.downAndSpin().until(loader::isLoaded),
-				loader.runLoaderCommand().until(loader::isLoaded)
-					
-				)
-					.until(loader::isLoaded)
-					.andThen(stopShooterComponents())
-			);
-	}
-
-	public Command autoIntake() {
-		return launcherAngle.speakerAngleCommand()
-			.andThen(
-				new ParallelCommandGroup(	
-				intake.intakeWheelCommand(),	
-				simranIntakeAssist.downAndSpin().withTimeout(1),
-				loader.runLoaderCommand().until(loader::isLoaded)
+				new ParallelCommandGroup(
+					intake.intakeWheelCommand(),
+					loader.runLoaderCommand(),
+					simranIntakeAssist.downAndSpin()
 					
 				)
 					.until(loader::isLoaded)
