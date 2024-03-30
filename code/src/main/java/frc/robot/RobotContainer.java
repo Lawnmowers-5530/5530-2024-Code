@@ -120,7 +120,6 @@ public class RobotContainer implements Loggable {
     autoChooser.addOption("tuner", AutoBuilder.buildAuto("tuner"));
     autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
     autoChooser.addOption("match 41 auto", AutoBuilder.buildAuto("match 41 auto"));
-    autoChooser.addOption("Middle Auto", AutoBuilder.buildAuto("Middle Auto"));
     SmartDashboard.putData("Auton chooser", autoChooser);
   }
 
