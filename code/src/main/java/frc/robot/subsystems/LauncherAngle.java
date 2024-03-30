@@ -12,6 +12,11 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
+/**
+ * Do not use
+ * has not been tuned
+ */
+@Deprecated
 public class LauncherAngle extends SubsystemBase implements Loggable{
     CANSparkMax motor;
     SparkAbsoluteEncoder encoder;
@@ -31,7 +36,6 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
 
     @Log
     double encoderPos = 0;
-
     public LauncherAngle(int motorPort, boolean reversed, double kP, double kI, double kD, double conversionFactor) {
         motor = new CANSparkMax(motorPort, CANSparkMax.MotorType.kBrushless);
         motor.setInverted(reversed);
