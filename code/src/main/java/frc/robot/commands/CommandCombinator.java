@@ -60,6 +60,15 @@ public class CommandCombinator {
 				);
 	}
 
+	public Command manualIntakeStop(){
+		return new SequentialCommandGroup(
+			stopShooterComponents(),
+			loader.ejectCommand(),
+			new WaitCommand(0.25), //subject to change
+			stopShooterComponents()
+		);
+	}
+
 	public Command sourceIntake() {
 		return launcherAngle.ampAngleCommand()
 			.andThen(
