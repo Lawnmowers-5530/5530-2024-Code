@@ -20,7 +20,6 @@ import frc.robot.subsystems.AmpAssist;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensor;
-import frc.robot.subsystems.DistanceSensorMXP;
 import frc.robot.subsystems.DumbLauncherAngle;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherV2;
@@ -34,7 +33,6 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.LedController.StripType;
 
 import java.util.function.BooleanSupplier;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -53,7 +51,6 @@ public class RobotContainer implements Loggable {
   private Camera fisheye;
   private LedManager ledManager;
   private AmpAssist ampAssist;
-  private DistanceSensorMXP distanceSensorMXP;
   private CommandXboxController driverController;
   private CommandXboxController secondaryController;
 

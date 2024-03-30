@@ -9,7 +9,8 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import io.github.oblarg.oblog.annotations.Config;import io.github.oblarg.oblog.annotations.Log;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 
 public class LauncherV2 extends Launcher{
     RelativeEncoder leftEncoder;
