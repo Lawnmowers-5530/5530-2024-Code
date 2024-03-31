@@ -149,6 +149,20 @@ public class CommandCombinator {
 			.andThen(stopShooterComponents());
 	};
 
+	public Command lobShot() {
+		return launcherAngle.speakerAngleCommand()
+			.andThen(
+				new ParallelDeadlineGroup(
+					new SequentialCommandGroup(
+						new WaitCommand(0.75),
+						loader.feedShooterCommand().until(loader::isNotLoaded)
+					),
+				launcher.lobLauncherCommand()
+				)
+			)
+			.andThen(stopShooterComponents());
+	}
+
 	public Command ampShot() {
 		return launcherAngle.ampAngleCommand()
 
