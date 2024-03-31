@@ -70,6 +70,7 @@ public class RobotContainer implements Loggable {
   private Command ampAngle;
   private Command speakerLauncher;
   private Command speakerFarLauncher;
+  private Command lobLauncher;
   private Command ampLauncher;
   private Command zeroGyro;
   private Command sourceIntake;
@@ -104,11 +105,14 @@ public class RobotContainer implements Loggable {
     NamedCommands.registerCommand("closeShoot", speakerLauncher);
     NamedCommands.registerCommand("farShoot", speakerFarLauncher);
     NamedCommands.registerCommand("stop", stopShooterComponents);
+    NamedCommands.registerCommand("lob", lobLauncher);
 
     createStateSuppliers();
 
     configureBindings();
     autoChooser = new SendableChooser<>();
+    autoChooser.addOption("disrupt", AutoBuilder.buildAuto("disruptor"));
+    autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
     autoChooser.addOption("Shoot Only, Any Pos", AutoBuilder.buildAuto("Shoot Only, Any Pos"));
     autoChooser.addOption("Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Middle 4 Note - WEEK 5"));
     autoChooser.addOption("---", new InstantCommand());
@@ -206,6 +210,8 @@ autoChooser.addOption("--------", new InstantCommand());
     speakerFarLauncher = combinator.speakerFarShot();
     // spin up launcher, shoot to amp after 0.5 seconds
     ampLauncher = combinator.ampShot();
+
+    lobLauncher = combinator.lobShot();
 
     ampLauncherAssist = combinator.ampShotAssist();
 
