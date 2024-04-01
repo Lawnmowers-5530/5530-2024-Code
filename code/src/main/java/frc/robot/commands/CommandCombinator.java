@@ -42,6 +42,8 @@ public class CommandCombinator {
 		
 	}
 
+	
+	//Eject Ring
 	public Command eject() {
 		return new ParallelCommandGroup(
 				intake.ejectCommand(),
@@ -50,6 +52,8 @@ public class CommandCombinator {
 				);
 	}
 
+
+	//Stop all Componets, and retract everything
 	public Command stopShooterComponents() {
 		return new ParallelCommandGroup(
 				
@@ -61,6 +65,7 @@ public class CommandCombinator {
 				);
 	}
 
+	//Distance Sensor Fall back, stops all componets and brings ring back into gate wheels so it is no longer touching fly wheels
 	public Command manualIntakeStop(){
 		return new SequentialCommandGroup(
 			stopShooterComponents(),
@@ -70,6 +75,7 @@ public class CommandCombinator {
 		);
 	}
 
+	//Intake Fall back, intakes from source above
 	public Command sourceIntake() {
 		return launcherAngle.ampAngleCommand()
 			.andThen(
@@ -82,6 +88,7 @@ public class CommandCombinator {
 			.andThen(stopShooterComponents());
 	}
 
+	//Intakes from ground using ONLY internal
 	public Command groundIntake() {
 		return launcherAngle.speakerAngleCommand()
 			.andThen(
@@ -94,6 +101,8 @@ public class CommandCombinator {
 			);
 	}
 
+	
+	//Intakes from ground using external and internal
 	public Command fullIntake() {
 		return launcherAngle.speakerAngleCommand()
 			.andThen(
@@ -108,7 +117,8 @@ public class CommandCombinator {
 			);
 	}
 
-	public Command autoIntake() {
+	//FOR AUTON, Intakes from ground using external and internal, but times out
+	public Command autonIntake() {
 		return launcherAngle.speakerAngleCommand()
 			.andThen(
 				new ParallelCommandGroup(	
@@ -122,6 +132,23 @@ public class CommandCombinator {
 			);
 	}
 
+	//FOR AUTON, feeds the already spun up shooter and turns of the componets
+	public Command feedAndOff(){
+		return new SequentialCommandGroup(
+			loader.feedShooterCommand().until(loader::isNotLoaded).withTimeout(0.1),//TIME subject to change
+			stopShooterComponents()
+		);
+	}
+
+	public Command spinAndAngle(){
+		return new ParallelCommandGroup(
+		launcherAngle.ampAngleCommand(),
+		launcher.speakerLauncherCommand()
+		);
+	}
+
+	
+	//Shoots into the speaker, from the close angle and high rpm
 	public Command speakerShot() {
 		return launcherAngle.ampAngleCommand()
 			.andThen(
@@ -136,6 +163,8 @@ public class CommandCombinator {
 			.andThen(logFinish("speakerShot")).andThen(stopShooterComponents());
 	};
 
+	
+	//Shoots into the speaker, from the far angle and high rpm
 	public Command speakerFarShot() { //53 inches from base
 		return launcherAngle.speakerAngleCommand()
 			.andThen(
@@ -150,6 +179,7 @@ public class CommandCombinator {
 			.andThen(stopShooterComponents());
 	};
 
+	//Shoots from the centerline to into wing USED during auto - CURRENTLY ILLEGAL NEEDS TO CHANGE
 	public Command lobShot() {
 		return launcherAngle.speakerAngleCommand()
 			.andThen(
@@ -164,6 +194,7 @@ public class CommandCombinator {
 			.andThen(stopShooterComponents());
 	}
 
+	//Shoots into amp WITHOUT amp assist arm
 	public Command ampShot() {
 		return launcherAngle.ampAngleCommand()
 
@@ -179,6 +210,8 @@ public class CommandCombinator {
 			.andThen(stopShooterComponents());
 	};
 
+	
+	//shoots into amp WITH amp assist arm
 	public Command ampShotAssist() {
 		return new ParallelDeadlineGroup(launcherAngle.ampAngleCommand(), new WaitCommand(0.75), ampAssist.up())
 		
@@ -194,6 +227,7 @@ public class CommandCombinator {
 			.andThen(new WaitCommand(0.75), ampAssist.down(), stopShooterComponents());
 	};
 
+	
 	private Command logFinish(String cmdName) {
 		return new InstantCommand(
 				() -> {

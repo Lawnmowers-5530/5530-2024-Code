@@ -84,7 +84,9 @@ public class RobotContainer implements Loggable {
 
     createCommands();
 
-    NamedCommands.registerCommand("intake", combinator.autoIntake());
+    NamedCommands.registerCommand("intake", combinator.autonIntake());
+    NamedCommands.registerCommand("spinAndAngle", combinator.spinAndAngle());
+    NamedCommands.registerCommand("feedAndOff", combinator.feedAndOff());
     NamedCommands.registerCommand("closeShoot", combinator.speakerShot());
     NamedCommands.registerCommand("farShoot", combinator.speakerFarShot());
     NamedCommands.registerCommand("stop", combinator.stopShooterComponents());
@@ -97,7 +99,6 @@ public class RobotContainer implements Loggable {
     autoChooser.addOption("disrupt", AutoBuilder.buildAuto("disruptor"));
     autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
     autoChooser.addOption("Shoot Only, Any Pos", AutoBuilder.buildAuto("Shoot Only, Any Pos"));
-    autoChooser.addOption("Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Middle 4 Note - WEEK 5"));
     
     autoChooser.addOption("---", new InstantCommand());
     autoChooser.addOption("Sped Up Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Sped Up Middle 4 Note - WEEK 5"));
