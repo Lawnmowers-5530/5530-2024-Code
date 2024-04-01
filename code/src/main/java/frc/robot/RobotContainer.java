@@ -59,29 +59,14 @@ public class RobotContainer implements Loggable {
 
   private Command swerveCmd;
   private Command shooterFeed;
-  private Command stopShooterComponents;
   private Command eject;
 
   private Command climberManual;
-  private Command climberUp;
-  private Command climberDown;
 
-  private Command speakerAngle;
-  private Command ampAngle;
-  private Command speakerLauncher;
-  private Command speakerFarLauncher;
-  private Command lobLauncher;
-  private Command ampLauncher;
   private Command zeroGyro;
-  private Command sourceIntake;
-  private Command groundIntake;
-  private Command fullIntake;
 
-  private Command ampAssistUp;
-  private Command ampAssistDown;
-  private Command ampLauncherAssist;
 
-  private Command manualIntakeStop;
+  
 
   private CommandCombinator combinator;
 
@@ -100,12 +85,10 @@ public class RobotContainer implements Loggable {
     createCommands();
 
     NamedCommands.registerCommand("intake", combinator.autoIntake());
-    // NamedCommands.registerCommand("intake", new InstantCommand ( () ->
-    // {CommandScheduler.getInstance().schedule(combinator.autoIntake());}));
-    NamedCommands.registerCommand("closeShoot", speakerLauncher);
-    NamedCommands.registerCommand("farShoot", speakerFarLauncher);
-    NamedCommands.registerCommand("stop", stopShooterComponents);
-    NamedCommands.registerCommand("lob", lobLauncher);
+    NamedCommands.registerCommand("closeShoot", combinator.speakerShot());
+    NamedCommands.registerCommand("farShoot", combinator.speakerFarShot());
+    NamedCommands.registerCommand("stop", combinator.stopShooterComponents());
+    NamedCommands.registerCommand("lob", combinator.lobShot());
 
     createStateSuppliers();
 
@@ -115,20 +98,23 @@ public class RobotContainer implements Loggable {
     autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
     autoChooser.addOption("Shoot Only, Any Pos", AutoBuilder.buildAuto("Shoot Only, Any Pos"));
     autoChooser.addOption("Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Middle 4 Note - WEEK 5"));
+    
     autoChooser.addOption("---", new InstantCommand());
     autoChooser.addOption("Sped Up Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Sped Up Middle 4 Note - WEEK 5"));
     autoChooser.addOption("Shoot In Path Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Shoot In Path Middle 4 Note - WEEK 5"));
-autoChooser.addOption("----", new InstantCommand());
+    
+    autoChooser.addOption("----", new InstantCommand());
     autoChooser.addOption("Amp 3 Note - WEEK 5", AutoBuilder.buildAuto("Amp 3 Note - WEEK 5"));
     autoChooser.addOption("Source 3 Note - WEEK 5", AutoBuilder.buildAuto("Source 3 Note - WEEK 5"));
-autoChooser.addOption("-----", new InstantCommand());
+    
+    autoChooser.addOption("-----", new InstantCommand());
     autoChooser.addOption("Amp 2 Note - WEEK 5", AutoBuilder.buildAuto("Amp 2 Note - WEEK 5"));
     autoChooser.addOption("Source 2 Note - WEEK 5", AutoBuilder.buildAuto("Source 2 Note - WEEK 5"));
-autoChooser.addOption("--------", new InstantCommand());
+    
+    autoChooser.addOption("--------", new InstantCommand());
     autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
     autoChooser.addOption("Shoot and Leave Middle - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
     autoChooser.addOption("Shoot and Leave Source - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
-    // autoChooser.addOption("simranintaketestjustintake", combinator.fullIntake());
     SmartDashboard.putData("Auton chooser", autoChooser);
   }
 
@@ -187,50 +173,10 @@ autoChooser.addOption("--------", new InstantCommand());
     climberManual = climber.runRaw(() -> {
       return secondaryController.getRightTriggerAxis() - secondaryController.getLeftTriggerAxis();
     });
-    // move climber up with limits
-    climberUp = climber.moveUpCommand();
-    // move climber down with limits
-    climberDown = climber.moveDownCommand();
-
-    // backup angle to amp/speaker close shot
-    ampAngle = launcherAngle.ampAngleCommand();
-    // backup angle to intake/speaker far shot
-    speakerAngle = launcherAngle.speakerAngleCommand();
-
+    
     // backup shooter feed command
     shooterFeed = loader.feedShooterCommand().until(loader::isNotLoaded).andThen(loader.stopLoaderCommand());
-    // stop all shooter components
-    stopShooterComponents = combinator.stopShooterComponents();
-    // stop all shooter components, move note down to correct pos, stop all shooter components
-    manualIntakeStop = combinator.manualIntakeStop();
-
-    // spin up launcher, shoot to speaker after 0.5 seconds
-    speakerLauncher = combinator.speakerShot();
-    // spin up launcher, shoot to speaker from intake angle after 0.5 seconds
-    speakerFarLauncher = combinator.speakerFarShot();
-    // spin up launcher, shoot to amp after 0.5 seconds
-    ampLauncher = combinator.ampShot();
-
-    lobLauncher = combinator.lobShot();
-
-    ampLauncherAssist = combinator.ampShotAssist();
-
-    // intake note from source, auto stop
-    sourceIntake = combinator.sourceIntake();
-    // intake note from ground, auto stop
-    groundIntake = combinator.groundIntake();
-    fullIntake = combinator.fullIntake();
-
-    // amp assist up
-    ampAssistUp = ampAssist.up();
-    // amp Assist down
-    ampAssistDown = ampAssist.down();
-
-    // eject note
-    // make eject a toggle button
-    eject = combinator.eject();
-
-    speakerFarLauncher = combinator.speakerFarShot();
+  
   }
 
   private void createStateSuppliers() {
@@ -256,37 +202,35 @@ autoChooser.addOption("--------", new InstantCommand());
 
     driverController.x().onTrue(zeroGyro);
 
-    driverController.y().onTrue(sourceIntake);
-    driverController.a().onTrue(groundIntake);
+    driverController.y().onTrue(combinator.sourceIntake());
+    driverController.a().onTrue(combinator.groundIntake());
 
-    driverController.leftTrigger().onTrue(speakerAngle);
-    driverController.rightTrigger().onTrue(ampAngle);
-    driverController.leftBumper().onTrue(ampLauncherAssist);
-    driverController.rightBumper().onTrue(speakerLauncher);
+    driverController.leftTrigger().onTrue(launcherAngle.speakerAngleCommand());
+    driverController.rightTrigger().onTrue(launcherAngle.ampAngleCommand());
+    driverController.leftBumper().onTrue(combinator.ampShotAssist());
+    driverController.rightBumper().onTrue(combinator.speakerShot());
 
     driverController.start().onTrue(eject);
 
     driverController.povDown().onTrue(shooterFeed);
 
-    secondaryController.y().onTrue(speakerLauncher);
+    secondaryController.y().onTrue(combinator.speakerShot());
 
-    secondaryController.b().onTrue(ampLauncherAssist);
+    secondaryController.b().onTrue(combinator.ampShotAssist());
 
-    secondaryController.start().onTrue(eject);
-    secondaryController.x().onTrue(stopShooterComponents);
-    secondaryController.a().onTrue(speakerFarLauncher);
+    secondaryController.start().onTrue(combinator.eject());
+    secondaryController.x().onTrue(combinator.stopShooterComponents());
+    secondaryController.a().onTrue(combinator.speakerFarShot());
 
-    secondaryController.rightBumper().whileTrue(climberDown);
-    secondaryController.leftBumper().whileTrue(climberUp);
+    secondaryController.rightBumper().whileTrue(climber.moveDownCommand());
+    secondaryController.leftBumper().whileTrue(climber.moveUpCommand());
 
-    // secondaryController.povDown().onTrue(ampAngle);
-    // secondaryController.povUp().onTrue(speakerAngle);
 
-    secondaryController.povDown().onTrue(fullIntake);
+    secondaryController.povDown().onTrue(combinator.fullIntake());
     secondaryController.povUp().onTrue(simranIntakeAssist.upAndStop());
 
-    secondaryController.povLeft().onTrue(groundIntake);
-    secondaryController.povRight().onTrue(manualIntakeStop);
+    secondaryController.povLeft().onTrue(combinator.groundIntake());
+    secondaryController.povRight().onTrue(combinator.manualIntakeStop());
 
   }
 

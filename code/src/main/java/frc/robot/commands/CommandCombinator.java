@@ -56,7 +56,8 @@ public class CommandCombinator {
 				intake.stopIntakeWheelCommand(),
 				loader.stopLoaderCommand(),
 				launcher.stopLauncherCommand(), 
-				simranIntakeAssist.upAndStop()
+				simranIntakeAssist.upAndStop(),
+				ampAssist.down()
 				);
 	}
 
@@ -200,18 +201,5 @@ public class CommandCombinator {
 				}, new Subsystem[] {});
 	}
 
-	// public Command ExternalIntakeOn() {
-	// 	return new SequentialCommandGroup(	
-	// 	externalIntake.setPivotCommand(Position.DOWN).until(externalIntake::ready),
-	// 	externalIntake.externalIntakeWheelCommand()
-	// 	);
-	// }
-
-	// public Command ExternalIntakeOff() {
-	// 	return new SequentialCommandGroup(
-	// 		externalIntake.stopExternalIntakeWheelCommand(),
-	// 		externalIntake.setPivotCommand(Position.UP)
-	// 			.until(externalIntake::ready)
-	// 	);
-	// }
+	
 }
