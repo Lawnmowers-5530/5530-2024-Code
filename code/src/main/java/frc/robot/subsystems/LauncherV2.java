@@ -114,6 +114,17 @@ public class LauncherV2 extends Launcher{
             });
     }
 
+    public Command lobLauncherCommand() {
+        return this.runLauncherCommand(
+            () -> {
+                    return Constants.LauncherConstants.LAUNCHER_MED_REVS;
+            },
+            () -> {
+                    return Constants.LauncherConstants.LAUNCHER_MED_REVS
+                                    / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+            });
+    }
+
 
 
     public boolean isRunningIntake(){

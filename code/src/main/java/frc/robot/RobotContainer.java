@@ -82,6 +82,7 @@ public class RobotContainer implements Loggable {
     public Command ampAssistUp;
     public Command ampAssistDown;
     public Command ampLauncherAssist;
+    public Command lobLauncher;
   }
 
   private Commands commands;
@@ -182,6 +183,8 @@ public class RobotContainer implements Loggable {
       // spin up launcher, shoot to amp after 0.5 seconds
       this.commands.ampLauncher = combinator.ampShot();
 
+      this.commands.lobLauncher = combinator.lobShot();
+
       this.commands.ampLauncherAssist = combinator.ampShotAssist();
 
       // intake note from source, auto stop
@@ -268,6 +271,8 @@ public class RobotContainer implements Loggable {
       NamedCommands.registerCommand("closeShoot", this.commands.speakerLauncher);
       NamedCommands.registerCommand("farShoot", this.commands.speakerFarLauncher);
       NamedCommands.registerCommand("stop", this.commands.stopShooterComponents);
+      NamedCommands.registerCommand("lobLauncher", this.commands.lobLauncher);
+
       autoChooser = new SendableChooser<>();
       autoChooser.addOption("Shoot Only, Any Pos", AutoBuilder.buildAuto("Shoot Only, Any Pos"));
       autoChooser.addOption("Parallel Middle Auto - WEEK 5", AutoBuilder.buildAuto("Parallel Middle Auto - WEEK 5"));
