@@ -13,8 +13,7 @@ import frc.robot.interfaces.Gyro;
 
 public class Pgyro extends SubsystemBase implements Gyro<Pigeon2> {
   /** Creates a new Gyro. */
-  public Pgyro() { 
-  }
+  public Pgyro() {}
   private static final Pigeon2 pigeon = new Pigeon2(17);
 
   public static Pigeon2 getGyro(){

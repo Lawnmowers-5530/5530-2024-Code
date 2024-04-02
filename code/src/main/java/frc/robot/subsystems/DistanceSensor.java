@@ -12,6 +12,7 @@ public class DistanceSensor extends SubsystemBase implements Loggable{
     @Log
     double pos;
     Rev2mDistanceSensor sensor;
+    
 
     public DistanceSensor() {
         sensor = new Rev2mDistanceSensor(Port.kOnboard);
