@@ -58,6 +58,7 @@ public class RobotContainer implements Loggable {
   private CommandXboxController secondaryController;
 
   private Command swerveCmd;
+  private Command robotRelativeCmd;
   private Command shooterFeed;
   private Command eject;
 
@@ -166,6 +167,17 @@ public class RobotContainer implements Loggable {
           }
 
         }, swerve);
+
+    robotRelativeCmd = new RunCommand(
+      () -> {
+        double y = MathUtil.applyDeadband(secondaryController.getLeftY(), 0.06);
+        double x = MathUtil.applyDeadband(secondaryController.getLeftX(), 0.06);
+        double w = MathUtil.applyDeadband(secondaryController.getRightX(), 0.06);
+
+      Vector2D vector = new Vector2D(y, x, false);
+          swerve.drive(vector, -w, false);
+
+      }, swerve);
 
     // set gyro yaw to 0
     zeroGyro = Pgyro.zeroGyroCommand();

@@ -140,6 +140,7 @@ public class CommandCombinator {
 		);
 	}
 
+	//FOR AUTON, spins up the shooter and angles the launcher to shoot
 	public Command spinAndAngle(){
 		return new ParallelCommandGroup(
 		launcherAngle.ampAngleCommand(),
