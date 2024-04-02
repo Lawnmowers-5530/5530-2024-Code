@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import io.github.oblarg.oblog.Loggable;
@@ -87,6 +88,7 @@ public class RobotContainer implements Loggable {
 
   private Commands commands;
   private CommandCombinator combinator;
+
   public class StateSuppliers {
     public BooleanSupplier groundIntakeRunningAmpAngle;
     public BooleanSupplier readyToIntakeFromSource;
@@ -94,6 +96,7 @@ public class RobotContainer implements Loggable {
     public BooleanSupplier noteLoaded;
     public BooleanSupplier slowMode;
   }
+
   private StateSuppliers stateSuppliers;
 
   public RobotContainer() {
@@ -210,10 +213,12 @@ public class RobotContainer implements Loggable {
      */
     {
       this.stateSuppliers = new StateSuppliers();
-      this.stateSuppliers.groundIntakeRunningAmpAngle = () -> this.subsystems.intake.isRunning() && this.subsystems.launcherAngle.isUp();
+      this.stateSuppliers.groundIntakeRunningAmpAngle = () -> this.subsystems.intake.isRunning()
+          && this.subsystems.launcherAngle.isUp();
       this.stateSuppliers.readyToIntakeFromSource = () -> this.subsystems.launcher.isRunningIntake()
           && !this.subsystems.distanceSensor.isNotePresent() && this.subsystems.launcherAngle.isUp();
-      this.stateSuppliers.readyToShoot = () -> this.subsystems.distanceSensor.isNotePresent() && this.subsystems.swerve.atTargetAngle()
+      this.stateSuppliers.readyToShoot = () -> this.subsystems.distanceSensor.isNotePresent()
+          && this.subsystems.swerve.atTargetAngle()
           && false; // disabled not ready
       this.stateSuppliers.noteLoaded = () -> this.subsystems.distanceSensor.isNotePresent();
       this.stateSuppliers.slowMode = () -> this.controllers.driverController.b().getAsBoolean();
@@ -224,7 +229,8 @@ public class RobotContainer implements Loggable {
      */
 
     {
-      this.subsystems.ledManager.setDefaultCommand(this.subsystems.ledManager.LedControllingCommand(this.stateSuppliers));
+      this.subsystems.ledManager
+          .setDefaultCommand(this.subsystems.ledManager.LedControllingCommand(this.stateSuppliers));
 
       // add zero gyro button
       Shuffleboard.getTab("Settings").add("Zero Gyro", this.commands.zeroGyro);
@@ -265,23 +271,24 @@ public class RobotContainer implements Loggable {
 
     // auton config
     {
-      NamedCommands.registerCommand("intake", combinator.autoIntake());
-      // NamedCommands.registerCommand("intake", new InstantCommand ( () ->
-      // {CommandScheduler.getInstance().schedule(combinator.autoIntake());}));
-      NamedCommands.registerCommand("closeShoot", this.commands.speakerLauncher);
-      NamedCommands.registerCommand("farShoot", this.commands.speakerFarLauncher);
-      NamedCommands.registerCommand("stop", this.commands.stopShooterComponents);
-      NamedCommands.registerCommand("lobLauncher", this.commands.lobLauncher);
-
       autoChooser = new SendableChooser<>();
+      autoChooser.addOption("disrupt", AutoBuilder.buildAuto("disruptor"));
+      autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
       autoChooser.addOption("Shoot Only, Any Pos", AutoBuilder.buildAuto("Shoot Only, Any Pos"));
-      autoChooser.addOption("Parallel Middle Auto - WEEK 5", AutoBuilder.buildAuto("Parallel Middle Auto - WEEK 5"));
-      autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
+      autoChooser.addOption("Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Middle 4 Note - WEEK 5"));
+      autoChooser.addOption("---", new InstantCommand());
+      autoChooser.addOption("Sped Up Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Sped Up Middle 4 Note - WEEK 5"));
+      autoChooser.addOption("Shoot In Path Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Shoot In Path Middle 4 Note - WEEK 5"));
+      autoChooser.addOption("----", new InstantCommand());
       autoChooser.addOption("Amp 3 Note - WEEK 5", AutoBuilder.buildAuto("Amp 3 Note - WEEK 5"));
-      autoChooser.addOption("Shoot and Leave Middle - WEEK 5",
-          AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
-      autoChooser.addOption("Shoot and Leave Source - WEEK 5",
-          AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
+      autoChooser.addOption("Source 3 Note - WEEK 5", AutoBuilder.buildAuto("Source 3 Note - WEEK 5"));
+      autoChooser.addOption("-----", new InstantCommand());
+      autoChooser.addOption("Amp 2 Note - WEEK 5", AutoBuilder.buildAuto("Amp 2 Note - WEEK 5"));
+      autoChooser.addOption("Source 2 Note - WEEK 5", AutoBuilder.buildAuto("Source 2 Note - WEEK 5"));
+      autoChooser.addOption("--------", new InstantCommand());
+      autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
+      autoChooser.addOption("Shoot and Leave Middle - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
+      autoChooser.addOption("Shoot and Leave Source - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
       // autoChooser.addOption("simranintaketestjustintake", combinator.fullIntake());
       SmartDashboard.putData("Auton chooser", autoChooser);
     }
