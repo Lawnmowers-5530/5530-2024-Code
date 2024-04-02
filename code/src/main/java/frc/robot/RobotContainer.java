@@ -292,6 +292,14 @@ public class RobotContainer implements Loggable {
       // autoChooser.addOption("simranintaketestjustintake", combinator.fullIntake());
       SmartDashboard.putData("Auton chooser", autoChooser);
     }
+
+    //named command init
+    {
+      NamedCommands.registerCommand("intake", combinator.autoIntake());
+      NamedCommands.registerCommand("closeShoot", this.commands.speakerLauncher);
+      NamedCommands.registerCommand("farShoot", this.commands.speakerFarLauncher);
+      NamedCommands.registerCommand("stop", this.commands.stopShooterComponents);
+    }
   }
 
   public Command getAutonomousCommand() {
