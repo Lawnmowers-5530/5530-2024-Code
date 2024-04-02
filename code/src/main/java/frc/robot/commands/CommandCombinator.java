@@ -137,14 +137,14 @@ public class CommandCombinator {
 	};
 
 	public Command lobShot() {
-		return launcherAngle.speakerAngleCommand()
+		return this.subsystems.launcherAngle.speakerAngleCommand()
 			.andThen(
 				new ParallelDeadlineGroup(
 					new SequentialCommandGroup(
 						new WaitCommand(0.75),
-						loader.feedShooterCommand().until(loader::isNotLoaded)
+						this.subsystems.loader.feedShooterCommand().until(this.subsystems.distanceSensor::isNoteNotPresent)
 					),
-				launcher.lobLauncherCommand()
+				this.subsystems.launcher.lobLauncherCommand()
 				)
 			)
 			.andThen(stopShooterComponents());
