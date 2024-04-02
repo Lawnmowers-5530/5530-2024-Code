@@ -8,8 +8,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.*;
+import static frc.robot.Constants.ExternalIntakeConstants.*;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -20,20 +19,18 @@ public class SimranIntakeAssist extends SubsystemBase implements Loggable {
 
 
 
-    public SimranIntakeAssist(int pivotMotorID, int rollerMotorID, boolean reversed) {
-        pivotMotor = new CANSparkMax(pivotMotorID, CANSparkMax.MotorType.kBrushless);
+    public SimranIntakeAssist() {
+        pivotMotor = new CANSparkMax(pivotMotorPort, CANSparkMax.MotorType.kBrushless);
         pivotMotor.restoreFactoryDefaults();
 
-        rollerMotor = new CANSparkMax(rollerMotorID, CANSparkMax.MotorType.kBrushless);
+        rollerMotor = new CANSparkMax(rollerMotorPort, CANSparkMax.MotorType.kBrushless);
         rollerMotor.restoreFactoryDefaults();
 
         pivotEncoder = pivotMotor.getEncoder();
         pivotEncoder.setPosition(0);
-        pivotEncoder.setPositionConversionFactor(ExternalIntakeConstants.pivotConversionFactor);
+        pivotEncoder.setPositionConversionFactor(pivotConversionFactor);
 
-        if (reversed == true) {
-            rollerMotor.setInverted(true);
-        }
+        rollerMotor.setInverted(isReversed);
     }
 
     @Override
@@ -41,12 +38,12 @@ public class SimranIntakeAssist extends SubsystemBase implements Loggable {
     }
     @Log
     public Boolean atBottom(){
-        return pivotEncoder.getPosition() > Constants.ExternalIntakeConstants.pivotDownPosition;
-        //return pivotEncoder.getPosition() < Constants.ExternalIntakeConstants.pivotUpPosition;
+        return pivotEncoder.getPosition() > pivotDownPosition;
+        //return pivotEncoder.getPosition() < pivotUpPosition;
     }
     @Log
     public Boolean atUp(){
-        return pivotEncoder.getPosition() < Constants.ExternalIntakeConstants.pivotUpPosition;
+        return pivotEncoder.getPosition() < pivotUpPosition;
     }
     @Log
     public double pivotEncoder(){
@@ -57,7 +54,7 @@ public class SimranIntakeAssist extends SubsystemBase implements Loggable {
     public SequentialCommandGroup intakeDown(){
         SequentialCommandGroup command = new SequentialCommandGroup(
             new RunCommand(()->{
-                pivotMotor.set(ExternalIntakeConstants.pivotDownPower);
+                pivotMotor.set(pivotDownPower);
                
             }).until(this::atBottom),
          
@@ -94,7 +91,7 @@ public class SimranIntakeAssist extends SubsystemBase implements Loggable {
         return new ParallelCommandGroup(
             intakeDown(),
             new InstantCommand(()->{
-                rollerMotor.set(ExternalIntakeConstants.rollerSpeed);
+                rollerMotor.set(rollerSpeed);
             })
         );
     }
@@ -112,7 +109,7 @@ public class SimranIntakeAssist extends SubsystemBase implements Loggable {
         return new ParallelCommandGroup(
             intakeDown(),
             new InstantCommand(()->{
-                rollerMotor.set(-ExternalIntakeConstants.rollerSpeed);
+                rollerMotor.set(-rollerSpeed);
             })
         );
     }

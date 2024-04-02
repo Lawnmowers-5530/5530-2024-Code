@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static frc.robot.Constants.LedControllerConstants.*;
 
 public class LedController extends SubsystemBase {
     private boolean duplicateOnShuffleboard = false;
@@ -175,22 +176,12 @@ public class LedController extends SubsystemBase {
         }
     }
     
-    int portID;
-    StripType ledStripType;
     Spark ledController;
-    
-    public LedController(int portID, StripType type) {
-        this.portID = portID;
-        this.ledStripType = type;
-        this.ledController = new Spark(portID);
-    }
 
-    public LedController(int portID, StripType type, String tabName) {
-        this.portID = portID;
-        this.ledStripType = type;
-        this.ledController = new Spark(portID);
+    public LedController() {
+        this.ledController = new Spark(ledPort);
         this.duplicateOnShuffleboard = true;
-        this.widget = Shuffleboard.getTab(tabName)
+        this.widget = Shuffleboard.getTab(shuffleBoardTabName)
             .add("Status", false)
             .withProperties(Map.of("colorWhenFalse", "black"));
         this.entry = widget.getEntry();

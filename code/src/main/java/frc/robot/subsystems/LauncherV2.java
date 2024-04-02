@@ -6,47 +6,55 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import io.github.oblarg.oblog.annotations.Config;import io.github.oblarg.oblog.annotations.Log;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
+
+import static frc.robot.Constants.*;
+import static frc.robot.Constants.LauncherConstants.*;
+
 
 public class LauncherV2 extends Launcher{
     RelativeEncoder leftEncoder;
     RelativeEncoder rightEncoder;
     RelativeEncoder leftEncoder2;
     RelativeEncoder rightEncoder2;
+    @Log
+    double leftVelocityTarget = 0;
+    @Log
+    double rightVelocityTarget = 0;
     SparkPIDController leftPIDController;
     SparkPIDController rightPIDController;
 
     public LauncherV2() {
-        super(Constants.LauncherConstants.leftMotorPort, Constants.LauncherConstants.rightMotorPort,
-                Constants.LauncherConstants.isReversed);
+        super();
         leftEncoder = leftMotor.getEncoder();
         rightEncoder = rightMotor.getEncoder();
         leftPIDController = leftMotor.getPIDController();
         rightPIDController = rightMotor.getPIDController();
-        leftEncoder2 = leftMotor.getAlternateEncoder(8192);
-        rightEncoder2 = rightMotor.getAlternateEncoder(8192);
-        leftPIDController.setP(Constants.LauncherConstants.kP);
-        leftPIDController.setI(Constants.LauncherConstants.kI);
-        leftPIDController.setD(Constants.LauncherConstants.kD);
-        leftPIDController.setFF(Constants.LauncherConstants.kF);
+        leftEncoder2 = leftMotor.getAlternateEncoder(encoderCountsPerRev);
+        rightEncoder2 = rightMotor.getAlternateEncoder(encoderCountsPerRev);
+        leftPIDController.setP(kP);
+        leftPIDController.setI(kI);
+        leftPIDController.setD(kD);
+        leftPIDController.setFF(kF);
 
-        rightPIDController.setP(Constants.LauncherConstants.kP);
-        rightPIDController.setI(Constants.LauncherConstants.kI);
-        rightPIDController.setD(Constants.LauncherConstants.kD);
-        rightPIDController.setFF(Constants.LauncherConstants.kF);
+        rightPIDController.setP(kP);
+        rightPIDController.setI(kI);
+        rightPIDController.setD(kD);
+        rightPIDController.setFF(kF);
+        if (debugLogging) {
+            logEncoder();
+        }
     }
 
     @Config
     public void setVelocity(double left, double right) {
         leftPIDController.setReference(left, CANSparkBase.ControlType.kVelocity);
         rightPIDController.setReference(right, CANSparkBase.ControlType.kVelocity);
-        SmartDashboard.putNumber("Left Target", left);
-        SmartDashboard.putNumber("Right Target", right);
-        SmartDashboard.putNumber("left velocity", leftEncoder.getVelocity());
-        SmartDashboard.putNumber("right velocity", rightEncoder.getVelocity());
+        this.leftVelocityTarget = left;
+        this.rightVelocityTarget = right;
     }
 
     @Log
@@ -62,10 +70,10 @@ public class LauncherV2 extends Launcher{
     }
 
     public void logEncoder() {
-        SmartDashboard.putNumber("Left Encoder", leftEncoder.getPosition());
-        SmartDashboard.putNumber("Right Encoder", rightEncoder.getPosition());
-        SmartDashboard.putNumber("Left Encoder 2", leftEncoder2.getPosition());
-        SmartDashboard.putNumber("Right Encoder 2", rightEncoder2.getPosition());
+        Shuffleboard.getTab("LauncherV2").addNumber("Left Encoder", () -> leftEncoder.getPosition());
+        Shuffleboard.getTab("LauncherV2").addNumber("Right Encoder", () -> rightEncoder.getPosition());
+        Shuffleboard.getTab("LauncherV2").addNumber("Left Encoder 2", () -> leftEncoder2.getPosition());
+        Shuffleboard.getTab("LauncherV2").addNumber("Right Encoder 2", () -> rightEncoder2.getPosition());
     }
 
     public Command stopLauncherCommand() {
@@ -87,33 +95,33 @@ public class LauncherV2 extends Launcher{
     public Command ampLauncherCommand() {
         return this.runLauncherCommand(
             () -> {
-                    return Constants.LauncherConstants.LAUNCHER_LOW_REVS;
+                    return launcherLowRevs;
             },
             () -> {
-                    return Constants.LauncherConstants.LAUNCHER_LOW_REVS
-                                    / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+                    return launcherLowRevs
+                                    / (1 - launcherSpeedDiffPercent);
             });
     }
 
     public Command speakerLauncherCommand() {
         return this.runLauncherCommand(
             () -> {
-                    return Constants.LauncherConstants.LAUNCHER_HIGH_REVS;
+                    return launcherHighRevs;
             },
             () -> {
-                    return Constants.LauncherConstants.LAUNCHER_HIGH_REVS
-                                    / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+                    return launcherHighRevs
+                                    / (1 - launcherSpeedDiffPercent);
             });
     }
 
     public Command lobLauncherCommand() {
         return this.runLauncherCommand(
             () -> {
-                    return Constants.LauncherConstants.LAUNCHER_MED_REVS;
+                    return launcherMedRevs;
             },
             () -> {
-                    return Constants.LauncherConstants.LAUNCHER_MED_REVS
-                                    / (1 - Constants.LauncherConstants.LAUNCHER_SPEED_DIFF_PERCENT);
+                    return launcherMedRevs
+                                    / (1 - launcherMedRevs);
             });
     }
 

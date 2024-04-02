@@ -138,6 +138,16 @@ public class Swerve extends SubsystemBase implements Loggable {
     updateOdometry();
   }
 
+  @Log
+  public String poseString() {
+    return getPose().toString();
+  }
+
+  @Log
+  public String robotRelativeSpeedString() {
+    return getRobotRelativeSpeeds().toString();
+  }
+
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }

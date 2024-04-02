@@ -12,6 +12,11 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
+/**
+ * Do not use
+ * has not been tuned
+ */
+@Deprecated
 public class LauncherAngle extends SubsystemBase implements Loggable{
     CANSparkMax motor;
     SparkAbsoluteEncoder encoder;
@@ -24,14 +29,13 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
     double sP;
 
     @Log
-    String pidOutput = "a";
+    double pidOutput = 0;
 
     @Log
-    String feedOutput = "a";
+    double feedOutput = 0;
 
     @Log
-    String encoderPos = "a";
-
+    double encoderPos = 0;
     public LauncherAngle(int motorPort, boolean reversed, double kP, double kI, double kD, double conversionFactor) {
         motor = new CANSparkMax(motorPort, CANSparkMax.MotorType.kBrushless);
         motor.setInverted(reversed);
@@ -74,10 +78,10 @@ public class LauncherAngle extends SubsystemBase implements Loggable{
 
         //motor.set(MathUtil.clamp(output, -0.25, 0.25));
 
-        encoderPos = Double.toString(encoder.getPosition());
+        encoderPos = encoder.getPosition();
 
-        pidOutput = Double.toString(pidOut);
-        feedOutput = Double.toString(feedOut);
+        pidOutput = pidOut;
+        feedOutput = feedOut;
 
         //motor.set(feedOut + pidOut);
     }
