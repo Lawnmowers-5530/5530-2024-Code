@@ -4,10 +4,11 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
+
+import static frc.robot.Constants.AmpAssistConstants.*;
 
 public class AmpAssist extends SubsystemBase implements Loggable{
     private Servo servo;
@@ -15,17 +16,17 @@ public class AmpAssist extends SubsystemBase implements Loggable{
     double pos;
     
     public AmpAssist() {
-        servo = new Servo(Constants.AmpAssistConstants.servoPort);  
+        servo = new Servo(servoPort);  
     }
 
     public Command up() {
         return new InstantCommand(() -> {
-            set(Constants.AmpAssistConstants.up);
+            set(up);
         });
     }
     public Command down() {
         return new InstantCommand(() -> {
-            set(Constants.AmpAssistConstants.down);
+            set(down);
         });
     } 
     @Config

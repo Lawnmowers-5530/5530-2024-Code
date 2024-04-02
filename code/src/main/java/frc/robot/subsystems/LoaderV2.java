@@ -2,41 +2,28 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.Constants;
 import frc.robot.data.GlobalState;
+import static frc.robot.Constants.LoaderConstants.*;
+import static frc.robot.Constants.*;
 
 public class LoaderV2 extends Loader {
-    DistanceSensor distanceSensor;
     GlobalState state;
 
-    public LoaderV2(int motorLeft, int motorRight, boolean reversed, DistanceSensor distanceSensor) {
-        super(motorLeft, motorRight, reversed);
-        this.distanceSensor = distanceSensor;
-    }
-
-    public boolean isLoaded() {
-        return distanceSensor.checkBeamBreak(Constants.LoaderConstants.loaderCutoffDistance);
-    }
-
-    public boolean isNotLoaded() {
-        return !isLoaded();
+    public LoaderV2() {
+        super();
     }
 
     public Command runLoaderCommand() {
         return new RunCommand(
             () -> {
-                if (!isLoaded()) {
-                    this.run(Constants.LoaderConstants.loaderSpeed);
-                } else {
-                    this.run(0);
-                }
-            });
+                this.run(loaderSpeed);
+            }, this);
     }
 
     public Command feedShooterCommand() {
         return new RunCommand(
             () -> {
-              this.run(Constants.LoaderConstants.loaderSpeed);
+              this.run(loaderSpeed);
             }, this);
     }
 
@@ -50,7 +37,7 @@ public class LoaderV2 extends Loader {
     public Command ejectCommand() {
         return this.runOnce(
             () -> {
-                this.run(Constants.ejectSpeed);
+                this.run(ejectSpeed);
             });
     }
 }

@@ -9,7 +9,6 @@ public class LedController_MultiAccess extends SubsystemBase {
     private LedController controller;
     private static ArrayList<LedControllerCommand> queue = new ArrayList<>();
     private PatternType defaultPatternType;
-    private boolean smartDashboardLEDDupe = false;
 
     public LedController_MultiAccess(LedController controller) {
         this.controller = controller;

@@ -7,10 +7,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
+import static frc.robot.Constants.LoaderConstants.*;
 
 public class DistanceSensor extends SubsystemBase implements Loggable{
-    @Log
-    double pos;
     Rev2mDistanceSensor sensor;
     
 
@@ -20,7 +19,7 @@ public class DistanceSensor extends SubsystemBase implements Loggable{
         Shuffleboard.getTab("DistanceSensor").addNumber("distance", this::getDistance);
         this.setEnabled(true);
     }
-
+    @Log
     public double getDistance() { // returns distance in mm
         if (sensor.getRange() == -1) {
             return 400;
@@ -39,16 +38,15 @@ public class DistanceSensor extends SubsystemBase implements Loggable{
         return sensor.isEnabled();
     }
 
-    public boolean checkBeamBreak( double cutoffDistance) {
-        if (getDistance() < cutoffDistance) {
+    public boolean isNotePresent() {
+        if (getDistance() < loaderCutoffDistance) {
             return true;
         } else {
             return false;
         }
     }
 
-    @Override
-    public void periodic(){
-        pos = this.sensor.getRange();
+    public boolean isNoteNotPresent() {
+        return !isNotePresent();
     }
 }
