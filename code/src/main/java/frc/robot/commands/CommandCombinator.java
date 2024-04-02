@@ -35,34 +35,26 @@ public class CommandCombinator {
 	//Stop all Componets, and retract everything
 	public Command stopShooterComponents() {
 		return new ParallelCommandGroup(
-<<<<<<< HEAD
-				
-				intake.stopIntakeWheelCommand(),
-				loader.stopLoaderCommand(),
-				launcher.stopLauncherCommand(), 
-				simranIntakeAssist.upAndStop(),
-				ampAssist.down()
-				);
+			this.subsystems.intake.stopIntakeWheelCommand(),
+			this.subsystems.loader.stopLoaderCommand(),
+			this.subsystems.launcher.stopLauncherCommand(), 
+			this.subsystems.simranIntakeAssist.upAndStop(),
+			this.subsystems.ampAssist.down()
+		);
 	}
+
 
 	//Distance Sensor Fall back, stops all componets and brings ring back into gate wheels so it is no longer touching fly wheels
 	public Command manualIntakeStop(){
 		return new SequentialCommandGroup(
 			stopShooterComponents(),
-			loader.ejectCommand(),
+			this.subsystems.loader.ejectCommand(),
 			new WaitCommand(0.25), //subject to change
 			stopShooterComponents()
 		);
 	}
 
 	//Intake Fall back, intakes from source above
-=======
-			this.subsystems.intake.stopIntakeWheelCommand(),
-			this.subsystems.loader.stopLoaderCommand(),
-			this.subsystems.launcher.stopLauncherCommand(), 
-			this.subsystems.simranIntakeAssist.upAndStop()
-		);
-	}
 
 	int threshold = Constants.LauncherIntakeConstants.threshold;
     int stage = 0;
@@ -85,7 +77,6 @@ public class CommandCombinator {
 	}
 
 
->>>>>>> main
 	public Command sourceIntake() {
 		return this.subsystems.launcherAngle.ampAngleCommand()
 			.andThen(
@@ -124,14 +115,9 @@ public class CommandCombinator {
 			);
 	}
 
-<<<<<<< HEAD
-	//FOR AUTON, Intakes from ground using external and internal, but times out
+	//FOR AUTON, Intakes from ground using external and internal, but times out after 3 seconds
 	public Command autonIntake() {
-		return launcherAngle.speakerAngleCommand()
-=======
-	public Command autoIntake() {
 		return this.subsystems.launcherAngle.speakerAngleCommand()
->>>>>>> main
 			.andThen(
 				new ParallelCommandGroup(	
 				this.subsystems.intake.intakeWheelCommand(),	
@@ -147,7 +133,7 @@ public class CommandCombinator {
 	//FOR AUTON, feeds the already spun up shooter and turns of the componets
 	public Command feedAndOff(){
 		return new SequentialCommandGroup(
-			loader.feedShooterCommand().until(loader::isNotLoaded).withTimeout(0.1),//TIME subject to change
+			this.subsystems.loader.feedShooterCommand().until(this.subsystems.distanceSensor::isNoteNotPresent).withTimeout(0.1),//TIME subject to change
 			stopShooterComponents()
 		);
 	}
@@ -155,8 +141,8 @@ public class CommandCombinator {
 	//FOR AUTON, spins up the shooter and angles the launcher to shoot
 	public Command spinAndAngle(){
 		return new ParallelCommandGroup(
-		launcherAngle.ampAngleCommand(),
-		launcher.speakerLauncherCommand()
+		this.subsystems.launcherAngle.ampAngleCommand(),
+		this.subsystems.launcher.speakerLauncherCommand()
 		);
 	}
 
