@@ -133,7 +133,7 @@ public class CommandCombinator {
 	//FOR AUTON, feeds the already spun up shooter and turns of the componets
 	public Command feedAndOff(){
 		return new SequentialCommandGroup(
-			this.subsystems.loader.feedShooterCommand().until(this.subsystems.distanceSensor::isNoteNotPresent).withTimeout(0.1),//TIME subject to change
+			this.subsystems.loader.feedShooterCommand().until(this.subsystems.distanceSensor::isNoteNotPresent).withTimeout(0.4),
 			stopShooterComponents()
 		);
 	}
