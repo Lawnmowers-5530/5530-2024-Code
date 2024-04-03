@@ -8,14 +8,15 @@ import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static frc.robot.Constants.CameraConstants.*;
 
-public class Camera extends SubsystemBase {
+public class FisheyeCamera extends SubsystemBase {
     UsbCamera camera;
     Mat image;
     CvSink sink;
     CvSource output;
     
-    public Camera( String name, int port, int width, int height, int fps) {
+    public FisheyeCamera() {
         camera = CameraServer.startAutomaticCapture(name, port);
 
         camera.setVideoMode(PixelFormat.kMJPEG, width, height, fps);

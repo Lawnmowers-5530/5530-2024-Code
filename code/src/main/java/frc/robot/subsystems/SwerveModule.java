@@ -8,7 +8,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
@@ -17,8 +16,11 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix6.hardware.CANcoder;
 
+import static frc.robot.Constants.SwerveModuleConstants.*;
+
+
 public class SwerveModule extends SubsystemBase {
-  private PIDController anglePID = new PIDController(0.0075, 0.0025, 0);
+  private PIDController anglePID = new PIDController(SwerveAnglePIDConstants.p, SwerveAnglePIDConstants.i, SwerveAnglePIDConstants.d);
   private double pidOut;
   private CANSparkMax drive;
   private CANSparkMax rotate;
@@ -52,15 +54,15 @@ public class SwerveModule extends SubsystemBase {
     return new Rotation2d((this.canCoder.getAbsolutePosition().getValue()*360+this.angleOffset)*(Math.PI/180));
     }
 
-  public double getVelocity() {
-      return encoder.getVelocity()*(-1*(1/6.75)*Units.inchesToMeters(Math.PI*4))/60;
+  public double getVelocity() {                       // rpm to rotations / second
+      return encoder.getVelocity() * conversionFactor / 60;
     }
     
   public double getOffset(){
     return this.angleOffset;
   }
   public double getDistance(){
-    return encoder.getPosition()*(-1*(1/6.75)*Units.inchesToMeters(Math.PI*4));
+    return encoder.getPosition() * conversionFactor;
   }
 
   public SwerveModulePosition getPos(){
