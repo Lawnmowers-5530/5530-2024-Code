@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -18,9 +19,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.LimelightHelpers;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
 import frc.robot.Constants;
@@ -45,12 +48,25 @@ public class Swerve extends SubsystemBase implements Loggable {
 
   private SwerveModuleState[] states;
 
+  private BooleanSupplier sideSupplier = () -> {
+    // Boolean supplier that controls when the path will be mirrored for the red
+    // alliance
+    // This will flip the path being followed to the red side of the field.
+    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      return alliance.get() == DriverStation.Alliance.Red;
+    }
+    return false;
+  };
+
   public Swerve() {
     rotationPID = new PIDController(Constants.RotationConstants.kP, Constants.RotationConstants.kI,
         Constants.RotationConstants.kD);
     rotationPID.setTolerance(2);
     SwerveModulePosition[] modPos = getModulePositions();
-    odometry = new SwerveDrivePoseEstimator(Constants.kinematics, Pgyro.getRot(), modPos, new Pose2d(), VecBuilder.fill(0.01, 0.01, 0.01), VecBuilder.fill(100, 100, 99999));
+    odometry = new SwerveDrivePoseEstimator(Constants.kinematics, Pgyro.getRot(), modPos, new Pose2d(),
+        VecBuilder.fill(0.1, 0.1, 0.01), VecBuilder.fill(100, 100, 99999));
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::resetPose,
@@ -59,54 +75,12 @@ public class Swerve extends SubsystemBase implements Loggable {
         new HolonomicPathFollowerConfig(
             Constants.PathPlannerConstants.translationConstants,
             Constants.PathPlannerConstants.rotationConstants,
-            4.6, //was 3.8
+            4.6, // was 3.8
             Constants.driveBaseRadius,
             new ReplanningConfig()),
-        () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red
-          // alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Red;
-            }
-            return false;
-        },
+        sideSupplier,
         this);
   }
-  /** 
-  public class ManualSideOverride implements Sendable {
-    public enum Side {
-      RED, BLUE;
-    }
-
-    private Side side;
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("Manual Side Chooser");
-        builder.addStringProperty("Side Input:", this::getSide, this::setSide);
-    }
-
-    public void setSide(String sideInput) {
-        if (sideInput == "Red" || sideInput == "red") {
-            this.side = Side.RED;
-        } else if (sideInput == "Blue" || sideInput == "blue") {
-            this.side = Side.BLUE;
-        }
-    }
-
-    public String getSide() {
-        switch (side) {
-            case RED:
-                return "Red";
-            case BLUE:
-                return "Blue";
-            default:
-                return "Blue";
-        }
-    }
-  }**/
 
   public void drive(Vector2D vector, double omegaRadSec, boolean fieldRelative) {
 
@@ -167,7 +141,7 @@ public class Swerve extends SubsystemBase implements Loggable {
   public void updateOdometry() {
       odometry.update(Pgyro.getRot(), getModulePositions());
 
-      //use exponential based on distance from tag to find stdDevs, change based on tagCount
+      LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
       
   }
 
@@ -206,7 +180,7 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public boolean atTargetAngle() {
-    return false;//rotationPID.atSetpoint();
+    return false;// rotationPID.atSetpoint();
   }
 
   public void disabledPeriodic() {
