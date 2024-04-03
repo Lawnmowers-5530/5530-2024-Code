@@ -10,11 +10,12 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -28,13 +29,13 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class Swerve extends SubsystemBase implements Loggable {
+  private PIDController rotationPID;
+  private SwerveDrivePoseEstimator odometry;
 
-  PIDController rotationPID;
-
-  SwerveDriveOdometry odometry;
   @Log
-  boolean isUpdating;
+  private boolean isUpdating;
   private boolean isCoasting;
+  private double visionStdDevs;
   private static final SwerveModule Mod_0 = Constants.Modules.Mod_0;
   private static final SwerveModule Mod_1 = Constants.Modules.Mod_1;
   private static final SwerveModule Mod_2 = Constants.Modules.Mod_2;
@@ -49,7 +50,7 @@ public class Swerve extends SubsystemBase implements Loggable {
         Constants.RotationConstants.kD);
     rotationPID.setTolerance(2);
     SwerveModulePosition[] modPos = getModulePositions();
-    odometry = new SwerveDriveOdometry(Constants.kinematics, Pgyro.getRot(), modPos);
+    odometry = new SwerveDrivePoseEstimator(Constants.kinematics, Pgyro.getRot(), modPos, new Pose2d(), VecBuilder.fill(0.01, 0.01, 0.01), VecBuilder.fill(100, 100, 99999));
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::resetPose,
@@ -149,7 +150,7 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public Pose2d getPose() {
-    return odometry.getPoseMeters();
+    return odometry.getEstimatedPosition();
   }
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -164,14 +165,10 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public void updateOdometry() {
-    if (StaticLimeLight.getValidTarget()) {
-      odometry.resetPosition(Pgyro.getRot(), getModulePositions(),
-          new Pose2d(StaticLimeLight.getPose2DBlue().getTranslation(), Pgyro.getRot()));
-      isUpdating = true;
-    } else {
       odometry.update(Pgyro.getRot(), getModulePositions());
-      isUpdating = false;
-    }
+
+      //use exponential based on distance from tag to find stdDevs, change based on tagCount
+      
   }
 
   // chassis speeds consumer
