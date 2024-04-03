@@ -11,6 +11,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -19,8 +20,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.*;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LimelightHelpers;
@@ -44,9 +47,9 @@ public class Swerve extends SubsystemBase implements Loggable {
   private static final SwerveModule Mod_2 = Constants.Modules.Mod_2;
   private static final SwerveModule Mod_3 = Constants.Modules.Mod_3;
 
-  double rotationOutput;
-
+  private double rotationOutput;
   private SwerveModuleState[] states;
+  private LimelightHelpers.PoseEstimate limelightMeasurement;
 
   private BooleanSupplier sideSupplier = () -> {
     // Boolean supplier that controls when the path will be mirrored for the red
@@ -141,8 +144,21 @@ public class Swerve extends SubsystemBase implements Loggable {
   public void updateOdometry() {
       odometry.update(Pgyro.getRot(), getModulePositions());
 
-      LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
       
+      if(LimelightHelpers.getTV("limelight")){
+      limelightMeasurement = sideSupplier.getAsBoolean() ? LimelightHelpers.getBotPoseEstimate_wpiRed("limelight") : LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+
+      if(limelightMeasurement.tagCount == 1){
+        visionStdDevs = 0.3 * Math.pow(limelightMeasurement.avgTagDist, 2);
+      }
+      else if(limelightMeasurement.tagCount >= 2){
+        visionStdDevs = 0.045 * Math.pow(limelightMeasurement.avgTagDist, 2);
+      }
+      else{
+        visionStdDevs = 100;
+      }
+        odometry.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds, VecBuilder.fill(visionStdDevs, visionStdDevs, 99999));
+    }
   }
 
   // chassis speeds consumer
