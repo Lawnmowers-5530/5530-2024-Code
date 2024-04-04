@@ -274,6 +274,8 @@ public class RobotContainer implements Loggable {
     // auton config
     {
       autoChooser = new SendableChooser<>();
+      autoChooser.addOption("new auto", AutoBuilder.buildAuto("new auto"));
+      
       autoChooser.addOption("disrupt", AutoBuilder.buildAuto("disruptor"));
       autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
       autoChooser.addOption("Shoot Only, Any Pos", AutoBuilder.buildAuto("Shoot Only, Any Pos"));
