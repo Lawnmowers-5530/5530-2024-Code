@@ -7,9 +7,6 @@ import io.github.oblarg.oblog.Loggable;
 import static frc.robot.Constants.LauncherConstants.*;
 
 public class Launcher extends SubsystemBase implements Loggable {
-    static final double kP = 0.0001;
-    static final double kI = 0.0001;
-    static final double kD = 0.0001;
     CANSparkMax leftMotor;
     CANSparkMax rightMotor;
     

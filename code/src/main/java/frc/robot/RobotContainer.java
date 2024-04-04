@@ -268,6 +268,13 @@ public class RobotContainer implements Loggable {
 
       this.controllers.secondaryController.povLeft().onTrue(this.commands.groundIntake);
     }
+    // named command init
+    {
+      NamedCommands.registerCommand("intake", combinator.autoIntake());
+      NamedCommands.registerCommand("closeShoot", this.commands.speakerLauncher);
+      NamedCommands.registerCommand("farShoot", this.commands.speakerFarLauncher);
+      NamedCommands.registerCommand("stop", this.commands.stopShooterComponents);
+    }
 
     // auton config
     {
@@ -291,14 +298,6 @@ public class RobotContainer implements Loggable {
       autoChooser.addOption("Shoot and Leave Source - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
       // autoChooser.addOption("simranintaketestjustintake", combinator.fullIntake());
       SmartDashboard.putData("Auton chooser", autoChooser);
-    }
-
-    //named command init
-    {
-      NamedCommands.registerCommand("intake", combinator.autoIntake());
-      NamedCommands.registerCommand("closeShoot", this.commands.speakerLauncher);
-      NamedCommands.registerCommand("farShoot", this.commands.speakerFarLauncher);
-      NamedCommands.registerCommand("stop", this.commands.stopShooterComponents);
     }
   }
 
