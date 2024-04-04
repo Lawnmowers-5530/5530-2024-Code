@@ -286,15 +286,16 @@ public class RobotContainer implements Loggable {
       autoChooser.addOption("Middle 2 Note Middle - STATES", AutoBuilder.buildAuto("Middle 2 Note Middle - STATES"));
       autoChooser.addOption("Middle 2 Note Source Side - STATES", AutoBuilder.buildAuto("Middle 2 Note Source Side - STATES"));
       autoChooser.addOption("Middle 2 Note Amp Side - STATES", AutoBuilder.buildAuto("Middle 2 Note Amp Side - STATES"));
-      autoChooser.addOption("---", new InstantCommand());
+        autoChooser.addOption("---", new InstantCommand());
+      autoChooser.addOption("Source Side 2 Note delayed - STATES", AutoBuilder.buildAuto("Source Side 2 Note delayed - STATES"));
+        autoChooser.addOption("----", new InstantCommand());
       
-      autoChooser.addOption("----", new InstantCommand());
-      
-      autoChooser.addOption("-----", new InstantCommand());
-      
-      autoChooser.addOption("--------", new InstantCommand());
+        autoChooser.addOption("-----", new InstantCommand());
+      autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
+      autoChooser.addOption("Shoot and Leave Source - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
+      autoChooser.addOption("Shoot and Leave Middle - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
+        autoChooser.addOption("--------", new InstantCommand());
       autoChooser.addOption("Shoot Only - STATES", this.commands.speakerLauncher);
-      // autoChooser.addOption("simranintaketestjustintake", combinator.fullIntake());
       SmartDashboard.putData("Auton chooser", autoChooser);
     }
   }
