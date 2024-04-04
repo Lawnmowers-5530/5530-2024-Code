@@ -13,7 +13,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PIDConstants;
 
 public final class Constants {
-    public static final boolean debugLogging = true;
+    public static final boolean debugLogging = false;
 
     public static final double trackWidth = Units.inchesToMeters(24);
     public static final double wheelBase = Units.inchesToMeters(24);
