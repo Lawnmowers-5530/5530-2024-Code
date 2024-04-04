@@ -11,6 +11,7 @@ import static frc.robot.Constants.LoaderConstants.*;
 
 public class DistanceSensor extends SubsystemBase implements Loggable{
     Rev2mDistanceSensor sensor;
+    
 
     public DistanceSensor() {
         sensor = new Rev2mDistanceSensor(Port.kOnboard);

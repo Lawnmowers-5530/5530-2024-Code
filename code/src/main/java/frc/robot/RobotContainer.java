@@ -24,6 +24,7 @@ import frc.robot.subsystems.DumbLauncherAngle;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LauncherV2;
 import frc.robot.subsystems.LedController;
+import frc.robot.subsystems.LedController.StripType;
 import frc.robot.subsystems.LedController_MultiAccess;
 import frc.robot.subsystems.LedManager;
 import frc.robot.subsystems.LoaderV2;
@@ -84,6 +85,7 @@ public class RobotContainer implements Loggable {
     public Command ampAssistDown;
     public Command ampLauncherAssist;
     public Command lobLauncher;
+    public Command robotRelativeCmd;
   }
 
   private Commands commands;
@@ -272,6 +274,8 @@ public class RobotContainer implements Loggable {
     // auton config
     {
       autoChooser = new SendableChooser<>();
+      autoChooser.addOption("new auto", AutoBuilder.buildAuto("new auto"));
+      
       autoChooser.addOption("disrupt", AutoBuilder.buildAuto("disruptor"));
       autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
       autoChooser.addOption("Shoot Only, Any Pos", AutoBuilder.buildAuto("Shoot Only, Any Pos"));
@@ -295,10 +299,15 @@ public class RobotContainer implements Loggable {
 
     //named command init
     {
-      NamedCommands.registerCommand("intake", combinator.autoIntake());
+      NamedCommands.registerCommand("intake", combinator.autonIntake());
       NamedCommands.registerCommand("closeShoot", this.commands.speakerLauncher);
       NamedCommands.registerCommand("farShoot", this.commands.speakerFarLauncher);
       NamedCommands.registerCommand("stop", this.commands.stopShooterComponents);
+      NamedCommands.registerCommand("spinAndAngle", combinator.spinAndAngle());
+      NamedCommands.registerCommand("feedAndOff", combinator.feedAndOff());
+      NamedCommands.registerCommand("intake", combinator.autonIntake());
+      NamedCommands.registerCommand("stop", combinator.stopShooterComponents());
+      NamedCommands.registerCommand("lob", combinator.lobShot());
     }
   }
 

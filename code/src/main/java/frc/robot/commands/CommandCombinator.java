@@ -21,6 +21,8 @@ public class CommandCombinator {
 		this.subsystems = subsystems;
 	}
 
+	
+	//Eject Ring
 	public Command eject() {
 		return new ParallelCommandGroup(
 			this.subsystems.intake.ejectCommand(),
@@ -29,14 +31,30 @@ public class CommandCombinator {
 		);
 	}
 
+
+	//Stop all Componets, and retract everything
 	public Command stopShooterComponents() {
 		return new ParallelCommandGroup(
 			this.subsystems.intake.stopIntakeWheelCommand(),
 			this.subsystems.loader.stopLoaderCommand(),
 			this.subsystems.launcher.stopLauncherCommand(), 
-			this.subsystems.simranIntakeAssist.upAndStop()
+			this.subsystems.simranIntakeAssist.upAndStop(),
+			this.subsystems.ampAssist.down()
 		);
 	}
+
+
+	//Distance Sensor Fall back, stops all componets and brings ring back into gate wheels so it is no longer touching fly wheels
+	public Command manualIntakeStop(){
+		return new SequentialCommandGroup(
+			stopShooterComponents(),
+			this.subsystems.loader.ejectCommand(),
+			new WaitCommand(0.25), //subject to change
+			stopShooterComponents()
+		);
+	}
+
+	//Intake Fall back, intakes from source above
 
 	int threshold = Constants.LauncherIntakeConstants.threshold;
     int stage = 0;
@@ -69,6 +87,7 @@ public class CommandCombinator {
 			.andThen(stopShooterComponents());
 	}
 
+	//Intakes from ground using ONLY internal
 	public Command groundIntake() {
 		return this.subsystems.launcherAngle.speakerAngleCommand()
 			.andThen(
@@ -81,6 +100,8 @@ public class CommandCombinator {
 			);
 	}
 
+	
+	//Intakes from ground using external and internal
 	public Command fullIntake() {
 		return this.subsystems.launcherAngle.speakerAngleCommand()
 			.andThen(
@@ -94,7 +115,8 @@ public class CommandCombinator {
 			);
 	}
 
-	public Command autoIntake() {
+	//FOR AUTON, Intakes from ground using external and internal, but times out after 3 seconds
+	public Command autonIntake() {
 		return this.subsystems.launcherAngle.speakerAngleCommand()
 			.andThen(
 				new ParallelCommandGroup(	
@@ -108,6 +130,24 @@ public class CommandCombinator {
 			);
 	}
 
+	//FOR AUTON, feeds the already spun up shooter and turns of the componets
+	public Command feedAndOff(){
+		return new SequentialCommandGroup(
+			this.subsystems.loader.feedShooterCommand().until(this.subsystems.distanceSensor::isNoteNotPresent).withTimeout(0.4),
+			stopShooterComponents()
+		);
+	}
+
+	//FOR AUTON, spins up the shooter and angles the launcher to shoot
+	public Command spinAndAngle(){
+		return new ParallelCommandGroup(
+		this.subsystems.launcherAngle.ampAngleCommand(),
+		this.subsystems.launcher.speakerLauncherCommand()
+		);
+	}
+
+	
+	//Shoots into the speaker, from the close angle and high rpm
 	public Command speakerShot() {
 		return this.subsystems.launcherAngle.ampAngleCommand()
 			.andThen(
@@ -122,6 +162,8 @@ public class CommandCombinator {
 			.andThen(logFinish("speakerShot")).andThen(stopShooterComponents());
 	};
 
+	
+	//Shoots into the speaker, from the far angle and high rpm
 	public Command speakerFarShot() { //53 inches from base
 		return this.subsystems.launcherAngle.speakerAngleCommand()
 			.andThen(
@@ -136,6 +178,7 @@ public class CommandCombinator {
 			.andThen(stopShooterComponents());
 	};
 
+	//Shoots from the centerline to into wing USED during auto - CURRENTLY ILLEGAL NEEDS TO CHANGE
 	public Command lobShot() {
 		return this.subsystems.launcherAngle.speakerAngleCommand()
 			.andThen(
@@ -150,6 +193,7 @@ public class CommandCombinator {
 			.andThen(stopShooterComponents());
 	}
 
+	//Shoots into amp WITHOUT amp assist arm
 	public Command ampShot() {
 		return this.subsystems.launcherAngle.ampAngleCommand()
 
@@ -165,6 +209,8 @@ public class CommandCombinator {
 			.andThen(stopShooterComponents());
 	};
 
+	
+	//shoots into amp WITH amp assist arm
 	public Command ampShotAssist() {
 		return new ParallelDeadlineGroup(
 			this.subsystems.launcherAngle.ampAngleCommand(), 
@@ -183,6 +229,7 @@ public class CommandCombinator {
 		.andThen(new WaitCommand(0.75), this.subsystems.ampAssist.down(), stopShooterComponents());
 	};
 
+	
 	private Command logFinish(String cmdName) {
 		return new InstantCommand(
 				() -> {
@@ -190,18 +237,5 @@ public class CommandCombinator {
 				}, new Subsystem[] {});
 	}
 
-	// public Command ExternalIntakeOn() {
-	// 	return new SequentialCommandGroup(	
-	// 	externalIntake.setPivotCommand(Position.DOWN).until(externalIntake::ready),
-	// 	externalIntake.externalIntakeWheelCommand()
-	// 	);
-	// }
-
-	// public Command ExternalIntakeOff() {
-	// 	return new SequentialCommandGroup(
-	// 		externalIntake.stopExternalIntakeWheelCommand(),
-	// 		externalIntake.setPivotCommand(Position.UP)
-	// 			.until(externalIntake::ready)
-	// 	);
-	// }
+	
 }
