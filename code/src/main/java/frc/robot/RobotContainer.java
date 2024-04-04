@@ -271,8 +271,9 @@ public class RobotContainer implements Loggable {
     // named command init
     {
       NamedCommands.registerCommand("intake", combinator.autoIntake());
-      NamedCommands.registerCommand("closeShoot", this.commands.speakerLauncher);
-      NamedCommands.registerCommand("farShoot", this.commands.speakerFarLauncher);
+      NamedCommands.registerCommand("feedShot", this.commands.shooterFeed);
+      NamedCommands.registerCommand("closeSpinUp", combinator.autoSpeakerLauncher());
+      NamedCommands.registerCommand("farSpinUp", combinator.autoSpeakerFarLauncher());
       NamedCommands.registerCommand("stop", this.commands.stopShooterComponents);
     }
 
