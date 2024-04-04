@@ -31,7 +31,6 @@ import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.SimranIntakeAssist;
 import frc.robot.subsystems.Swerve;
 
-import java.applet.AudioClip;
 import java.util.function.BooleanSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -93,7 +92,6 @@ public class RobotContainer implements Loggable {
   public class StateSuppliers {
     public BooleanSupplier groundIntakeRunningAmpAngle;
     public BooleanSupplier readyToIntakeFromSource;
-    public BooleanSupplier readyToShoot;
     public BooleanSupplier noteLoaded;
     public BooleanSupplier slowMode;
   }
@@ -218,9 +216,6 @@ public class RobotContainer implements Loggable {
           && this.subsystems.launcherAngle.isUp();
       this.stateSuppliers.readyToIntakeFromSource = () -> this.subsystems.launcher.isRunningIntake()
           && !this.subsystems.distanceSensor.isNotePresent() && this.subsystems.launcherAngle.isUp();
-      this.stateSuppliers.readyToShoot = () -> this.subsystems.distanceSensor.isNotePresent()
-          && this.subsystems.swerve.atTargetAngle()
-          && false; // disabled not ready
       this.stateSuppliers.noteLoaded = () -> this.subsystems.distanceSensor.isNotePresent();
       this.stateSuppliers.slowMode = () -> this.controllers.driverController.b().getAsBoolean();
     }
@@ -252,6 +247,8 @@ public class RobotContainer implements Loggable {
       this.controllers.driverController.start().onTrue(this.commands.eject);
 
       this.controllers.driverController.povDown().onTrue(this.commands.shooterFeed);
+
+      this.controllers.driverController.povUp().whileTrue(this.subsystems.swerve.angleToLob());
 
       this.controllers.secondaryController.y().onTrue(this.commands.speakerLauncher);
 
@@ -287,6 +284,9 @@ public class RobotContainer implements Loggable {
       autoChooser.addOption("Middle 2 Note Source Side - STATES", AutoBuilder.buildAuto("Middle 2 Note Source Side - STATES"));
       autoChooser.addOption("Middle 2 Note Amp Side - STATES", AutoBuilder.buildAuto("Middle 2 Note Amp Side - STATES"));
       autoChooser.addOption("Middle 3 Note Amp Side - STATES", AutoBuilder.buildAuto("Middle 3 Note Amp Side - STATES"));
+      autoChooser.addOption("Middle 3 Note Source Side - STATES", AutoBuilder.buildAuto("Middle 3 Note Source Side - STATES"));
+      autoChooser.addOption("Middle 3 Note Source Side delayed - STATES", AutoBuilder.buildAuto("Middle 3 Note Source Side delayed - STATES"));
+      autoChooser.addOption("OLD Middle 3 Note Source Side - STATES", AutoBuilder.buildAuto("OLD Middle 3 Note Source Side - STATES"));
         autoChooser.addOption("---", new InstantCommand());
       autoChooser.addOption("Source Side 2 Note - STATES", AutoBuilder.buildAuto("Source Side 2 Note delayed - STATES"));
       autoChooser.addOption("Source Side 2 Note delayed - STATES", AutoBuilder.buildAuto("Source Side 2 Note delayed - STATES"));

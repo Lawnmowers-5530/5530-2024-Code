@@ -75,9 +75,9 @@ public final class Constants {
     }
 
     public static final class RotationConstants {
-        public static final double kP = 0.1;
-        public static final double kI = 0.1;
-        public static final double kD = 0.1;
+        public static final double kP = 0.75;
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
     }
 
     public static final class LoaderConstants {
@@ -222,6 +222,8 @@ public final class Constants {
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m0, m1, m2, m3);
 
     public static final Translation2d targetTranslation = new Translation2d(0, 5);
+
+    public static final Translation2d lobTranslation = new Translation2d(1, 7);
 
     public static final class Patterns {
         public static final PatternType noteLoaded = SolidColorType.Blue;
