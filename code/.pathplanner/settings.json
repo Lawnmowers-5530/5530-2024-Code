@@ -12,7 +12,12 @@
     "Source Side Auton - STATES",
     "Source Side Auton - WEEK 5"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Source",
+    "Shoot & Leave",
+    "Middle",
+    "Amp"
+  ],
   "defaultMaxVel": 3.5,
   "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 180.0,

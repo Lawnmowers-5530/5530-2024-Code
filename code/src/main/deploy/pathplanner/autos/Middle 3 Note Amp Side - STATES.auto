@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.83,
-      "y": 4.4
+      "x": 1.4,
+      "y": 5.546821904454621
     },
-    "rotation": -60.10000000000002
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Source, Subwoofer to Stage Note"
+                  "pathName": "Middle subwoofer to Middle note"
                 }
               },
               {
@@ -39,13 +39,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source, Stage Note to Subwoofer"
+            "pathName": "Middle note to Middle subwoofer"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "closeShoot"
+            "name": "feedShot"
           }
         },
         {
@@ -55,26 +55,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Source, Subwoofer to Far Note"
+                  "pathName": "Middle subwoofer to Left note"
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intake"
-                      }
-                    }
-                  ]
+                  "name": "intake"
                 }
               }
             ]
@@ -83,18 +70,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source, Far Note to Sub Woofer"
+            "pathName": "Left note to Middle subwoofer"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "closeShoot"
+            "name": "feedShot"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Middle",
   "choreoAuto": false
 }

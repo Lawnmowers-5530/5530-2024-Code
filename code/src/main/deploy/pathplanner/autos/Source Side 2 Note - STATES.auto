@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.83,
-      "y": 6.8
+      "x": 0.75,
+      "y": 4.35
     },
-    "rotation": 60.1
+    "rotation": -60.609589865168104
   },
   "command": {
     "type": "sequential",
@@ -24,26 +24,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp, Subwoofer to Far Note"
+                  "pathName": "Right subwoofer to Right note"
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 1.7
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intake"
-                      }
-                    }
-                  ]
+                  "name": "intake"
                 }
               }
             ]
@@ -52,18 +39,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp, Far Note to Subwoofer"
+            "pathName": "Right note to Right subwoofer"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "closeShoot"
+            "name": "feedShot"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Source",
   "choreoAuto": false
 }

@@ -41,10 +41,16 @@
           "data": {
             "pathName": "Left note to Middle subwoofer"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feedShot"
+          }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Middle",
   "choreoAuto": false
 }
