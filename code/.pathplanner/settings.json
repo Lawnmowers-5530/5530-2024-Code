@@ -3,18 +3,20 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
+    "Amp Side Auton - STATES",
     "Amp Side Auton - WEEK 5",
     "Middle Auton - STATES",
     "Middle Auton - WEEK 5",
     "Middle Auton Far Shot - WEEK 5",
     "Move Out Autons - WEEK 5",
-    "Amp Side Auton - STATES",
+    "Far Auton - STATES",
     "Source Side Auton - STATES",
     "Source Side Auton - WEEK 5"
   ],
   "autoFolders": [
     "Source",
     "Shoot & Leave",
+    "Far",
     "Middle",
     "Amp"
   ],
