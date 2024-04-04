@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8302773426424676,
-        "y": 6.738829325819981
+        "x": 0.75,
+        "y": 4.354
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8302773426424672,
-        "y": 6.738829325819981
+        "x": 2.5755193852730045,
+        "y": 1.0076726459759238
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.754132329142476,
-        "y": 7.303644500527436
+        "x": 8.1,
+        "y": 0.77
       },
       "prevControl": {
-        "x": 7.754132329142479,
-        "y": 7.683434014554863
-      },
-      "nextControl": {
-        "x": 7.754132329142473,
-        "y": 6.849381036638084
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.880728833818286,
-        "y": 0.8374845693938137
-      },
-      "prevControl": {
-        "x": 8.414812508154085,
-        "y": 4.036480860624831
+        "x": 3.7773307979048387,
+        "y": 0.9799385364536499
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 47.07003065304114,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Source Side Auton - STATES",
   "previewStartingState": {
-    "rotation": 58.52316065041607,
+    "rotation": -60.09508753310375,
     "velocity": 0
   },
   "useDefaultConstraints": true

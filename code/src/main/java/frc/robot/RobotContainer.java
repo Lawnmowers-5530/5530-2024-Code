@@ -31,6 +31,7 @@ import frc.robot.subsystems.Pgyro;
 import frc.robot.subsystems.SimranIntakeAssist;
 import frc.robot.subsystems.Swerve;
 
+import java.applet.AudioClip;
 import java.util.function.BooleanSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -175,7 +176,7 @@ public class RobotContainer implements Loggable {
 
       // backup shooter feed command
       this.commands.shooterFeed = this.subsystems.loader.feedShooterCommand()
-          .until(this.subsystems.distanceSensor::isNotePresent).andThen(this.subsystems.loader.stopLoaderCommand());
+          .until(this.subsystems.distanceSensor::isNoteNotPresent).andThen(this.subsystems.loader.stopLoaderCommand());
       // stop all shooter components
       this.commands.stopShooterComponents = combinator.stopShooterComponents();
 
@@ -275,28 +276,24 @@ public class RobotContainer implements Loggable {
       NamedCommands.registerCommand("closeSpinUp", combinator.autoSpeakerLauncher());
       NamedCommands.registerCommand("farSpinUp", combinator.autoSpeakerFarLauncher());
       NamedCommands.registerCommand("stop", this.commands.stopShooterComponents);
+      NamedCommands.registerCommand("closeShoot", this.commands.speakerLauncher);
     }
 
     // auton config
     {
       autoChooser = new SendableChooser<>();
-      autoChooser.addOption("disrupt", AutoBuilder.buildAuto("disruptor"));
-      autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
-      autoChooser.addOption("Shoot Only, Any Pos", AutoBuilder.buildAuto("Shoot Only, Any Pos"));
-      autoChooser.addOption("Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Middle 4 Note - WEEK 5"));
+      autoChooser.addOption("Middle 4 Note Moving - STATES", AutoBuilder.buildAuto("Middle 4 Note Moving - STATES"));
+      autoChooser.addOption("Middle 2 Note Middle - STATES", AutoBuilder.buildAuto("Middle 2 Note Middle - STATES"));
+      autoChooser.addOption("Middle 2 Note Source Side - STATES", AutoBuilder.buildAuto("Middle 2 Note Source Side - STATES"));
+      autoChooser.addOption("Middle 2 Note Amp Side - STATES", AutoBuilder.buildAuto("Middle 2 Note Amp Side - STATES"));
       autoChooser.addOption("---", new InstantCommand());
-      autoChooser.addOption("Sped Up Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Sped Up Middle 4 Note - WEEK 5"));
-      autoChooser.addOption("Shoot In Path Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Shoot In Path Middle 4 Note - WEEK 5"));
+      
       autoChooser.addOption("----", new InstantCommand());
-      autoChooser.addOption("Amp 3 Note - WEEK 5", AutoBuilder.buildAuto("Amp 3 Note - WEEK 5"));
-      autoChooser.addOption("Source 3 Note - WEEK 5", AutoBuilder.buildAuto("Source 3 Note - WEEK 5"));
+      
       autoChooser.addOption("-----", new InstantCommand());
-      autoChooser.addOption("Amp 2 Note - WEEK 5", AutoBuilder.buildAuto("Amp 2 Note - WEEK 5"));
-      autoChooser.addOption("Source 2 Note - WEEK 5", AutoBuilder.buildAuto("Source 2 Note - WEEK 5"));
+      
       autoChooser.addOption("--------", new InstantCommand());
-      autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
-      autoChooser.addOption("Shoot and Leave Middle - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
-      autoChooser.addOption("Shoot and Leave Source - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
+      autoChooser.addOption("Shoot Only - STATES", this.commands.speakerLauncher);
       // autoChooser.addOption("simranintaketestjustintake", combinator.fullIntake());
       SmartDashboard.putData("Auton chooser", autoChooser);
     }

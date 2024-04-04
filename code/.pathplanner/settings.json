@@ -4,14 +4,17 @@
   "holonomicMode": true,
   "pathFolders": [
     "Amp Side Auton - WEEK 5",
+    "Middle Auton - STATES",
     "Middle Auton - WEEK 5",
-    "Move Out Autons - WEEK 5",
     "Middle Auton Far Shot - WEEK 5",
+    "Move Out Autons - WEEK 5",
+    "Amp Side Auton - STATES",
+    "Source Side Auton - STATES",
     "Source Side Auton - WEEK 5"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 1.5,
+  "defaultMaxVel": 3.5,
+  "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 180.0,
   "defaultMaxAngAccel": 180.0,
   "maxModuleSpeed": 4.6
