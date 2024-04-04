@@ -174,7 +174,7 @@ public class RobotContainer implements Loggable {
 
       // backup shooter feed command
       this.commands.shooterFeed = this.subsystems.loader.feedShooterCommand()
-          .until(this.subsystems.distanceSensor::isNoteNotPresent).andThen(this.subsystems.loader.stopLoaderCommand());
+          .until(this.subsystems.distanceSensor::isNoteNotPresent).andThen(combinator.stopShooterComponents());
       // stop all shooter components
       this.commands.stopShooterComponents = combinator.stopShooterComponents();
 
@@ -294,6 +294,7 @@ public class RobotContainer implements Loggable {
         autoChooser.addOption("----", new InstantCommand());
       autoChooser.addOption("Amp 2 Note - STATES", AutoBuilder.buildAuto("Amp 2 Note - STATES"));
       autoChooser.addOption("Amp 2 Note delayed - STATES", AutoBuilder.buildAuto("Amp 2 Note delayed - STATES"));
+      autoChooser.addOption("Amp 3 Note - STATES", AutoBuilder.buildAuto("Amp 3 Note - STATES"));
         autoChooser.addOption("-----", new InstantCommand());
       autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
       autoChooser.addOption("Shoot and Leave Source - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
