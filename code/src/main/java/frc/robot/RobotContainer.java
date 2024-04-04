@@ -65,6 +65,7 @@ public class RobotContainer implements Loggable {
 
   public class Commands {
     public Command swerveCmd;
+    public Command swerveRobotRelativeCmd;
     public Command shooterFeed;
     public Command stopShooterComponents;
     public Command eject;
@@ -153,6 +154,17 @@ public class RobotContainer implements Loggable {
             }
 
           }, this.subsystems.swerve);
+
+      this.commands.swerveRobotRelativeCmd = new RunCommand(
+        () -> {
+          double y = MathUtil.applyDeadband(this.controllers.secondaryController.getLeftY(), 0.1);
+          double x = MathUtil.applyDeadband(this.controllers.secondaryController.getLeftX(), 0.1);
+          double w = MathUtil.applyDeadband(this.controllers.secondaryController.getRightX(), 0.1);
+  
+        Vector2D vector = new Vector2D(y, x, false);
+            this.subsystems.swerve.drive(vector, -w, false);
+  
+        }, this.subsystems.swerve);
 
       // set gyro yaw to 0
       this.commands.zeroGyro = Pgyro.zeroGyroCommand();
