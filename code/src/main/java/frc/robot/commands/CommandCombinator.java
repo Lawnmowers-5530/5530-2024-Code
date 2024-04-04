@@ -193,7 +193,7 @@ public class CommandCombinator {
 	public Command autoSpeakerFarLauncher(){
 		return new ParallelCommandGroup(
 			this.subsystems.launcher.speakerLauncherCommand(),
-			this.subsystems.launcher.speakerLauncherCommand()
+			this.subsystems.launcherAngle.speakerAngleCommand()
 		);
 	}
 
