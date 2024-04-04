@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle subwoofer to Left note"
+                  "pathName": "Middle subwoofer to Right note"
                 }
               },
               {
@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left note to Middle subwoofer"
+            "pathName": "Right note to Middle subwoofer"
           }
         },
         {
