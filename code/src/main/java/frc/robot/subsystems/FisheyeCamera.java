@@ -20,7 +20,7 @@ public class FisheyeCamera extends SubsystemBase {
         camera = CameraServer.startAutomaticCapture(name, port);
 
         camera.setVideoMode(PixelFormat.kMJPEG, width, height, fps);
-        camera.setExposureManual(16);
+        camera.setExposureManual(32);
         /**sink = CameraServer.getVideo(camera);
         output = CameraServer.putVideo(name, width, height);
         image = new Mat();
