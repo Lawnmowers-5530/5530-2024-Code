@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 4.35
+      "x": 0.7543128599770712,
+      "y": 4.354255194996877
     },
-    "rotation": -61.00541556865938
+    "rotation": -59.93141717813752
   },
   "command": {
     "type": "sequential",
@@ -15,37 +15,6 @@
           "type": "named",
           "data": {
             "name": "closeShoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Right subwoofer to Right note"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right note to Right subwoofer"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "feedShot"
           }
         },
         {
@@ -65,7 +34,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.5
+                        "waitTime": 1.5
                       }
                     },
                     {
@@ -84,6 +53,50 @@
           "type": "path",
           "data": {
             "pathName": "Far Right note to far Right subwoofer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feedShot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right subwoofer to Right Middle Note"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intake"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Middle note to Right subwoofer"
           }
         },
         {

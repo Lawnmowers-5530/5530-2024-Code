@@ -201,7 +201,8 @@ public class CommandCombinator {
 		return new ParallelCommandGroup(
 			this.subsystems.loader.ejectCommand(),
 			this.subsystems.launcher.runLauncherCommand(() -> {return -200;}, () -> {return -200;})
-		).withTimeout(0.13);
+		).withTimeout(0.13)
+		.andThen(stopShooterComponents());
 	}
 
 	private Command logFinish(String cmdName) {
