@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "frc.robot.Main",
+      "projectName": "code"
+    },
+    {
+      "type": "java",
       "name": "atan2Calc",
       "request": "launch",
       "mainClass": "atan2Calc",

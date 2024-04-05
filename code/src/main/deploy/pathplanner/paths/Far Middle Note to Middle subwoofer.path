@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 8.3,
-        "y": 0.77
+        "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3367291599448063,
-        "y": 3.0784861569723145
+        "x": 3.194914497937104,
+        "y": 3.189422595061407
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.75,
-        "y": 4.35
+        "x": 1.4014420821634435,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 0.9392069234588919,
-        "y": 4.076914099774146
+        "x": 5.6724949485935,
+        "y": 6.1662170171187185
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.4,
+      "waypointRelativePos": 0.55,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,11 +57,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.46588997821502,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Side Auton - STATES",
+  "folder": "Middle Auton - STATES",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

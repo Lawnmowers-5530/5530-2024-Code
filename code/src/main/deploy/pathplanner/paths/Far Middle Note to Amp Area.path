@@ -4,24 +4,40 @@
     {
       "anchor": {
         "x": 8.3,
-        "y": 0.77
+        "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3367291599448063,
-        "y": 3.0784861569723145
+        "x": 8.297990650035313,
+        "y": 4.391234007697475
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.75,
-        "y": 4.35
+        "x": 7.475212067541213,
+        "y": 6.693165098046142
       },
       "prevControl": {
-        "x": 0.9392069234588919,
-        "y": 4.076914099774146
+        "x": 8.048383664334857,
+        "y": 5.7686947806370386
+      },
+      "nextControl": {
+        "x": 7.057718521890262,
+        "y": 7.366541784579934
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.8266984281715906,
+        "y": 7.257091991665696
+      },
+      "prevControl": {
+        "x": 3.375186209831843,
+        "y": 6.5036486829772775
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,25 +46,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.4,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "closeSpinUp"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.75,
     "maxAcceleration": 2.9,
@@ -57,11 +55,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.46588997821502,
+    "rotation": -90.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Side Auton - STATES",
+  "folder": "Amp Auton - STATES",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
