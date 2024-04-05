@@ -292,7 +292,7 @@ public class RobotContainer implements Loggable {
       autoChooser.addOption("Source 3 Note FMR FM - STATES", AutoBuilder.buildAuto("Source 3 Note FMR FM - STATES"));
       autoChooser.addOption("Source 3 Note CR FR - STATES", AutoBuilder.buildAuto("Source 3 Note CR FR - STATES"));
       autoChooser.addOption("Source 2 Note delayed CR - STATES", AutoBuilder.buildAuto("Source 2 Note delayed CR - STATES"));
-      autoChooser.addOption("Source 2 Note FR MR - STATES", AutoBuilder.buildAuto("Source 2 Note FR MR - STATES"));
+      autoChooser.addOption("Source 3 Note FR FMR - STATES", AutoBuilder.buildAuto("Source 3 Note FR FMR - STATES"));
       autoChooser.addOption("Source 2 Note CR - STATES", AutoBuilder.buildAuto("Source 2 Note CR - STATES"));
         autoChooser.addOption("----", new InstantCommand());
       autoChooser.addOption("Amp 3 Note CL FL - STATES", AutoBuilder.buildAuto("Amp 3 Note CL FL - STATES"));

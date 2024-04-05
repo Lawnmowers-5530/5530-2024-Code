@@ -20,8 +20,8 @@
     "Middle",
     "Amp"
   ],
-  "defaultMaxVel": 3.6,
-  "defaultMaxAccel": 2.5,
+  "defaultMaxVel": 3.75,
+  "defaultMaxAccel": 2.9,
   "defaultMaxAngVel": 180.0,
   "defaultMaxAngAccel": 180.0,
   "maxModuleSpeed": 4.6
