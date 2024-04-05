@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.3,
+        "y": 2.44
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.9514081010144,
+        "y": 0.5916610031418273
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.308995050422533,
+        "y": 4.039935287077782
+      },
+      "prevControl": {
+        "x": 2.052884164326887,
+        "y": 1.076640763191438
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.5,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "farSpinUp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.75,
+    "maxAcceleration": 2.9,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 180.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -56.309932474020194,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Source Side Auton - STATES",
+  "previewStartingState": {
+    "rotation": 24.707657453065487,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

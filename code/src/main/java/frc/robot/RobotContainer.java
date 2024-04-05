@@ -305,6 +305,7 @@ public class RobotContainer implements Loggable {
       autoChooser.addOption("Shoot and Leave Middle - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
         autoChooser.addOption("--------", new InstantCommand());
       autoChooser.addOption("Shoot Only - STATES", this.commands.speakerLauncher);
+      autoChooser.addOption("farShotTest", AutoBuilder.buildAuto("farShotTest"));
       SmartDashboard.putData("Auton chooser", autoChooser);
     }
   }
