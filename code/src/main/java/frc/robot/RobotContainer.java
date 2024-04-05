@@ -265,6 +265,8 @@ public class RobotContainer implements Loggable {
       this.controllers.secondaryController.povUp().onTrue(this.subsystems.simranIntakeAssist.upAndStop());
 
       this.controllers.secondaryController.povLeft().onTrue(this.commands.groundIntake);
+
+      this.controllers.secondaryController.povRight().onTrue(this.combinator.backupNote());
     }
     // named command init
     {
@@ -286,15 +288,16 @@ public class RobotContainer implements Loggable {
       autoChooser.addOption("Middle 3 Note Amp Side - STATES", AutoBuilder.buildAuto("Middle 3 Note Amp Side - STATES"));
       autoChooser.addOption("Middle 3 Note Source Side - STATES", AutoBuilder.buildAuto("Middle 3 Note Source Side - STATES"));
       autoChooser.addOption("Middle 3 Note Source Side delayed - STATES", AutoBuilder.buildAuto("Middle 3 Note Source Side delayed - STATES"));
-      autoChooser.addOption("OLD Middle 3 Note Source Side - STATES", AutoBuilder.buildAuto("OLD Middle 3 Note Source Side - STATES"));
         autoChooser.addOption("---", new InstantCommand());
-      autoChooser.addOption("Source Side 2 Note - STATES", AutoBuilder.buildAuto("Source Side 2 Note delayed - STATES"));
-      autoChooser.addOption("Source Side 2 Note delayed - STATES", AutoBuilder.buildAuto("Source Side 2 Note delayed - STATES"));
-      autoChooser.addOption("Source Side 3 Note - STATES", AutoBuilder.buildAuto("Source Side 3 Note - STATES"));
+      autoChooser.addOption("Source 3 Note FMR FM - STATES", AutoBuilder.buildAuto("Source 3 Note FMR FM - STATES"));
+      autoChooser.addOption("Source 3 Note CR FR - STATES", AutoBuilder.buildAuto("Source 3 Note CR FR - STATES"));
+      autoChooser.addOption("Source 2 Note delayed CR - STATES", AutoBuilder.buildAuto("Source 2 Note delayed CR - STATES"));
+      autoChooser.addOption("Source 2 Note FR - STATES", AutoBuilder.buildAuto("Source 2 Note FR - STATES"));
+      autoChooser.addOption("Source 2 Note CR - STATES", AutoBuilder.buildAuto("Source 2 Note CR - STATES"));
         autoChooser.addOption("----", new InstantCommand());
-      autoChooser.addOption("Amp 2 Note - STATES", AutoBuilder.buildAuto("Amp 2 Note - STATES"));
-      autoChooser.addOption("Amp 2 Note delayed - STATES", AutoBuilder.buildAuto("Amp 2 Note delayed - STATES"));
-      autoChooser.addOption("Amp 3 Note - STATES", AutoBuilder.buildAuto("Amp 3 Note - STATES"));
+      autoChooser.addOption("Amp 3 Note CL FL - STATES", AutoBuilder.buildAuto("Amp 3 Note CL FL - STATES"));
+      autoChooser.addOption("Amp 2 Note delayed CL - STATES", AutoBuilder.buildAuto("Amp 2 Note delayed CL - STATES"));
+      autoChooser.addOption("Amp 2 Note CL - STATES", AutoBuilder.buildAuto("Amp 2 Note CL - STATES"));
         autoChooser.addOption("-----", new InstantCommand());
       autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
       autoChooser.addOption("Shoot and Leave Source - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
