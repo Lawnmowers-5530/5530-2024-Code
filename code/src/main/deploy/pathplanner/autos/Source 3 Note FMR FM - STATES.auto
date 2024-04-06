@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right subwoofer to Right Middle Note"
+                  "pathName": "RS to FMR"
                 }
               },
               {
@@ -52,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Middle note to Right subwoofer"
+            "pathName": "FMR to RS"
           }
         },
         {
@@ -68,7 +68,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right subwoofer to Middle note"
+                  "pathName": "RS to FM"
                 }
               },
               {

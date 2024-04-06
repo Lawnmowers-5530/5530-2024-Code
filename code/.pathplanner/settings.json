@@ -4,18 +4,15 @@
   "holonomicMode": true,
   "pathFolders": [
     "Amp Auton - STATES",
-    "Amp Side Auton - STATES",
-    "Far Auton - STATES",
     "Middle Auton - STATES",
     "STATES PLAYOFFS",
-    "Source Side Auton - STATES"
+    "Source Auton - STATES"
   ],
   "autoFolders": [
     "Source",
     "Shoot & Leave",
     "fucking playoffs",
     "Middle",
-    "Far",
     "Amp"
   ],
   "defaultMaxVel": 3.75,

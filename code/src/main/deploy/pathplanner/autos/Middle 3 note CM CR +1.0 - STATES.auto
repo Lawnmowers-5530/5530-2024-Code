@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 4.35
+      "x": 1.4,
+      "y": 5.55
     },
-    "rotation": -60.609589865168104
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right subwoofer to Right note"
+                  "pathName": "Middle subwoofer to Middle note"
                 }
               },
               {
@@ -45,7 +45,38 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right note to Right subwoofer"
+            "pathName": "Middle note to Middle subwoofer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feedShot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle subwoofer to Right note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right note to Middle subwoofer"
           }
         },
         {
@@ -57,6 +88,6 @@
       ]
     }
   },
-  "folder": "Source",
+  "folder": "Middle",
   "choreoAuto": false
 }

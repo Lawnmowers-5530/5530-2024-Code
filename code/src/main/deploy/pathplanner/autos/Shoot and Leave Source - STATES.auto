@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.83,
-      "y": 4.3
+      "x": 0.75,
+      "y": 4.35
     },
     "rotation": -60.10000000000002
   },
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move Out from Source"
+            "pathName": "RS to MOR"
           }
         }
       ]

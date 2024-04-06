@@ -281,31 +281,28 @@ public class RobotContainer implements Loggable {
     // auton config
     {
       autoChooser = new SendableChooser<>();
-      autoChooser.addOption("Middle 4 Note Moving - STATES", AutoBuilder.buildAuto("Middle 4 Note Moving - STATES"));
-      autoChooser.addOption("Middle 2 Note Middle - STATES", AutoBuilder.buildAuto("Middle 2 Note Middle - STATES"));
-      autoChooser.addOption("Middle 2 Note Source Side - STATES", AutoBuilder.buildAuto("Middle 2 Note Source Side - STATES"));
-      autoChooser.addOption("Middle 2 Note Amp Side - STATES", AutoBuilder.buildAuto("Middle 2 Note Amp Side - STATES"));
-      autoChooser.addOption("Middle 3 Note Amp Side - STATES", AutoBuilder.buildAuto("Middle 3 Note Amp Side - STATES"));
-      autoChooser.addOption("Middle 3 Note Source Side - STATES", AutoBuilder.buildAuto("Middle 3 Note Source Side - STATES"));
-      autoChooser.addOption("Middle 3 Note Source Side delayed - STATES", AutoBuilder.buildAuto("Middle 3 Note Source Side delayed - STATES"));
-      autoChooser.addOption("Middle 4 Note Source Side CM CR FM - STATES", AutoBuilder.buildAuto("Middle 4 Note Source Side CM CR FM - STATES")); 
+      autoChooser.addOption("Middle 4 note CM CR FM - STATES", AutoBuilder.buildAuto("Middle 4 note CM CR FM - STATES"));
+      autoChooser.addOption("Middle 4 note CM CL CR - STATES", AutoBuilder.buildAuto("Middle 4 note CM CL CR - STATES"));
+      autoChooser.addOption("Middle 3 note CM CR - STATES", AutoBuilder.buildAuto("Middle 3 note CM CR - STATES"));
+      autoChooser.addOption("Middle 3 note CM CR +1.0 - STATES", AutoBuilder.buildAuto("Middle 3 note CM CR +1.0 - STATES"));
+      autoChooser.addOption("Middle 3 note CM CL - STATES", AutoBuilder.buildAuto("Middle 3 note CM CL - STATES"));
+      autoChooser.addOption("Middle 2 note CR - STATES", AutoBuilder.buildAuto("Middle 2 note CR - STATES"));
+      autoChooser.addOption("Middle 2 note CM - STATES", AutoBuilder.buildAuto("Middle 2 note CM - STATES"));
+      autoChooser.addOption("Middle 2 note CL - STATES", AutoBuilder.buildAuto("Middle 2 note CL - STATES")); 
         autoChooser.addOption("---", new InstantCommand());
-      autoChooser.addOption("Source 3 Note FMR FM - STATES", AutoBuilder.buildAuto("Source 3 Note FMR FM - STATES"));
-      autoChooser.addOption("Source 3 Note CR FR - STATES", AutoBuilder.buildAuto("Source 3 Note CR FR - STATES"));
-      autoChooser.addOption("Source 2 Note delayed CR - STATES", AutoBuilder.buildAuto("Source 2 Note delayed CR - STATES"));
-      autoChooser.addOption("Source 3 Note FR FMR - STATES", AutoBuilder.buildAuto("Source 3 Note FR FMR - STATES"));
-      autoChooser.addOption("Source 2 Note CR - STATES", AutoBuilder.buildAuto("Source 2 Note CR - STATES"));
+      autoChooser.addOption("Source 3 note FMR FM - STATES", AutoBuilder.buildAuto("Source 3 note FMR FM - STATES"));
+      autoChooser.addOption("Source 3 note CR FR - STATES", AutoBuilder.buildAuto("Source 3 note CR FR - STATES"));
+      autoChooser.addOption("Source 3 note FR FMR - STATES", AutoBuilder.buildAuto("Source 3 note FR FMR - STATES"));
+      autoChooser.addOption("Source 2 note CR - STATES", AutoBuilder.buildAuto("Source 2 note CR - STATES"));
+      autoChooser.addOption("Source 2 note CR +1.0 - STATES", AutoBuilder.buildAuto("Source 2 note CR +1.0 - STATES"));
         autoChooser.addOption("----", new InstantCommand());
       autoChooser.addOption("Amp 3 Note CL FL - STATES", AutoBuilder.buildAuto("Amp 3 Note CL FL - STATES"));
       autoChooser.addOption("Amp 2 Note delayed CL - STATES", AutoBuilder.buildAuto("Amp 2 Note delayed CL - STATES"));
       autoChooser.addOption("Amp 2 Note CL - STATES", AutoBuilder.buildAuto("Amp 2 Note CL - STATES"));
         autoChooser.addOption("-----", new InstantCommand());
-      autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
-      autoChooser.addOption("Shoot and Leave Source - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
-      autoChooser.addOption("Shoot and Leave Middle - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
-        autoChooser.addOption("--------", new InstantCommand());
+      autoChooser.addOption("Shoot and Leave Source - STATES", AutoBuilder.buildAuto("Shoot and Leave Source - STATES"));
       autoChooser.addOption("Shoot Only - STATES", this.commands.speakerLauncher);
-      autoChooser.addOption("farShotTest", AutoBuilder.buildAuto("farShotTest"));
+
       SmartDashboard.putData("Auton chooser", autoChooser);
     }
   }

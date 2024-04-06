@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6,
-        "y": 4.1
+        "x": 8.3,
+        "y": 2.44
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7,
-        "y": 4.1
+        "x": 4.9514081010144,
+        "y": 0.5916610031418273
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.754,
+        "x": 0.75,
         "y": 4.35
       },
       "prevControl": {
-        "x": 0.654,
-        "y": 4.35
+        "x": 1.6325596615157194,
+        "y": 3.4112954712395913
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.3,
+      "waypointRelativePos": 0.65,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.69335123986062,
+    "rotation": -59.89158153736497,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Side Auton - STATES",
+  "folder": "Source Auton - STATES",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 24.707657453065487,
     "velocity": 0
   },
   "useDefaultConstraints": true

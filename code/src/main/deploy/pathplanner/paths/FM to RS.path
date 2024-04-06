@@ -4,12 +4,28 @@
     {
       "anchor": {
         "x": 8.3,
-        "y": 0.77
+        "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3367291599448063,
-        "y": 3.0784861569723145
+        "x": 4.092311041764941,
+        "y": 4.778983272252259
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.242062484124969,
+        "y": 2.858594288617149
+      },
+      "prevControl": {
+        "x": 4.238237208074175,
+        "y": 2.945978036331991
+      },
+      "nextControl": {
+        "x": 2.406473384375341,
+        "y": 2.7852969991654275
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +36,8 @@
         "y": 4.35
       },
       "prevControl": {
-        "x": 0.9392069234588919,
-        "y": 4.076914099774146
+        "x": 0.9698465111215943,
+        "y": 3.899415798831598
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,25 +46,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.4,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "closeSpinUp"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.75,
     "maxAcceleration": 2.9,
@@ -57,11 +55,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.46588997821502,
+    "rotation": -60.89660257180252,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "STATES PLAYOFFS",
+  "folder": "Source Auton - STATES",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
