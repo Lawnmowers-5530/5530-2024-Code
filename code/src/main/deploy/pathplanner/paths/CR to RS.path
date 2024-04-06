@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.3,
-        "y": 7.43
+        "x": 2.6,
+        "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.493701473889434,
-        "y": 7.506698977361919
+        "x": 2.7,
+        "y": 4.1
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.8,
-        "y": 6.75
+        "x": 0.754,
+        "y": 4.35
       },
       "prevControl": {
-        "x": 0.9299622202848008,
-        "y": 7.645369524973284
+        "x": 0.654,
+        "y": 4.35
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.65,
+      "waypointRelativePos": 0.3,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,11 +57,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 60.847860345986824,
+    "rotation": -59.69335123986062,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Amp Side Auton - STATES",
+  "folder": "Source Auton - STATES",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

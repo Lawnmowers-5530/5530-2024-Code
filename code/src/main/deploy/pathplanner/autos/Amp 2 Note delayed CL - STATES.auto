@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Subwoofer Left to Left Note"
+                  "pathName": null
                 }
               },
               {
@@ -45,7 +45,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Note to Subwoofer Left"
+            "pathName": null
           }
         },
         {

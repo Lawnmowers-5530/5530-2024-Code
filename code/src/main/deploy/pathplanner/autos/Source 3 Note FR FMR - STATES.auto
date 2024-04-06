@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right subwoofer to Far Right note"
+                  "pathName": "RS to FR"
                 }
               },
               {
@@ -52,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Far Right note to far Right subwoofer"
+            "pathName": "FR to RS"
           }
         },
         {
@@ -68,7 +68,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right subwoofer to Right Middle Note"
+                  "pathName": "RS to FMR"
                 }
               },
               {
@@ -96,7 +96,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Middle note to far shot Right"
+            "pathName": "FMR to FSR"
           }
         },
         {

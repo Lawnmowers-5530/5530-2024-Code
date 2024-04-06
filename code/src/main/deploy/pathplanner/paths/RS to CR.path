@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.752,
+        "x": 0.75,
         "y": 4.35
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.803492850228944,
-        "y": 0.9244703174091035
+        "x": 1.4753997075561718,
+        "y": 4.095403506122328
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.3,
-        "y": 2.4406016379600333
+        "x": 2.6,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 7.151647456448066,
-        "y": 1.9598770729072998
+        "x": 1.6,
+        "y": 4.1
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,29 +30,29 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.9,
-      "rotationDegrees": 25.546545227671004,
+      "waypointRelativePos": 0.65,
+      "rotationDegrees": 0,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.75,
-    "maxAcceleration": 2.9,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 1.25,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 180.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 26.163118655443842,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "STATES PLAYOFFS",
+  "folder": "Source Auton - STATES",
   "previewStartingState": {
-    "rotation": -60.69015837038674,
+    "rotation": -59.7435628364707,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

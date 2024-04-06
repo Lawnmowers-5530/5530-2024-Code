@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8,
-        "y": 6.75
+        "x": 0.75,
+        "y": 4.35
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.604825551993446,
-        "y": 7.016729709135094
+        "x": 0.9773974619835367,
+        "y": 1.8007802214655444
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6,
-        "y": 7.0
+        "x": 3.4766138103704782,
+        "y": 0.9088863892013505
       },
       "prevControl": {
-        "x": 1.6,
-        "y": 7.0
+        "x": 1.5269059109546794,
+        "y": 0.8942269313110068
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -54.72333599091232,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Amp Side Auton - STATES",
+  "folder": "Source Auton - STATES",
   "previewStartingState": {
-    "rotation": 60.25511870305785,
+    "rotation": -59.951036606558745,
     "velocity": 0
   },
   "useDefaultConstraints": true

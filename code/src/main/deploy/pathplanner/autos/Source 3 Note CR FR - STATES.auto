@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right subwoofer to Right note"
+                  "pathName": "RS to CR"
                 }
               },
               {
@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right note to Right subwoofer"
+            "pathName": "CR to RS"
           }
         },
         {
@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right subwoofer to Far Right note"
+                  "pathName": "RS to FR"
                 }
               },
               {
@@ -83,7 +83,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Far Right note to far Right subwoofer"
+            "pathName": "FR to RS"
           }
         },
         {
