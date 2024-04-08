@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RS to FR note"
+                  "pathName": "RS to FMR"
                 }
               },
               {
@@ -52,13 +52,57 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FR note to RS"
+            "pathName": "FMR to FSS"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "closeShoot"
+            "name": "feedShot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "FSS to FR"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intake"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FR to FSS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feedShot"
           }
         }
       ]

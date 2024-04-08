@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 0.7543128599770712,
-      "y": 4.354255194996877
+      "y": 4.35
     },
-    "rotation": -59.93141717813752
+    "rotation": -60.053842887935865
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RS to FR"
+                  "pathName": "RS to FMR"
                 }
               },
               {
@@ -52,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FR to RS"
+            "pathName": "FMR to RS"
           }
         },
         {
@@ -68,7 +68,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RS to FMR"
+                  "pathName": "RS to FR"
                 }
               },
               {
@@ -78,7 +78,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.75
+                        "waitTime": 1.0
                       }
                     },
                     {
@@ -96,7 +96,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FMR to FSS"
+            "pathName": "FR to FSS"
           }
         },
         {
@@ -108,6 +108,6 @@
       ]
     }
   },
-  "folder": "Source",
+  "folder": "fucking playoffs",
   "choreoAuto": false
 }
