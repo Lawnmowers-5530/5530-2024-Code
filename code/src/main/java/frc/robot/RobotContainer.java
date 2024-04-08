@@ -281,27 +281,27 @@ public class RobotContainer implements Loggable {
     // auton config
     {
       autoChooser = new SendableChooser<>();
-      autoChooser.addOption("Middle 4 note CM CR FM - STATES", AutoBuilder.buildAuto("Middle 4 note CM CR FM - STATES"));
-      autoChooser.addOption("Middle 4 note CM CL CR - STATES", AutoBuilder.buildAuto("Middle 4 note CM CL CR - STATES"));
-      autoChooser.addOption("Middle 3 note CM CR - STATES", AutoBuilder.buildAuto("Middle 3 note CM CR - STATES"));
-      autoChooser.addOption("Middle 3 note CM CR +1.0 - STATES", AutoBuilder.buildAuto("Middle 3 note CM CR +1.0 - STATES"));
-      autoChooser.addOption("Middle 3 note CM CL - STATES", AutoBuilder.buildAuto("Middle 3 note CM CL - STATES"));
-      autoChooser.addOption("Middle 2 note CR - STATES", AutoBuilder.buildAuto("Middle 2 note CR - STATES"));
-      autoChooser.addOption("Middle 2 note CM - STATES", AutoBuilder.buildAuto("Middle 2 note CM - STATES"));
-      autoChooser.addOption("Middle 2 note CL - STATES", AutoBuilder.buildAuto("Middle 2 note CL - STATES")); 
-        autoChooser.addOption("---", new InstantCommand());
-      autoChooser.addOption("Source 3 note FMR FM - STATES", AutoBuilder.buildAuto("Source 3 note FMR FM - STATES"));
-      autoChooser.addOption("Source 3 note CR FR - STATES", AutoBuilder.buildAuto("Source 3 note CR FR - STATES"));
-      autoChooser.addOption("Source 3 note FR FMR - STATES", AutoBuilder.buildAuto("Source 3 note FR FMR - STATES"));
-      autoChooser.addOption("Source 2 note CR - STATES", AutoBuilder.buildAuto("Source 2 note CR - STATES"));
-      autoChooser.addOption("Source 2 note CR +1.0 - STATES", AutoBuilder.buildAuto("Source 2 note CR +1.0 - STATES"));
-        autoChooser.addOption("----", new InstantCommand());
-      autoChooser.addOption("Amp 3 Note CL FL - STATES", AutoBuilder.buildAuto("Amp 3 Note CL FL - STATES"));
-      autoChooser.addOption("Amp 2 Note delayed CL - STATES", AutoBuilder.buildAuto("Amp 2 Note delayed CL - STATES"));
-      autoChooser.addOption("Amp 2 Note CL - STATES", AutoBuilder.buildAuto("Amp 2 Note CL - STATES"));
-        autoChooser.addOption("-----", new InstantCommand());
-      autoChooser.addOption("Shoot and Leave Source - STATES", AutoBuilder.buildAuto("Shoot and Leave Source - STATES"));
-      autoChooser.addOption("Shoot Only - STATES", this.commands.speakerLauncher);
+      autoChooser.addOption("Source 3 note FR FMR far - PLAYOFF", AutoBuilder.buildAuto("Source 3 note FR FMR far - PLAYOFF"));
+      autoChooser.addOption("Source 3 note FMR FR far - PLAYOFF", AutoBuilder.buildAuto("Source 3 note FMR FR far - PLAYOFF"));
+      autoChooser.addOption("Source 3 note FMR FR close far - PLAYOFF", AutoBuilder.buildAuto("Source 3 note FMR FR close far - PLAYOFF"));
+      //  autoChooser.addOption("-", new InstantCommand());
+      //autoChooser.addOption("Middle 4 note CM CR FM - STATES", AutoBuilder.buildAuto("Middle 4 note CM CR FM - STATES"));
+      //autoChooser.addOption("Middle 4 note CM CL CR - STATES", AutoBuilder.buildAuto("Middle 4 note CM CL CR - STATES"));
+      //autoChooser.addOption("Middle 3 note CM CR - STATES", AutoBuilder.buildAuto("Middle 3 note CM CR - STATES"));
+      //autoChooser.addOption("Middle 3 note CM CR +1.0 - STATES", AutoBuilder.buildAuto("Middle 3 note CM CR +1.0 - STATES"));
+      //autoChooser.addOption("Middle 3 note CM CL - STATES", AutoBuilder.buildAuto("Middle 3 note CM CL - STATES"));
+      //autoChooser.addOption("Middle 2 note CR - STATES", AutoBuilder.buildAuto("Middle 2 note CR - STATES"));
+      //autoChooser.addOption("Middle 2 note CM - STATES", AutoBuilder.buildAuto("Middle 2 note CM - STATES"));
+      //autoChooser.addOption("Middle 2 note CL - STATES", AutoBuilder.buildAuto("Middle 2 note CL - STATES")); 
+      //  autoChooser.addOption("---", new InstantCommand());
+      //autoChooser.addOption("Source 3 note FMR FM - STATES", AutoBuilder.buildAuto("Source 3 note FMR FM - STATES"));
+      //autoChooser.addOption("Source 3 note CR FR - STATES", AutoBuilder.buildAuto("Source 3 note CR FR - STATES"));
+      //autoChooser.addOption("Source 3 note FR FMR - STATES", AutoBuilder.buildAuto("Source 3 note FR FMR - STATES"));
+      //autoChooser.addOption("Source 2 note CR - STATES", AutoBuilder.buildAuto("Source 2 note CR - STATES"));
+      //autoChooser.addOption("Source 2 note CR +1.0 - STATES", AutoBuilder.buildAuto("Source 2 note CR +1.0 - STATES"));
+      //  autoChooser.addOption("-----", new InstantCommand());
+      //autoChooser.addOption("Shoot and Leave Source - STATES", AutoBuilder.buildAuto("Shoot and Leave Source - STATES"));
+      //autoChooser.addOption("Shoot Only - STATES", this.commands.speakerLauncher);
 
       SmartDashboard.putData("Auton chooser", autoChooser);
     }
