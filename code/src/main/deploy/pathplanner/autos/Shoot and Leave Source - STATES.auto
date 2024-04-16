@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.75,
+      "y": 4.35
+    },
+    "rotation": -60.10000000000002
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "closeShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RS to MOR"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Shoot & Leave",
+  "choreoAuto": false
+}

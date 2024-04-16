@@ -200,16 +200,20 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public void rotateToAngle(double angle) {
-    rotationOutput = rotationPID.calculate(Pgyro.getRot().getDegrees(), angle);
+    rotationOutput = rotationPID.calculate(Pgyro.getRot().getRadians(), angle);
     this.drive(new Vector2D(0, 0, false), rotationOutput, false);
+  }
+
+  public Command angleToLob(){
+    return this.run(
+      () -> {
+        rotateToAngle(Math.atan2(odometry.getPoseMeters().getX()-Constants.lobTranslation.getX(), -odometry.getPoseMeters().getY()+Constants.lobTranslation.getY() - (Math.PI / 2)));
+      }
+    );
   }
 
   public Command pathFind(Pose2d endPose) {
     return AutoBuilder.pathfindToPose(endPose, Constants.PathPlannerConstants.constraints);
-  }
-
-  public boolean atTargetAngle() {
-    return false;//rotationPID.atSetpoint();
   }
 
   public void disabledPeriodic() {

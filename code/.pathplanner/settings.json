@@ -3,15 +3,20 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "Amp Side Auton - WEEK 5",
-    "Middle Auton - WEEK 5",
-    "Move Out Autons - WEEK 5",
-    "Middle Auton Far Shot - WEEK 5",
-    "Source Side Auton - WEEK 5"
+    "Amp Auton - STATES",
+    "Middle Auton - STATES",
+    "STATES PLAYOFFS",
+    "Source Auton - STATES"
   ],
-  "autoFolders": [],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 1.5,
+  "autoFolders": [
+    "Source",
+    "Shoot & Leave",
+    "fucking playoffs",
+    "Middle",
+    "Amp"
+  ],
+  "defaultMaxVel": 3.75,
+  "defaultMaxAccel": 2.9,
   "defaultMaxAngVel": 180.0,
   "defaultMaxAngAccel": 180.0,
   "maxModuleSpeed": 4.6

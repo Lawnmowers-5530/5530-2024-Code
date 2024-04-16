@@ -92,7 +92,6 @@ public class RobotContainer implements Loggable {
   public class StateSuppliers {
     public BooleanSupplier groundIntakeRunningAmpAngle;
     public BooleanSupplier readyToIntakeFromSource;
-    public BooleanSupplier readyToShoot;
     public BooleanSupplier noteLoaded;
     public BooleanSupplier slowMode;
   }
@@ -175,7 +174,7 @@ public class RobotContainer implements Loggable {
 
       // backup shooter feed command
       this.commands.shooterFeed = this.subsystems.loader.feedShooterCommand()
-          .until(this.subsystems.distanceSensor::isNotePresent).andThen(this.subsystems.loader.stopLoaderCommand());
+          .until(this.subsystems.distanceSensor::isNoteNotPresent).andThen(combinator.stopShooterComponents());
       // stop all shooter components
       this.commands.stopShooterComponents = combinator.stopShooterComponents();
 
@@ -217,9 +216,6 @@ public class RobotContainer implements Loggable {
           && this.subsystems.launcherAngle.isUp();
       this.stateSuppliers.readyToIntakeFromSource = () -> this.subsystems.launcher.isRunningIntake()
           && !this.subsystems.distanceSensor.isNotePresent() && this.subsystems.launcherAngle.isUp();
-      this.stateSuppliers.readyToShoot = () -> this.subsystems.distanceSensor.isNotePresent()
-          && this.subsystems.swerve.atTargetAngle()
-          && false; // disabled not ready
       this.stateSuppliers.noteLoaded = () -> this.subsystems.distanceSensor.isNotePresent();
       this.stateSuppliers.slowMode = () -> this.controllers.driverController.b().getAsBoolean();
     }
@@ -252,6 +248,8 @@ public class RobotContainer implements Loggable {
 
       this.controllers.driverController.povDown().onTrue(this.commands.shooterFeed);
 
+      this.controllers.driverController.povUp().whileTrue(this.subsystems.swerve.angleToLob());
+
       this.controllers.secondaryController.y().onTrue(this.commands.speakerLauncher);
 
       this.controllers.secondaryController.b().onTrue(this.commands.ampLauncherAssist);
@@ -267,36 +265,44 @@ public class RobotContainer implements Loggable {
       this.controllers.secondaryController.povUp().onTrue(this.subsystems.simranIntakeAssist.upAndStop());
 
       this.controllers.secondaryController.povLeft().onTrue(this.commands.groundIntake);
+
+      this.controllers.secondaryController.povRight().onTrue(this.combinator.backupNote());
     }
     // named command init
     {
       NamedCommands.registerCommand("intake", combinator.autoIntake());
-      NamedCommands.registerCommand("closeShoot", this.commands.speakerLauncher);
-      NamedCommands.registerCommand("farShoot", this.commands.speakerFarLauncher);
+      NamedCommands.registerCommand("feedShot", this.commands.shooterFeed);
+      NamedCommands.registerCommand("closeSpinUp", combinator.autoSpeakerLauncher());
+      NamedCommands.registerCommand("farSpinUp", combinator.autoSpeakerFarLauncher());
       NamedCommands.registerCommand("stop", this.commands.stopShooterComponents);
+      NamedCommands.registerCommand("closeShoot", this.commands.speakerLauncher);
     }
 
     // auton config
     {
       autoChooser = new SendableChooser<>();
-      autoChooser.addOption("disrupt", AutoBuilder.buildAuto("disruptor"));
-      autoChooser.addOption("playoff auto", AutoBuilder.buildAuto("playoff auto"));
-      autoChooser.addOption("Shoot Only, Any Pos", AutoBuilder.buildAuto("Shoot Only, Any Pos"));
-      autoChooser.addOption("Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Middle 4 Note - WEEK 5"));
-      autoChooser.addOption("---", new InstantCommand());
-      autoChooser.addOption("Sped Up Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Sped Up Middle 4 Note - WEEK 5"));
-      autoChooser.addOption("Shoot In Path Middle 4 Note - WEEK 5", AutoBuilder.buildAuto("Shoot In Path Middle 4 Note - WEEK 5"));
-      autoChooser.addOption("----", new InstantCommand());
-      autoChooser.addOption("Amp 3 Note - WEEK 5", AutoBuilder.buildAuto("Amp 3 Note - WEEK 5"));
-      autoChooser.addOption("Source 3 Note - WEEK 5", AutoBuilder.buildAuto("Source 3 Note - WEEK 5"));
-      autoChooser.addOption("-----", new InstantCommand());
-      autoChooser.addOption("Amp 2 Note - WEEK 5", AutoBuilder.buildAuto("Amp 2 Note - WEEK 5"));
-      autoChooser.addOption("Source 2 Note - WEEK 5", AutoBuilder.buildAuto("Source 2 Note - WEEK 5"));
-      autoChooser.addOption("--------", new InstantCommand());
-      autoChooser.addOption("Shoot and Leave Amp - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Amp - WEEK 5"));
-      autoChooser.addOption("Shoot and Leave Middle - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Middle - WEEK 5"));
-      autoChooser.addOption("Shoot and Leave Source - WEEK 5", AutoBuilder.buildAuto("Shoot and Leave Source - WEEK 5"));
-      // autoChooser.addOption("simranintaketestjustintake", combinator.fullIntake());
+      autoChooser.addOption("Source 3 note FR FMR far - PLAYOFF", AutoBuilder.buildAuto("Source 3 note FR FMR far - PLAYOFF"));
+      autoChooser.addOption("Source 3 note FMR FR far - PLAYOFF", AutoBuilder.buildAuto("Source 3 note FMR FR far - PLAYOFF"));
+      autoChooser.addOption("Source 3 note FMR FR close far - PLAYOFF", AutoBuilder.buildAuto("Source 3 note FMR FR close far - PLAYOFF"));
+      //  autoChooser.addOption("-", new InstantCommand());
+      //autoChooser.addOption("Middle 4 note CM CR FM - STATES", AutoBuilder.buildAuto("Middle 4 note CM CR FM - STATES"));
+      //autoChooser.addOption("Middle 4 note CM CL CR - STATES", AutoBuilder.buildAuto("Middle 4 note CM CL CR - STATES"));
+      //autoChooser.addOption("Middle 3 note CM CR - STATES", AutoBuilder.buildAuto("Middle 3 note CM CR - STATES"));
+      //autoChooser.addOption("Middle 3 note CM CR +1.0 - STATES", AutoBuilder.buildAuto("Middle 3 note CM CR +1.0 - STATES"));
+      //autoChooser.addOption("Middle 3 note CM CL - STATES", AutoBuilder.buildAuto("Middle 3 note CM CL - STATES"));
+      //autoChooser.addOption("Middle 2 note CR - STATES", AutoBuilder.buildAuto("Middle 2 note CR - STATES"));
+      //autoChooser.addOption("Middle 2 note CM - STATES", AutoBuilder.buildAuto("Middle 2 note CM - STATES"));
+      //autoChooser.addOption("Middle 2 note CL - STATES", AutoBuilder.buildAuto("Middle 2 note CL - STATES")); 
+      //  autoChooser.addOption("---", new InstantCommand());
+      //autoChooser.addOption("Source 3 note FMR FM - STATES", AutoBuilder.buildAuto("Source 3 note FMR FM - STATES"));
+      //autoChooser.addOption("Source 3 note CR FR - STATES", AutoBuilder.buildAuto("Source 3 note CR FR - STATES"));
+      //autoChooser.addOption("Source 3 note FR FMR - STATES", AutoBuilder.buildAuto("Source 3 note FR FMR - STATES"));
+      //autoChooser.addOption("Source 2 note CR - STATES", AutoBuilder.buildAuto("Source 2 note CR - STATES"));
+      //autoChooser.addOption("Source 2 note CR +1.0 - STATES", AutoBuilder.buildAuto("Source 2 note CR +1.0 - STATES"));
+      //  autoChooser.addOption("-----", new InstantCommand());
+      //autoChooser.addOption("Shoot and Leave Source - STATES", AutoBuilder.buildAuto("Shoot and Leave Source - STATES"));
+      //autoChooser.addOption("Shoot Only - STATES", this.commands.speakerLauncher);
+
       SmartDashboard.putData("Auton chooser", autoChooser);
     }
   }

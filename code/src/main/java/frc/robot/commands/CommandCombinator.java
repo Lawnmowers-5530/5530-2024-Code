@@ -183,6 +183,28 @@ public class CommandCombinator {
 		.andThen(new WaitCommand(0.75), this.subsystems.ampAssist.down(), stopShooterComponents());
 	};
 
+	public Command autoSpeakerLauncher(){
+		return new ParallelCommandGroup(
+			this.subsystems.launcher.speakerLauncherCommand(),
+			this.subsystems.launcherAngle.ampAngleCommand()
+		);
+	}
+
+	public Command autoSpeakerFarLauncher(){
+		return new ParallelCommandGroup(
+			this.subsystems.launcher.speakerLauncherCommand(),
+			this.subsystems.launcherAngle.speakerAngleCommand()
+		);
+	}
+
+	public Command backupNote(){
+		return new ParallelCommandGroup(
+			this.subsystems.loader.ejectCommand(),
+			this.subsystems.launcher.runLauncherCommand(() -> {return -200;}, () -> {return -200;})
+		).withTimeout(0.13)
+		.andThen(stopShooterComponents());
+	}
+
 	private Command logFinish(String cmdName) {
 		return new InstantCommand(
 				() -> {

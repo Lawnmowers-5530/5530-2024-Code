@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.62,
+        "y": 4.0
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.503133817078445,
+        "y": 2.634740404615945
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.35,
+        "y": 2.45
+      },
+      "prevControl": {
+        "x": 5.630047916852589,
+        "y": 0.43450104918227966
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.75,
+    "maxAcceleration": 2.9,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 180.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 38.96454979234288,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Source Auton - STATES",
+  "previewStartingState": {
+    "rotation": -45.239195041017524,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
