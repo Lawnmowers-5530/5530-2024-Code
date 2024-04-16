@@ -4,22 +4,24 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
-
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.LimelightHelpers;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
 import frc.robot.Constants;
@@ -28,28 +30,41 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class Swerve extends SubsystemBase implements Loggable {
+  private PIDController rotationPID;
+  private SwerveDrivePoseEstimator odometry;
 
-  PIDController rotationPID;
-
-  SwerveDriveOdometry odometry;
   @Log
-  boolean isUpdating;
+  private boolean isUpdating;
   private boolean isCoasting;
+  private double visionStdDevs;
   private static final SwerveModule Mod_0 = Constants.Modules.Mod_0;
   private static final SwerveModule Mod_1 = Constants.Modules.Mod_1;
   private static final SwerveModule Mod_2 = Constants.Modules.Mod_2;
   private static final SwerveModule Mod_3 = Constants.Modules.Mod_3;
 
-  double rotationOutput;
-
+  private double rotationOutput;
   private SwerveModuleState[] states;
+  private LimelightHelpers.PoseEstimate limelightMeasurement;
+
+  private BooleanSupplier sideSupplier = () -> {
+    // Boolean supplier that controls when the path will be mirrored for the red
+    // alliance
+    // This will flip the path being followed to the red side of the field.
+    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      return alliance.get() == DriverStation.Alliance.Red;
+    }
+    return false;
+  };
 
   public Swerve() {
     rotationPID = new PIDController(Constants.RotationConstants.kP, Constants.RotationConstants.kI,
         Constants.RotationConstants.kD);
     rotationPID.setTolerance(2);
     SwerveModulePosition[] modPos = getModulePositions();
-    odometry = new SwerveDriveOdometry(Constants.kinematics, Pgyro.getRot(), modPos);
+    odometry = new SwerveDrivePoseEstimator(Constants.kinematics, Pgyro.getRot(), modPos, new Pose2d(),
+        VecBuilder.fill(0.1, 0.1, 0.01), VecBuilder.fill(100, 100, 99999));
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::resetPose,
@@ -58,54 +73,12 @@ public class Swerve extends SubsystemBase implements Loggable {
         new HolonomicPathFollowerConfig(
             Constants.PathPlannerConstants.translationConstants,
             Constants.PathPlannerConstants.rotationConstants,
-            4.6, //was 3.8
+            4.6, // was 3.8
             Constants.driveBaseRadius,
             new ReplanningConfig()),
-        () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red
-          // alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Red;
-            }
-            return false;
-        },
+        sideSupplier,
         this);
   }
-  /** 
-  public class ManualSideOverride implements Sendable {
-    public enum Side {
-      RED, BLUE;
-    }
-
-    private Side side;
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("Manual Side Chooser");
-        builder.addStringProperty("Side Input:", this::getSide, this::setSide);
-    }
-
-    public void setSide(String sideInput) {
-        if (sideInput == "Red" || sideInput == "red") {
-            this.side = Side.RED;
-        } else if (sideInput == "Blue" || sideInput == "blue") {
-            this.side = Side.BLUE;
-        }
-    }
-
-    public String getSide() {
-        switch (side) {
-            case RED:
-                return "Red";
-            case BLUE:
-                return "Blue";
-            default:
-                return "Blue";
-        }
-    }
-  }**/
 
   public void drive(Vector2D vector, double omegaRadSec, boolean fieldRelative) {
 
@@ -149,7 +122,7 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public Pose2d getPose() {
-    return odometry.getPoseMeters();
+    return odometry.getEstimatedPosition();
   }
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -164,13 +137,21 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public void updateOdometry() {
-    if (StaticLimeLight.getValidTarget()) {
-      odometry.resetPosition(Pgyro.getRot(), getModulePositions(),
-          new Pose2d(StaticLimeLight.getPose2DBlue().getTranslation(), Pgyro.getRot()));
-      isUpdating = true;
-    } else {
-      odometry.update(Pgyro.getRot(), getModulePositions());
-      isUpdating = false;
+    odometry.update(Pgyro.getRot(), getModulePositions());
+
+    if (LimelightHelpers.getTV("limelight")) {
+      limelightMeasurement = sideSupplier.getAsBoolean() ? LimelightHelpers.getBotPoseEstimate_wpiRed("limelight")
+          : LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+
+      if (limelightMeasurement.tagCount == 1) {
+        visionStdDevs = 0.3 * Math.pow(limelightMeasurement.avgTagDist, 2);
+      } else if (limelightMeasurement.tagCount >= 2) {
+        visionStdDevs = 0.045 * Math.pow(limelightMeasurement.avgTagDist, 2);
+      } else {
+        visionStdDevs = 100;
+      }
+      odometry.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds,
+          VecBuilder.fill(visionStdDevs, visionStdDevs, 99999));
     }
   }
 
@@ -209,7 +190,7 @@ public class Swerve extends SubsystemBase implements Loggable {
   }
 
   public boolean atTargetAngle() {
-    return false;//rotationPID.atSetpoint();
+    return false;// rotationPID.atSetpoint();
   }
 
   public void disabledPeriodic() {
