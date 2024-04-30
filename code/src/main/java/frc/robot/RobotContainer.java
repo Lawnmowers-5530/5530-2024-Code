@@ -221,10 +221,6 @@ public class RobotContainer implements Loggable {
       
       //we should track state in a different way, this sucks -hugo
       this.stateSuppliers.slowMode = () -> {
-        if (this.controllers.driverController.b().getAsBoolean() != GlobalState.lastSlowModeButtonState) {
-          GlobalState.slowMode = !GlobalState.slowMode;
-        }
-        GlobalState.lastSlowModeButtonState = this.controllers.driverController.b().getAsBoolean();
         return GlobalState.slowMode;
       };
     }
@@ -247,6 +243,10 @@ public class RobotContainer implements Loggable {
 
       this.controllers.driverController.y().onTrue(this.commands.sourceIntake);
       this.controllers.driverController.a().onTrue(this.commands.groundIntake);
+      this.controllers.driverController.b().onTrue(new InstantCommand(() -> {
+          GlobalState.slowMode = !GlobalState.slowMode;
+          SmartDashboard.putBoolean("slowMode", GlobalState.slowMode);
+      }));
 
       this.controllers.driverController.leftTrigger().onTrue(this.commands.speakerAngle);
       this.controllers.driverController.rightTrigger().onTrue(this.commands.ampAngle);

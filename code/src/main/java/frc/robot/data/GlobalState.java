@@ -6,5 +6,4 @@ public class GlobalState {
     public static boolean inSpeakerZone = false;
     public static boolean isEnabled = false;
     public static boolean slowMode = false;
-    public static boolean lastSlowModeButtonState = false;
 }
