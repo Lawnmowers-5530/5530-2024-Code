@@ -148,7 +148,7 @@ public class RobotContainer implements Loggable {
             Vector2D vector = new Vector2D(y, x, false);
             this.subsystems.swerve.drive(vector, -w, true);
 
-            if (this.controllers.driverController.b().getAsBoolean()) {
+            if (GlobalState.slowMode) {
               this.subsystems.swerve.drive(VectorOperator.scalarMultiply(vector, 0.5), -w / 2, true);
             }
 
@@ -221,11 +221,11 @@ public class RobotContainer implements Loggable {
       
       //we should track state in a different way, this sucks -hugo
       this.stateSuppliers.slowMode = () -> {
-        if (this.controllers.driverController.b().getAsBoolean() != GlobalState.lastButtonState) {
-          GlobalState.toggleTracker = !GlobalState.toggleTracker;
+        if (this.controllers.driverController.b().getAsBoolean() != GlobalState.lastSlowModeButtonState) {
+          GlobalState.slowMode = !GlobalState.slowMode;
         }
-        GlobalState.lastButtonState = this.controllers.driverController.b().getAsBoolean();
-        return GlobalState.toggleTracker;
+        GlobalState.lastSlowModeButtonState = this.controllers.driverController.b().getAsBoolean();
+        return GlobalState.slowMode;
       };
     }
 
