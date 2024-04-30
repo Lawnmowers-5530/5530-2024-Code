@@ -16,6 +16,7 @@ import io.github.oblarg.oblog.Loggable;
 import frc.lib.Vector2D;
 import frc.lib.VectorOperator;
 import frc.robot.commands.CommandCombinator;
+import frc.robot.data.GlobalState;
 import frc.robot.subsystems.AmpAssist;
 import frc.robot.subsystems.FisheyeCamera;
 import frc.robot.subsystems.Climber;
@@ -217,15 +218,15 @@ public class RobotContainer implements Loggable {
       this.stateSuppliers.readyToIntakeFromSource = () -> this.subsystems.launcher.isRunningIntake()
           && !this.subsystems.distanceSensor.isNotePresent() && this.subsystems.launcherAngle.isUp();
       this.stateSuppliers.noteLoaded = () -> this.subsystems.distanceSensor.isNotePresent();
-      private final toggleTracker = false;
-      private final lastButtonState = false;
+      
+      //we should track state in a different way, this sucks -hugo
       this.stateSuppliers.slowMode = () -> {
-        if (this.controllers.driverController.b().getAsBoolean() != lastButtonState) {
-          toggleTracker = !toggleTracker;
+        if (this.controllers.driverController.b().getAsBoolean() != GlobalState.lastButtonState) {
+          GlobalState.toggleTracker = !GlobalState.toggleTracker;
         }
-        lastButtonState = this.controllers.driverController.b().getAsBoolean();
-        return toggleTracker;
-      }
+        GlobalState.lastButtonState = this.controllers.driverController.b().getAsBoolean();
+        return GlobalState.toggleTracker;
+      };
     }
 
     /**
