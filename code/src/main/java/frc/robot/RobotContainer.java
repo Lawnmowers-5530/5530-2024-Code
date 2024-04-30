@@ -217,7 +217,15 @@ public class RobotContainer implements Loggable {
       this.stateSuppliers.readyToIntakeFromSource = () -> this.subsystems.launcher.isRunningIntake()
           && !this.subsystems.distanceSensor.isNotePresent() && this.subsystems.launcherAngle.isUp();
       this.stateSuppliers.noteLoaded = () -> this.subsystems.distanceSensor.isNotePresent();
-      this.stateSuppliers.slowMode = () -> this.controllers.driverController.b().getAsBoolean();
+      private final toggleTracker = false;
+      private final lastButtonState = false;
+      this.stateSuppliers.slowMode = () -> {
+        if (this.controllers.driverController.b().getAsBoolean() != lastButtonState) {
+          toggleTracker = !toggleTracker;
+        }
+        lastButtonState = this.controllers.driverController.b().getAsBoolean();
+        return toggleTracker;
+      }
     }
 
     /**
